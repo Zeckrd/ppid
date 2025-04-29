@@ -16,10 +16,9 @@
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
             <!-- Navigation-->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar fixed-top navbar-expand-lg navbar-white bg-white">
                 <div class="container px-5">
-                     <!-- TODO: logo + text edit -->
-                    <a class="navbar-brand" href="/"><img src = {{ asset('img/ptunLogo.png') }} class = 'navbar-brand' height ='80px' alt = 'PTUN Bandung logo'>PTUN Bandung</a>
+                    <a class="navbar-brand" href="/"><img src = {{ asset('img/logoppid.png') }} class = 'navbar-brand' height ='80px' alt = 'PTUN Bandung logo'></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -38,6 +37,7 @@
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Regulasi</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
                                     <li><a class="dropdown-item" href="blog-home.html">Surat Keterangan PPID</a></li>
+                                    <li><a class="dropdown-item" href="blog-home.html">SK PPID dan SK lainnya terkait Informasi</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="pricing.html">Laporan</a></li>
@@ -45,15 +45,19 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Laporan</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
-                                    <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
+                                    <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-bulanan/">Laporan Bulanan</a></li>
+                                    <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-tahunan/">Laporan Tahunan</a></li>
+                                    <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-ikm-ipak/">laporan Indeks Kepuasan Masyarakat dan Indeks Persepsi Korupsi</a></li>
+                                    <li><a class="dropdown-item" href="">SAKIP</a></li>
+                                    <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-perkara/">Laporan Perkara</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Standar Layanan</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                    <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
-                                    <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
+                                    <li><a class="dropdown-item" href="portfolio-overview.html">SOP PPID</a></li>
+                                    <li><a class="dropdown-item" href="portfolio-item.html">Jam Kerja dan Layanan</a></li>
+                                    <li><a class="dropdown-item" href="portfolio-item.html">Maklumat PPID</a></li>
                                 </ul>
                             </li>
                         </ul>
