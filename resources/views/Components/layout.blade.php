@@ -18,17 +18,17 @@
             <!-- Navigation-->
             <nav class="navbar fixed-top navbar-expand-lg navbar-white bg-white">
                 <div class="container px-5">
-                    <a class="navbar-brand" href="/"><img src = {{ asset('img/logoppid.png') }} class = 'navbar-brand' height ='80px' alt = 'PTUN Bandung logo'></a>
+                    <a class="navbar-brand" href="/"><img src = {{ asset('img/logoppid.png') }} class = 'navbar-brand' height ='60px' alt = 'PTUN Bandung logo'></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profil</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="blog-home.html">Profil PPID</a></li>
-                                    <li><a class="dropdown-item" href="blog-post.html">Visi & Misi</a></li>
-                                    <li><a class="dropdown-item" href="blog-post.html">Tugas & Fungsi PPID</a></li>
+                                    <li><a class="dropdown-item" href="/profil-PPID">Profil PPID</a></li>
+                                    <li><a class="dropdown-item" href="https://ptun-bandung.go.id/visi-dan-misi-pengadilan/">Visi & Misi</a></li>
+                                    <li><a class="dropdown-item" href="/tugas-dan-fungsi">Tugas & Fungsi PPID</a></li>
                                     <li><a class="dropdown-item" href="blog-post.html">Struktur PPID</a></li>
                                     <li><a class="dropdown-item" href="blog-post.html">Tim PPID</a></li>
                                 </ul>
@@ -36,12 +36,10 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Regulasi</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="blog-home.html">Surat Keterangan PPID</a></li>
+                                    <li><a class="dropdown-item" href="https://jdih.mahkamahagung.go.id/index.php/legal-product/sk-kma-nomor-2-144kmaskviii2022/detail">Peraturan mengenai Keterbukaan Informasi Publik</a></li>
                                     <li><a class="dropdown-item" href="blog-home.html">SK PPID dan SK lainnya terkait Informasi</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="pricing.html">Laporan</a></li>
-                            <li class="nav-item"><a class="nav-link" href="faq.html">Standar Layanan</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Laporan</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
