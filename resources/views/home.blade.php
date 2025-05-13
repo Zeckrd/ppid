@@ -55,6 +55,16 @@
             </section>
     <!-- End of Section Cards -->
     <!-- Features section-->
+    <!-- TODO: FIX 
+                    <div class="col">
+                    <a>...</a>
+                    </div>
+
+                    DONOT
+                    
+                    <a>
+                    <div class="col">...</div>
+                    </a>-->
     <section class="py-5" id="features">
         <div class="container px-5 my-5">
             <div class="row gx-5">

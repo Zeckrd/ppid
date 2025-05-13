@@ -30,7 +30,7 @@
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Regulasi</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
                                     <li><a class="dropdown-item" href="https://jdih.mahkamahagung.go.id/index.php/legal-product/sk-kma-nomor-2-144kmaskviii2022/detail">Peraturan mengenai Keterbukaan Informasi Publik</a></li>
-                                    <li><a class="dropdown-item" href="blog-home.html">SK PPID dan SK lainnya terkait Informasi</a></li>
+                                    <li><a class="dropdown-item" href="/surat-keterangan">SK PPID dan SK lainnya terkait Informasi</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -39,14 +39,14 @@
                                     <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-bulanan/">Laporan Bulanan</a></li>
                                     <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-tahunan/">Laporan Tahunan</a></li>
                                     <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-ikm-ipak/">laporan Indeks Kepuasan Masyarakat dan Indeks Persepsi Korupsi</a></li>
-                                    <li><a class="dropdown-item" href="">SAKIP</a></li>
+                                    <li><a class="dropdown-item" href="sakip">SAKIP</a></li>
                                     <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-perkara/">Laporan Perkara</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Standar Layanan</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                    <li><a class="dropdown-item" href="portfolio-overview.html">SOP PPID</a></li>
+                                    <li><a class="dropdown-item" href="sop">SOP PPID</a></li>
                                     <li><a class="dropdown-item" href="portfolio-item.html">Jam Kerja dan Layanan</a></li>
                                     <li><a class="dropdown-item" href="portfolio-item.html">Maklumat PPID</a></li>
                                 </ul>
