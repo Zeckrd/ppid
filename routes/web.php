@@ -6,8 +6,8 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/profil-PPID', function () {
-    return view('profil-PPID');
+Route::get('/profil', function () {
+    return view('profil');
 });
 
 Route::get('/tugas-dan-fungsi', function () {

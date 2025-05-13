@@ -12,6 +12,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -23,16 +25,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profil</a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                    <li><a class="dropdown-item" href="/profil-PPID">Profil PPID</a></li>
-                                    <li><a class="dropdown-item" href="https://ptun-bandung.go.id/visi-dan-misi-pengadilan/">Visi & Misi</a></li>
-                                    <li><a class="dropdown-item" href="/tugas-dan-fungsi">Tugas & Fungsi PPID</a></li>
-                                    <li><a class="dropdown-item" href="blog-post.html">Struktur PPID</a></li>
-                                    <li><a class="dropdown-item" href="blog-post.html">Tim PPID</a></li>
-                                </ul>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="/profil">Profil</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Regulasi</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">

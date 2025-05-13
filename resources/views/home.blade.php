@@ -63,43 +63,29 @@
                     <div class="row gx-5 row-cols-1 row-cols-md-2">
                     <a href="#" class="text-decoration-none text-reset">
                         <div class="col mb-5 h-100 feature-box">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                            <h2 class="h5">Prosedur Permohonan Informasi</h2>
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="ri-file-3-fill"></i></div>
+                            <h2 class="h5">Prosedur Pelayanan</h2>
                             <p class="mb-0">Tata cara pengajuan permintaan informasi publik kepada PTUN Bandung.</p>
                         </div>
                     </a>
                     <a href="#" class="text-decoration-none text-reset">
                         <div class="col mb-5 h-100 feature-box">
                             <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                            <h2 class="h5">Prosedur Permohonan Informasi</h2>
+                            <h2 class="h5">Informasi Berkala</h2>
                             <p class="mb-0">Tata cara pengajuan permintaan informasi publik kepada PTUN Bandung.</p>
                         </div>
                     </a>
                     <a href="#" class="text-decoration-none text-reset">
                         <div class="col mb-5 h-100 feature-box">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                            <h2 class="h5">Prosedur Permohonan Informasi</h2>
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="ri-book-read-fill"></i></div>
+                            <h2 class="h5">Informasi Tersedia Setiap Saat</h2>
                             <p class="mb-0">Tata cara pengajuan permintaan informasi publik kepada PTUN Bandung.</p>
                         </div>
                     </a>
                     <a href="#" class="text-decoration-none text-reset">
                         <div class="col mb-5 h-100 feature-box">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                            <h2 class="h5">Prosedur Permohonan Informasi</h2>
-                            <p class="mb-0">Tata cara pengajuan permintaan informasi publik kepada PTUN Bandung.</p>
-                        </div>
-                    </a>
-                    <a href="#" class="text-decoration-none text-reset">
-                        <div class="col mb-5 h-100 feature-box">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                            <h2 class="h5">Prosedur Permohonan Informasi</h2>
-                            <p class="mb-0">Tata cara pengajuan permintaan informasi publik kepada PTUN Bandung.</p>
-                        </div>
-                    </a>
-                    <a href="#" class="text-decoration-none text-reset">
-                        <div class="col mb-5 h-100 feature-box">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                            <h2 class="h5">Prosedur Permohonan Informasi</h2>
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="ri-chat-delete-line"></i></div>
+                            <h2 class="h5">Informasi yang di Kecualikan</h2>
                             <p class="mb-0">Tata cara pengajuan permintaan informasi publik kepada PTUN Bandung.</p>
                         </div>
                     </a>
