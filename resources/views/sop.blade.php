@@ -1,5 +1,5 @@
 <x-layout>
-    <!-- Menu -->
+    <!-- List SOP -->
     <section class="py-5" id="features">
         <div class="container px-5 my-5">
             <div class="text-center mb-5">

@@ -1,21 +1,10 @@
 <x-layout>
-    <!-- Header-->
-    <header class="bg-dark py-5">
-        <div class="container px-5">
-            <div class="row gx-5 align-items-center justify-content-center pt-5">
-                <div class="col-lg-8 col-xl-7 col-xxl-6">
-                    <div class="my-5 text-center text-xl-start">
-                        <h1 class="display-5 fw-bolder text-white mb-2">Pejabat Pengelola Informasi dan Dokumentasi (PPID) PTUN Bandung</h1>
-                        <!-- <p class="lead fw-normal text-white-50 mb-4">//////////////////////////////////</p> -->
-                    </div>
-                </div>
-                <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="{{ asset('img/home-kantor.jpg') }}" alt="..." /></div>
-            </div>
-        </div>
-    </header>
-    <!-- End of Header-->
+    <x-header>
+        <h1 class="display-5 fw-bolder pt-3 mb-2">Pejabat Pengelola Informasi dan Dokumentasi (PPID) PTUN Bandung</h1>
+    </x-header>
+
     <!-- Section Cards to Permohonan dan Keberatan-->
-    <section class="py-5">
+    <section class="py-3">
                 <div class="container px-5 my-5">
                     <div class="row gx-5 justify-content-center">
                         <div class="col-lg-8 col-xl-6">
