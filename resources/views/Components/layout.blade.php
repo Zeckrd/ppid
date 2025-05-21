@@ -43,14 +43,7 @@
                                     <li><a class="dropdown-item" href="https://ptun-bandung.go.id/laporan-perkara/">Laporan Perkara</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Standar Layanan</a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                    <li><a class="dropdown-item" href="sop">SOP PPID</a></li>
-                                    <li><a class="dropdown-item" href="portfolio-item.html">Jam Kerja dan Layanan</a></li>
-                                    <li><a class="dropdown-item" href="portfolio-item.html">Maklumat PPID</a></li>
-                                </ul>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="/standar-layanan">Standar Layanan</a></li>
                         </ul>
                     </div>
                 </div>

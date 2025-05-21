@@ -22,6 +22,6 @@ Route::get('/sakip', function () {
     return view('sakip');
 });
 
-Route::get('/sop', function () {
-    return view('sop');
+Route::get('/standar-layanan', function () {
+    return view('standar-layanan');
 });
