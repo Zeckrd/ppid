@@ -6,7 +6,7 @@
     <!-- Menu -->
     <section class="py-5" id="features">
         <div class="container px-5 my-5">
-            <div class="row gx-5 row-cols-2 row-cols-md-4 g-4 justify-content-center"> <!-- TODO: target="_blank" on all a href -->
+            <div class="row gx-5 row-cols-2 row-cols-md-4 g-4 justify-content-center">
                 <div class="col mb-5">
                     <a href="https://drive.google.com/file/d/1dTzTvt9xs5Xm9sb8PtP6QPV12uJ48T6S" target="_blank" class="text-decoration-none text-reset d-block h-100">
                         <div class="feature-box h-100 d-flex flex-column justify-content-center align-items-center text-center">

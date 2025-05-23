@@ -25,3 +25,21 @@ Route::get('/sakip', function () {
 Route::get('/standar-layanan', function () {
     return view('standar-layanan');
 });
+
+// prosedeur layanan home boxes
+
+Route::get('/prosedur-layanan', function () {
+    return view('prosedur-layanan');
+});
+
+Route::get('/informasi-berkala', function () {
+    return view('informasi-berkala');
+});
+
+Route::get('/informasi-tersedia-setiap-saat', function () {
+    return view('informasi-tersedia-setiap-saat');
+});
+
+Route::get('/informasi-dikecualikan', function () {
+    return view('informasi-dikecualikan');
+});
