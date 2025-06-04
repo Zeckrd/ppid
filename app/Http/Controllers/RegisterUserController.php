@@ -18,6 +18,7 @@ class RegisterUserController extends Controller
 
     public function store()
     {
+        // debug this
         // dd(request()->all());
 
         $attributes = request()->validate([
