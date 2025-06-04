@@ -4294,6 +4294,11 @@ textarea.form-control-lg {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.card.no-hover:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 
 .card-group > .card {
   margin-bottom: var(--bs-card-group-margin);

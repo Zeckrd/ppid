@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'pekerjaan',
+        'ktp_no',
+        'ktp_foto',
+        'alamat',
     ];
 
     /**
@@ -45,4 +49,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function permohonans()
+{
+    return $this->hasMany(Permohonan::class);
+}
 }

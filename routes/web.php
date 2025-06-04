@@ -1,45 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PermohonanController;
+use App\Http\Controllers\RegisterUserController;
+use App\Http\Controllers\SessionController;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::view('/', 'home');
+Route::view('/profil', 'profil');
+Route::view('/tugas-dan-fungsi', 'tugas-dan-fungsi');
+Route::view('/surat-keterangan', 'surat-keterangan');
+Route::view('/sakip', 'sakip');
+Route::view('/standar-layanan', 'standar-layanan');
+Route::view('/prosedur-layanan', 'prosedur-layanan');
+Route::view('/informasi-berkala', 'informasi-berkala');
+Route::view('/informasi-tersedia-setiap-saat', 'informasi-tersedia-setiap-saat');
+Route::view('/informasi-dikecualikan', 'informasi-dikecualikan');
 
-Route::get('/profil', function () {
-    return view('profil');
-});
+Route::get('/dashboard', [PermohonanController::class, 'index']);
 
-Route::get('/tugas-dan-fungsi', function () {
-    return view('tugas-dan-fungsi');
-});
+//Auth
+Route::get('/register',[RegisterUserController::class, 'create'])->name('register');
+Route::post('/register',[RegisterUserController::class, 'store']);
 
-Route::get('/surat-keterangan', function () {
-    return view('surat-keterangan');
-});
-
-Route::get('/sakip', function () {
-    return view('sakip');
-});
-
-Route::get('/standar-layanan', function () {
-    return view('standar-layanan');
-});
-
-// prosedeur layanan home boxes
-
-Route::get('/prosedur-layanan', function () {
-    return view('prosedur-layanan');
-});
-
-Route::get('/informasi-berkala', function () {
-    return view('informasi-berkala');
-});
-
-Route::get('/informasi-tersedia-setiap-saat', function () {
-    return view('informasi-tersedia-setiap-saat');
-});
-
-Route::get('/informasi-dikecualikan', function () {
-    return view('informasi-dikecualikan');
-});
+Route::get('/login',[SessionController::class, 'create'])->name('login');
+Route::post('/login',[SessionController::class, 'store']);
+Route::post('/logout',[SessionController::class, 'destroy']);
