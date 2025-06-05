@@ -4,7 +4,7 @@
 
         <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
             <div class="row w-100 justify-content-center">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="col-12 col-md-8 col-lg-3 col-xl-3">
                     <div class="card no-hover py-3 px-2">
                         <div class="division mb-3">
                             <div class="row">
@@ -46,7 +46,7 @@
                         </x-form-field>
 
                         <x-form-field>
-                            <label for="ktp_foto" class="form-label">Upload Foto KTP</label>
+                            <label for="ktp_foto" class="form-label ps-4">Upload Foto KTP</label>
                             <x-form-input name="ktp_foto" id="ktp_foto" type="file" accept='image/*' required></x-form-input>
                             <x-form-error name='ktp_foto'></x-form-error>
                         </x-form-field>

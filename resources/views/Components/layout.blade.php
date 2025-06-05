@@ -44,6 +44,17 @@
                                 </ul>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="/standar-layanan">Standar Layanan</a></li>
+                            @guest
+                                <li class="nav-item"><a class="nav-link" href='/login' :active="request()->is('login')">Log In</a></li>
+                            @endguest
+
+                            @auth
+                                <li class="nav-item"><a class="nav-link" href='/dashboard' :active="request()->is('login')">Dashboard</a></li>
+                                <form method='POST'action='/logout'>
+                                    @csrf
+                                    <x-form-button>Log Out</x-form-button>
+                                </form>
+                            @endauth
                         </ul>
                     </div>
                 </div>

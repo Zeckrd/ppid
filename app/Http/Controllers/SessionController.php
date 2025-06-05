@@ -15,6 +15,8 @@ class SessionController extends Controller
 
         public function store()
     {
+        // dd(request()->all());
+
         //validate
         $attributes = request()->validate([
             'email'=>['required','email'],
@@ -32,7 +34,7 @@ class SessionController extends Controller
         request()->session()->regenerate();
 
         //redirect
-        return redirect('/jobs');
+        return redirect('/');
     }
 
     public function destroy()

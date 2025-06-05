@@ -4,7 +4,7 @@
 
     <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
         <div class="row w-100 justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-3">
                 <div class="card no-hover py-3 px-2">
                     <div class="division mb-3">
                         <div class="row">
@@ -20,7 +20,7 @@
 
                         <x-form-error name='credential'></x-form-error>
                         
-                        <div class="row my-2">
+                        <div class="row my-2 px-4">
                             <div class="col-md-6 col-12">
                                 <div class="form-group form-check">
                                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
