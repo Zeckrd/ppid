@@ -30,11 +30,11 @@ class SessionController extends Controller
             ]);
         };
 
-        //if succedd regenerate session token
+        //if succeedd regenerate session token
         request()->session()->regenerate();
 
         //redirect
-        return redirect('/');
+        return redirect('dashboard');
     }
 
     public function destroy()

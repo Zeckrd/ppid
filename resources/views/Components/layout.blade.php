@@ -16,7 +16,7 @@
         <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
     </head>
     <body class="d-flex flex-column h-100">
-        <main class="flex-shrink-0">
+        <main class="flex-shrink-0 pt-5">
             <!-- Navigation-->
             <nav class="navbar fixed-top navbar-expand-lg navbar-white bg-white">
                 <div class="container px-5">

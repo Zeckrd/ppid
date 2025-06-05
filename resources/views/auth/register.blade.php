@@ -2,7 +2,7 @@
     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
-        <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center pt-5">
             <div class="row w-100 justify-content-center">
                 <div class="col-12 col-md-8 col-lg-3 col-xl-3">
                     <div class="card no-hover py-3 px-2">
@@ -27,7 +27,7 @@
 
                         <x-form-field>
                             <x-form-input name="password" id="password" type="password" :value="old('password')" placeholder="Password"  required></x-form-input>
-                            <x-form-error name='credential'></x-form-error>
+                            <x-form-error name='password'></x-form-error>
                         </x-form-field>
 
                         <x-form-field>
