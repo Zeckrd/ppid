@@ -50,10 +50,22 @@
 
                             @auth
                                 <li class="nav-item"><a class="nav-link" href='/dashboard' :active="request()->is('login')">Dashboard</a></li>
-                                <form method='POST'action='/logout'>
+                                {{-- FOR DEBUGGING --}}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Log Out
+                                    </a>
+
+                                    <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
+
+                                {{-- <form method='POST'action='/logout'>
                                     @csrf
                                     <x-form-button>Log Out</x-form-button>
-                                </form>
+                                </form> --}}
                             @endauth
                         </ul>
                     </div>

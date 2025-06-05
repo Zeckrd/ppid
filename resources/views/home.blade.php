@@ -1,6 +1,6 @@
 <x-layout>
     <x-header>
-        <h1 class="display-5 fw-bolder pt-3 mb-2">Pejabat Pengelola Informasi dan Dokumentasi (PPID) PTUN Bandung</h1>
+        <h1 class="display-5 fw-bolder">Pejabat Pengelola Informasi dan Dokumentasi (PPID) PTUN Bandung</h1>
     </x-header>
 
     <!-- Section Cards to Permohonan dan Keberatan-->

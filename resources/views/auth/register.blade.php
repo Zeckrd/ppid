@@ -2,7 +2,7 @@
     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
-        <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center pt-5">
+        <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
             <div class="row w-100 justify-content-center">
                 <div class="col-12 col-md-8 col-lg-3 col-xl-3">
                     <div class="card no-hover py-3 px-2">
