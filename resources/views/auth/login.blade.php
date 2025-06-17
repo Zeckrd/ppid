@@ -4,13 +4,13 @@
 
     <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
         <div class="row w-100 justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-3">
-                <div class="card no-hover py-3 px-2">
+            <div class="col-8 col-md-8 col-lg-8 col-xl-3">
+                <div class="card shadow py-3 px-2">
                     <div class="division mb-3">
-                        <div class="row">
-                            <div class="col-3"><div class="line l"></div></div>
-                            <div class="col-6 text-center"><span>Login Dengan Email</span></div>
-                            <div class="col-3"><div class="line r"></div></div>
+                        <div class="row justify-content-center">
+                            <div class="col-auto text-center">
+                                <h4>Login</h4>
+                            </div>
                         </div>
                     </div>
                     <x-form-field>

@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('pekerjaan');
-            $table->string('ktp_no');
-            $table->string('ktp_foto');
-            $table->string('alamat');
+            $table->string('pekerjaan')->nullable();
+            $table->string('ktp_no')->nullable();
+            $table->string('ktp_foto')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('phone')->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
         });

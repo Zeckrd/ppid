@@ -5,27 +5,28 @@
     </x-header>
   
     <section class="my-4 mx-5">
-      <div class="row">
+      <div class="container">
+        <div class="row justify-content-center">
         <!-- Sidebar nav -->
-        <div class="col-md-4 mb-4">
-          <div class="nav flex-column nav-pills px-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="nav-link active" id="v-pills-profil-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profil" type="button" role="tab" aria-controls="v-pills-profil" aria-selected="true">
-              Profil PPID
-            </button>
-            <button class="nav-link" id="v-pills-struktur-tab" data-bs-toggle="pill" data-bs-target="#v-pills-struktur" type="button" role="tab" aria-controls="v-pills-struktur" aria-selected="false">
-              Struktur PPID
-            </button>
-            <button class="nav-link" id="v-pills-visi-misi-tab" data-bs-toggle="pill" data-bs-target="#v-pills-visi-misi" type="button" role="tab" aria-controls="v-pills-visi-misi" aria-selected="false">
-              Visi dan Misi PPID
-            </button>
-            <button class="nav-link" id="v-pills-tugas-wewenang-tab" data-bs-toggle="pill" data-bs-target="#v-pills-tugas-wewenang" type="button" role="tab" aria-controls="v-pills-tugas-wewenang" aria-selected="false">
-              Tugas dan Wewenang PPID
-            </button>
+          <div class="col-md-3 mb-3">
+            <div class="nav flex-column nav-pills px-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <button class="nav-link active" id="v-pills-profil-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profil" type="button" role="tab" aria-controls="v-pills-profil" aria-selected="true">
+                Profil PPID
+              </button>
+              <button class="nav-link" id="v-pills-struktur-tab" data-bs-toggle="pill" data-bs-target="#v-pills-struktur" type="button" role="tab" aria-controls="v-pills-struktur" aria-selected="false">
+                Struktur PPID
+              </button>
+              <button class="nav-link" id="v-pills-visi-misi-tab" data-bs-toggle="pill" data-bs-target="#v-pills-visi-misi" type="button" role="tab" aria-controls="v-pills-visi-misi" aria-selected="false">
+                Visi dan Misi PPID
+              </button>
+              <button class="nav-link" id="v-pills-tugas-wewenang-tab" data-bs-toggle="pill" data-bs-target="#v-pills-tugas-wewenang" type="button" role="tab" aria-controls="v-pills-tugas-wewenang" aria-selected="false">
+                Tugas dan Wewenang PPID
+              </button>
+            </div>
           </div>
-        </div>
   
         <!-- Tab Content -->
-        <div class="col-md-8">
+        <div class="col-md-9">
           <div class="tab-content" id="v-pills-tabContent">
   
             <!-- Profil PPID -->
@@ -154,10 +155,11 @@
                 </ul>
               </div>
             </div>
-  
+            
           </div>
         </div>
       </div>
-    </section>
-  </x-layout>
+    </div>
+  </section>
+</x-layout>
   

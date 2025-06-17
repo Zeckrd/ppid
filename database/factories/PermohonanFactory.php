@@ -18,9 +18,18 @@ class PermohonanFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'=>User::factory(),
-            'permohonan_type'=>fake()->boolean(),
-            'permohonan_file'=>fake()->randomLetter(),
+            'user_id' => User::factory(),
+            'permohonan_type' => fake()->randomElement(['Biasa', 'Khusus']),
+            'permohonan_file' => fake()->word() . '.pdf',
+            'status' => fake()->randomElement([
+                'Menunggu Verifikasi Berkas Dari Petugas',
+                'Sedang Diverifikasi petugas',
+                'Perlu Diperbaiki',
+                'Permohonan Sedang Diproses',
+                'Selesai',
+            ]),
+            'keterangan_user' => fake()->sentence(10),
+            'reply_type' => fake()->randomElement(['softcopy', 'hardcopy']),
         ];
     }
 }

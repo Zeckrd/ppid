@@ -51,7 +51,13 @@ class User extends Authenticatable
     }
 
     public function permohonans()
-{
-    return $this->hasMany(Permohonan::class);
-}
+    {
+        return $this->hasMany(Permohonan::class);
+    }
+
+    public function phoneVerification()
+    {
+        return $this->hasOne(PhoneVerification::class);
+    }
+
 }

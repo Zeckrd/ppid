@@ -4288,17 +4288,6 @@ textarea.form-control-lg {
   border-bottom-left-radius: var(--bs-card-inner-border-radius);
 }
 
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card.no-hover:hover {
-    transform: none !important;
-    box-shadow: none !important;
-}
-
 
 .card-group > .card {
   margin-bottom: var(--bs-card-group-margin);
@@ -10869,4 +10858,18 @@ html {
   background-position: center;
   background-repeat: no-repeat;
   min-height: 15rem;
+}
+
+.table-no-inner-border {
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+}
+
+.table-no-inner-border td,
+.table-no-inner-border th {
+    border: none;
+}
+
+.table-no-inner-border thead th {
+    border-bottom: 2px solid #dee2e6;
 }

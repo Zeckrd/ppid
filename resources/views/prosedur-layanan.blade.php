@@ -5,24 +5,25 @@
     </x-header>
   
     <section class="my-4 mx-5">
-  <div class="row">
-    <!-- Sidebar nav -->
-    <div class="col-md-4 mb-4">
-      <div class="nav flex-column nav-pills px-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <button class="nav-link active" id="v-pills-profil-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profil" type="button" role="tab" aria-controls="v-pills-profil" aria-selected="true">
-          Prosedur Permohonan Informasi
-        </button>
-        <button class="nav-link" id="v-pills-struktur-tab" data-bs-toggle="pill" data-bs-target="#v-pills-struktur" type="button" role="tab" aria-controls="v-pills-struktur" aria-selected="false">
-          Prosedur Pengajuan Keberatan
-        </button>
-        <button class="nav-link" id="v-pills-visi-misi-tab" data-bs-toggle="pill" data-bs-target="#v-pills-visi-misi" type="button" role="tab" aria-controls="v-pills-visi-misi" aria-selected="false">
-          Sengketa Informasi
-        </button>
-      </div>
-    </div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <!-- Sidebar nav -->
+          <div class="col-md-3 mb-3">
+            <div class="nav flex-column nav-pills px-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <button class="nav-link active" id="v-pills-profil-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profil" type="button" role="tab" aria-controls="v-pills-profil" aria-selected="true">
+                Prosedur Permohonan Informasi
+              </button>
+              <button class="nav-link" id="v-pills-struktur-tab" data-bs-toggle="pill" data-bs-target="#v-pills-struktur" type="button" role="tab" aria-controls="v-pills-struktur" aria-selected="false">
+                Prosedur Pengajuan Keberatan
+              </button>
+              <button class="nav-link" id="v-pills-visi-misi-tab" data-bs-toggle="pill" data-bs-target="#v-pills-visi-misi" type="button" role="tab" aria-controls="v-pills-visi-misi" aria-selected="false">
+                Sengketa Informasi
+              </button>
+            </div>
+          </div>
 
     <!-- Tab content -->
-    <div class="col-md-8">
+    <div class="col-md-9">
       <div class="tab-content" id="v-pills-tabContent">
 
         <!-- Prosedur Permohonan Informasi -->
@@ -136,7 +137,7 @@
             <img src="{{ asset('img/prosedur-sengketa.png') }}" alt="Prosedur sengketa" class="img-fluid" />
           </div>
         </div>
-
+      </div>
       </div>
     </div>
   </div>

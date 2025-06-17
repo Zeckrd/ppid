@@ -18,7 +18,7 @@
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0 pt-5">
             <!-- Navigation-->
-            <nav class="navbar fixed-top navbar-expand-lg navbar-white bg-white">
+            <nav class="navbar fixed-top navbar-expand-lg navbar-white bg-white shadow">
                 <div class="container px-5">
                     <a class="navbar-brand" href="/"><img src = {{ asset('img/logoppid.png') }} class = 'navbar-brand' height ='60px' alt = 'PTUN Bandung logo'></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -46,13 +46,14 @@
                             <li class="nav-item"><a class="nav-link" href="/standar-layanan">Standar Layanan</a></li>
                             @guest
                                 <li class="nav-item"><a class="nav-link" href='/login' :active="request()->is('login')">Log In</a></li>
+                                <li class="nav-item"><a class="nav-link" href='/register' :active="request()->is('register')">Daftar</a></li>
                             @endguest
 
                             @auth
                                 <li class="nav-item"><a class="nav-link" href='/dashboard' :active="request()->is('login')">Dashboard</a></li>
-                                {{-- FOR DEBUGGING --}}
+                                
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#"
+                                    <a class="nav-link text-danger" href="#"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         Log Out
                                     </a>
@@ -78,20 +79,24 @@
         <footer class="bg-dark py-4 mt-auto">
             <div class="container px-5">
                 <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; Your Website 2023</div></div>
                     <div class="col-auto">
-                        <a class="link-light small" href="#!">Privacy</a>
+                        <div class="small m-0 text-white">
+                            &copy; Pengadilan Tata Usaha Negara Bandung
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <a class="link-light small" href="tel:+62227213999">📞 (022) 7213999</a>
                         <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Terms</a>
+                        <a class="link-light small" href="mailto:informasi@ptun-bandung.go.id">✉️ informasi@ptun-bandung.go.id</a>
                         <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Contact</a>
+                        <a class="link-light small" href="https://g.co/kgs/ECfzF8b" target="_blank">
+                            📍 Lokasi
+                        </a>
                     </div>
                 </div>
             </div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src={{ asset('js/script.js') }}></script>
     </body>
 </html>

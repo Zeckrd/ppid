@@ -7,41 +7,30 @@
     <section class="py-5" id="features">
         <div class="container px-5 my-5">
             <div class="row gx-5 row-cols-2 row-cols-md-4 g-4 justify-content-center">
-                <div class="col mb-5">
-                    <a href="https://drive.google.com/file/d/1dTzTvt9xs5Xm9sb8PtP6QPV12uJ48T6S" target="_blank" class="text-decoration-none text-reset d-block h-100">
-                        <div class="feature-box h-100 d-flex flex-column justify-content-center align-items-center text-center">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="ri-file-3-fill"></i></div>
-                            <h2 class="h5">SK Tim PPID</h2>
-                            <div class="d-inline mt-2"><span class="btn btn-outline-primary">Lihat</span></div>
+                <div class="col-md-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-sk" role="tabpanel" aria-labelledby="v-pills-sk-tab">
+                        {{-- <h2 class="fw-bolder mb-3">Daftar SK PPID dan SK Lain Terkait Informasi</h2> --}}
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="ri-file-3-fill text-primary me-2"></i>SK Tim PPID</span>
+                            <a href="https://drive.google.com/file/d/1dTzTvt9xs5Xm9sb8PtP6QPV12uJ48T6S" target="_blank" class="btn btn-sm btn-primary">Lihat</a>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="ri-file-3-fill text-primary me-2"></i>SK Tim Pengelola Website</span>
+                            <a href="https://drive.google.com/file/d/1Laa-QibQz3yxlQ5jM1vAuJ0_P6ZA1Lui" target="_blank" class="btn btn-sm btn-primary">Lihat</a>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="ri-file-3-fill text-primary me-2"></i>SK Penetapan dan Tata Cara Permintaan Informasi</span>
+                            <a href="https://drive.google.com/file/d/14l1Mm_aXpWk4SnZGRFthFuXEt0VA0Woh" target="_blank" class="btn btn-sm btn-primary">Lihat</a>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="ri-file-3-fill text-primary me-2"></i>SK Pembentukan Tim Teknis Jaringan Dokumentasi dan Info Hukum</span>
+                            <a href="https://drive.google.com/file/d/1rzXdBs0thEdgrHGTXUutblrpEyDfbma7" target="_blank" class="btn btn-sm btn-primary">Lihat</a>
+                            </li>
+                        </ul>
                         </div>
-                    </a>
-                </div>
-                <div class="col mb-5">
-                    <a href="https://drive.google.com/file/d/1Laa-QibQz3yxlQ5jM1vAuJ0_P6ZA1Lui"  target="_blank"target="_blank" class="text-decoration-none text-reset d-block h-100">
-                        <div class="feature-box h-100 d-flex flex-column justify-content-center align-items-center text-center">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="ri-file-3-fill"></i></div>
-                            <h2 class="h5">SK Tim Pengelola Website</h2>
-                            <div class="d-inline mt-2"><span class="btn btn-outline-primary">Lihat</span></div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col mb-5">
-                    <a href="https://drive.google.com/file/d/14l1Mm_aXpWk4SnZGRFthFuXEt0VA0Woh" target="_blank" class="text-decoration-none text-reset d-block h-100">
-                        <div class="feature-box h-100 d-flex flex-column justify-content-center align-items-center text-center">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="ri-file-3-fill"></i></div>
-                            <h2 class="h5">SK Penetapan dan Tata Cara Permintaan Informasi</h2>
-                            <div class="d-inline mt-2"><span class="btn btn-outline-primary">Lihat</span></div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col mb-5">
-                    <a href="https://drive.google.com/file/d/1rzXdBs0thEdgrHGTXUutblrpEyDfbma7" target="_blank" class="text-decoration-none text-reset d-block h-100">
-                        <div class="feature-box h-100 d-flex flex-column justify-content-center align-items-center text-center">
-                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="ri-file-3-fill"></i></div>
-                            <h2 class="h5">SK Pembentukan Tim Teknis Jaringan Dokumentasi dan Info Hukum</h2>
-                            <div class="d-inline mt-2"><span class="btn btn-outline-primary">Lihat</span></div>
-                        </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>

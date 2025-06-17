@@ -5,24 +5,25 @@
     </x-header>
   
     <section class="my-4 mx-5">
-      <div class="row ms-4">
-        <!-- Sidebar nav -->
-        <div class="col-md-4 mb-4">
-          <div class="nav flex-column nav-pills px-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="nav-link active" id="v-pills-sop-tab" data-bs-toggle="pill" data-bs-target="#v-pills-sop" type="button" role="tab" aria-controls="v-pills-sop" aria-selected="true">
-              Standar Operasional Prosedur (SOP)
-            </button>
-            <button class="nav-link" id="v-pills-hours-tab" data-bs-toggle="pill" data-bs-target="#v-pills-hours" type="button" role="tab" aria-controls="v-pills-hours" aria-selected="false">
-              Jam Layanan
-            </button>
-            <button class="nav-link" id="v-pills-maklumat-tab" data-bs-toggle="pill" data-bs-target="#v-pills-maklumat" type="button" role="tab" aria-controls="v-pills-maklumat" aria-selected="false">
-              Maklumat Pelayanan
-            </button>
+      <div class="container">
+        <div class="row justify-content-center">
+          <!-- Sidebar nav -->
+          <div class="col-md-3 mb-3">
+            <div class="nav flex-column nav-pills px-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <button class="nav-link active" id="v-pills-sop-tab" data-bs-toggle="pill" data-bs-target="#v-pills-sop" type="button" role="tab" aria-controls="v-pills-sop" aria-selected="true">
+                Standar Operasional Prosedur (SOP)
+              </button>
+              <button class="nav-link" id="v-pills-hours-tab" data-bs-toggle="pill" data-bs-target="#v-pills-hours" type="button" role="tab" aria-controls="v-pills-hours" aria-selected="false">
+                Jam Layanan
+              </button>
+              <button class="nav-link" id="v-pills-maklumat-tab" data-bs-toggle="pill" data-bs-target="#v-pills-maklumat" type="button" role="tab" aria-controls="v-pills-maklumat" aria-selected="false">
+                Maklumat Pelayanan
+              </button>
+            </div>
           </div>
-        </div>
   
         <!-- Content panes -->
-        <div class="col-md-8">
+        <div class="col-md-9">
           <div class="tab-content" id="v-pills-tabContent">
   
             <!-- SOP Pane -->
@@ -89,6 +90,7 @@
           </div>
         </div>
       </div>
-    </section>
-  </x-layout>
+    </div>
+  </section>
+</x-layout>
   

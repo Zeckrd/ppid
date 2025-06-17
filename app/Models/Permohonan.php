@@ -14,7 +14,12 @@ class Permohonan extends Model
     protected $guarded =[];
     
     public function user()
-{
-    return $this->belongsTo(User::class);
-}
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function keberatan()
+    {
+        return $this->hasOne(Keberatan::class);
+    }
 }

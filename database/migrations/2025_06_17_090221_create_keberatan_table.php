@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permohonan', function (Blueprint $table) {
+        Schema::create('keberatan', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\User::class);
-            $table->enum('permohonan_type', ['biasa', 'khusus'])->default('biasa');
-            $table->string('permohonan_file');
+            $table->foreignIdFor(App\Models\Permohonan::class)->constrained()->onDelete('cascade');
+            $table->string('keberatan_file');
             $table->string('status')->default('Menunggu Verifikasi Berkas Dari Petugas');
-            $table->text('keterangan_user');
+            $table->text('alasan');
             $table->text('keterangan_petugas')->nullable();
             $table->string('reply_file')->nullable();
-            $table->enum('reply_type', ['softcopy', 'hardcopy'])->default('softcopy');
             $table->timestamps();
         });
+
     }
 
     /**
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permohonan');
+        Schema::dropIfExists('keberatan');
     }
 };
