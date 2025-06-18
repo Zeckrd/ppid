@@ -18,7 +18,9 @@
 
                         <x-form-input name="password" id="password" type="password" :value="old('password')" placeholder="Password"  required></x-form-input>
 
-                        <x-form-error name='credential'></x-form-error>
+                        <div class="ps-4">
+                            <x-form-error name='credential'></x-form-error>
+                        </div>
                         
                         <div class="row my-2 px-4">
                             <div class="col-md-6 col-12">

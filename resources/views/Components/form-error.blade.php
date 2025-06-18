@@ -1,4 +1,4 @@
-@props(['name'])
+@props(['name', 'class' => ''])
 @error($name)
-    <p class="text-danger">{{ $message }} </p>
+    <p class="text-danger {{ $class }}">{{ $message }} </p>
 @enderror
