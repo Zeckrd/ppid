@@ -80,11 +80,11 @@ class DashboardController extends Controller
 
         if ($request->hasFile('permohonan_file')) {
 
-            if ($permohonan->permohonan_file && Storage::exists($permohonan->permohonan_file)) {
-                Storage::delete($permohonan->permohonan_file);
+            if ($permohonan->permohonan_file && Storage::disk('public')->exists($permohonan->permohonan_file)) {
+                Storage::disk('public')->delete($permohonan->permohonan_file);
             }
             
-            $updateData['permohonan_file'] = $request->file('permohonan_file')->store('permohonan_files');
+            $updateData['permohonan_file'] = $request->file('permohonan_file')->store('permohonan', 'public');
         }
 
 
