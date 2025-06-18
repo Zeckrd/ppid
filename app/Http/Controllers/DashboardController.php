@@ -68,7 +68,7 @@ class DashboardController extends Controller
             'permohonan_type' => 'required|in:biasa,khusus',
             'keterangan_user' => 'required|string',
             'reply_type' => 'required|in:softcopy,hardcopy',
-            'permohonan_file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
+            'permohonan_file' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
         ]);
 
         $updateData = [
