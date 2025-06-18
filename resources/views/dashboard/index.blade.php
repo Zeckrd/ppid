@@ -42,8 +42,8 @@
                                 @endif
                             </td>
                             <td colspan="4" class="text-end">
-                                <a href="#" class="btn btn-sm btn-outline-primary">Lihat Detil</a>
-                                {{-- <a href="{{ route('#', $permohonan->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detil</a> --}}
+                                {{-- <a href="#" class="btn btn-sm btn-outline-primary">Lihat Detil</a> --}}
+                                <a href="{{ route('dashboard.show', $permohonan->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detil</a>
                             </td>
                         </tr>
                     @endforeach
