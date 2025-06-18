@@ -32,7 +32,7 @@
         @if($permohonan->status == 'Perlu Diperbaiki')
             <div class="alert alert-warning">
                 <h6 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Permohonan Perlu Diperbaiki</h6>
-                <p class="mb-0">Silakan perbaiki permohonan Anda berdasarkan keterangan petugas di bawah ini.</p>
+                <p class="mb-0">Silakan perbaiki permohonan Anda berdasarkan keterangan petugas.</p>
             </div>
         @elseif($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
             <div class="alert alert-info">
@@ -48,7 +48,6 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <h6 class="text-muted">Informasi Permohonan</h6>
                         <table class="table table-borderless">
                             <tr>
                                 <td><strong>Jenis Permohonan:</strong></td>
