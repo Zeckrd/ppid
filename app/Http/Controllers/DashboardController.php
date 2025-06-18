@@ -52,42 +52,18 @@ class DashboardController extends Controller
         return redirect('/dashboard');
     }
 
-    public function show($id)
+    public function show(Permohonan $permohonan)
     {
-        $permohonan = Permohonan::where('id', $id)
-                        ->where('user_id', auth()->id())
-                        ->firstOrFail();
-
         return view('dashboard.show', compact('permohonan'));
     }
 
-    public function edit($id)
+    public function edit(Permohonan $permohonan)
     {
-        $permohonan = Permohonan::where('id', $id)
-                               ->where('user_id', auth()->id())
-                               ->firstOrFail();
-
-        // If status is at menunggu verifikasi or perlu diperbaiki enable edit
-        if (!in_array($permohonan->status, ['Menunggu Verifikasi Berkas Dari Petugas', 'Perlu Diperbaiki'])) {
-            return redirect()->route('dashboard.show', $permohonan->id)
-                           ->with('error', 'Permohonan tidak dapat diedit pada status ini.');
-        }
-
         return view('dashboard.edit', compact('permohonan'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Permohonan $permohonan)
     {
-        $permohonan = Permohonan::where('id', $id)
-                               ->where('user_id', auth()->id())
-                               ->firstOrFail();
-
-        // if status is at menunggu verifikasi or perlu diperbaiki enable edit
-        if (!in_array($permohonan->status, ['Menunggu Verifikasi Berkas Dari Petugas', 'Perlu Diperbaiki'])) {
-            return redirect()->route('dashboard.show', $permohonan->id)
-                           ->with('error', 'Permohonan tidak dapat diedit pada status ini.');
-        }
-
         $request->validate([
             'permohonan_type' => 'required|in:biasa,khusus',
             'keterangan_user' => 'required|string',
@@ -101,8 +77,9 @@ class DashboardController extends Controller
             'reply_type' => $request->reply_type,
         ];
 
-        // if user uploads a new file delete old file then store new file
+
         if ($request->hasFile('permohonan_file')) {
+
             if ($permohonan->permohonan_file && Storage::exists($permohonan->permohonan_file)) {
                 Storage::delete($permohonan->permohonan_file);
             }
@@ -110,15 +87,15 @@ class DashboardController extends Controller
             $updateData['permohonan_file'] = $request->file('permohonan_file')->store('permohonan_files');
         }
 
-        // reset status to Menunggu Verifikasi if it was Perlu Diperbaiki
+
         if ($permohonan->status == 'Perlu Diperbaiki') {
             $updateData['status'] = 'Menunggu Verifikasi Berkas Dari Petugas';
-            $updateData['keterangan_petugas'] = null; // delete staff comment
+            $updateData['keterangan_petugas'] = null;
         }
 
         $permohonan->update($updateData);
 
-        return redirect()->route('dashboard.show', $permohonan->id)
+        return redirect()->route('dashboard.show', $permohonan)
                        ->with('success', 'Permohonan berhasil diperbarui.');
     }
 }

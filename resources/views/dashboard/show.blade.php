@@ -1,14 +1,14 @@
 <x-layout>
-    <div class="container mt-5 pt-5 mb-3">
+    <div class="container mt-5 pt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-0">Detail Permohonan</h3>
             <div>
-                {{-- Show Edit button only for specific statuses --}}
-                @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas' || $permohonan->status == 'Perlu Diperbaiki')
-                    <a href="{{ route('dashboard.edit', $permohonan->id) }}" class="btn btn-warning me-2">
+                {{-- Use Policy to check if user can update --}}
+                @can('update', $permohonan)
+                    <a href="{{ route('dashboard.edit', $permohonan) }}" class="btn btn-warning me-2">
                         <i class="fas fa-edit"></i> Edit Permohonan
                     </a>
-                @endif
+                @endcan
                 <a href="/dashboard" class="btn btn-secondary">Kembali ke Daftar</a>
             </div>
         </div>
@@ -32,7 +32,7 @@
         @if($permohonan->status == 'Perlu Diperbaiki')
             <div class="alert alert-warning">
                 <h6 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Permohonan Perlu Diperbaiki</h6>
-                <p class="mb-0">Silakan perbaiki permohonan Anda berdasarkan keterangan petugas.</p>
+                <p class="mb-0">Silakan perbaiki permohonan Anda berdasarkan keterangan petugas di bawah ini.</p>
             </div>
         @elseif($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
             <div class="alert alert-info">

@@ -28,9 +28,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/create', [DashboardController::class, 'create'])->name('dashboard.create');
     Route::post('/dashboard', [DashboardController::class, 'store'])->name('dashboard.store');
-    Route::get('/dashboard/permohonan/{id}', [DashboardController::class, 'show'])->name('dashboard.show');
-    Route::get('/dashboard/permohonan/{id}/edit', [DashboardController::class, 'edit'])->name('dashboard.edit');
-    Route::put('/dashboard/permohonan/{id}', [DashboardController::class, 'update'])->name('dashboard.update');
+    Route::get('/dashboard/permohonan/{permohonan}', [DashboardController::class, 'show'])->name('dashboard.show')->middleware('can:view,permohonan');
+    Route::get('/dashboard/permohonan/{permohonan}/edit', [DashboardController::class, 'edit'])->name('dashboard.edit')->middleware('can:update,permohonan');
+    Route::put('/dashboard/permohonan/{permohonan}', [DashboardController::class, 'update'])->name('dashboard.update')->middleware('can:update,permohonan');
 });
 
 //Auth
