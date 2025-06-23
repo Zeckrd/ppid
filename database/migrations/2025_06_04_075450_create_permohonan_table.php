@@ -17,6 +17,8 @@ return new class extends Migration
             $table->enum('permohonan_type', ['biasa', 'khusus'])->default('biasa');
             $table->string('permohonan_file');
             $table->string('status')->default('Menunggu Verifikasi Berkas Dari Petugas');
+            // Menunggu Verifikasi Berkas Dari Petugas -> Sedang Diverifikasi petugas -> Permohonan Sedang Diproses -> Selesai
+            // Menunggu Verifikasi Berkas Dari Petugas -> Sedang Diverifikasi petugas -> Perlu Diperbaiki -> RESET -> Menunggu Verifikasi Berkas Dari Petugas
             $table->text('keterangan_user');
             $table->text('keterangan_petugas')->nullable();
             $table->string('reply_file')->nullable();

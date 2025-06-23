@@ -5,7 +5,7 @@
         <div class="container mt-5 pt-5">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
-                    <div class="card shadow-sm border-0">
+                    <div class="card shadow border-0">
                         <div class="card-body p-4">
                             <h4 class="card-title mb-4">Form Permohonan Informasi</h4>
                             {{-- Jenis Permohonan --}}
