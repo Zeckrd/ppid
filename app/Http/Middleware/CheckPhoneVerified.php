@@ -4,8 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use App\Models\PhoneVerification;
+use Illuminate\Support\Facades\Auth;
 
 class CheckPhoneVerified
 {
@@ -14,21 +13,16 @@ class CheckPhoneVerified
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        $user = $request->user();
+        $user = Auth::user();
 
-        if (!$user || !$user->phone) {
-            return redirect()->route('verify-phone')->with('message', 'Please provide your phone number.');
-        }
-
-        $verified = PhoneVerification::where('user_id', $user->id)
-            ->where('phone', $user->phone)
-            ->where('is_verified', true)
-            ->exists();
-
-        if (!$verified) {
-            return redirect()->route('verify-phone')->with('message', 'Please verify your phone number.');
+        // if user is logged in but hasnt verified their phone
+        if ($user && is_null($user->phone_verified_at)) {
+            Auth::logout(); // log them out
+            return redirect('/login')->withErrors([
+                'phone' => 'Nomor telepon Anda belum diverifikasi.',
+            ]);
         }
 
         return $next($request);

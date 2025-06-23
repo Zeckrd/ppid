@@ -35,6 +35,11 @@
                             <x-form-error name='password_confirmation'></x-form-error>
                         </x-form-field>
 
+                        <x-form-field>
+                            <x-form-input name="phone" id="phone" :value="old('phone')" placeholder="Nomor Telpon 62"  required></x-form-input>
+                            <x-form-error name='phone'></x-form-error>
+                        </x-form-field>
+
                         <div class="form-group mt-3">
                             <x-form-button>Daftar</x-form-button>
                         </div>

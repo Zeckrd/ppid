@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 use App\Models\User;
+use App\Models\PhoneVerification;
 
 
 class RegisterUserController extends Controller
@@ -25,10 +27,25 @@ class RegisterUserController extends Controller
             'name'          => ['required'],
             'email'         => ['required', 'unique:users,email'],
             'password'      => ['required', Password::min(5)->letters(),'confirmed'],
+            'phone'         => ['required', 'unique:users,phone']
         ]);
 
         //create User
         $user = User::create($attributes);
+
+         // Str to generate token example: "20a5d4cb-8b12-48c6-a0b2-e4e39d01e3b5"
+        $token = Str::uuid();
+
+        //store token in prone verification table with associated user id
+        PhoneVerification::create([
+            'user_id' => $user->id,
+            'token' => $token,
+        ]);
+
+        //use token to generate link, send with message to Services/WablasService.php
+        $verifyUrl = route('verify.phone', ['token' => $token]);
+        $message = "Halo {$user->name}, klik link ini untuk verifikasi nomor Anda: $verifyUrl";
+        app(\App\Services\WablasService::class)->sendMessage($user->phone, $message);
 
         // Login User
         Auth::login($user);

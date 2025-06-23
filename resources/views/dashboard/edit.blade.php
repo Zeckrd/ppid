@@ -83,6 +83,7 @@
                         <input type="file" class="form-control @error('permohonan_file') is-invalid @enderror" 
                             id="permohonan_file" name="permohonan_file" 
                             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                        <x-form-error name='permohonan_file'></x-form-error>
                         <div class="form-text">
                             Tipe File : .pdf, .doc, .docx, dan ukuran dibawah 2 MB
                             <br>
@@ -93,7 +94,6 @@
                                 </a>
                             @endif
                         </div>
-                        <x-form-error name='permohonan_file'></x-form-error>
                     </div>
 
                     @if($permohonan->status == 'Perlu Diperbaiki' && $permohonan->keterangan_petugas)

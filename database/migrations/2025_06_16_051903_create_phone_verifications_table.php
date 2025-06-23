@@ -14,10 +14,7 @@ return new class extends Migration
         Schema::create('phone_verifications', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->onDelete('cascade');
-            $table->string('phone')->nullable();
-            $table->string('otp')->nullable();
-            $table->boolean('is_verified')->default(false);
-            $table->timestamp('expires_at')->nullable();
+            $table->string('token')->unique();
             $table->timestamps();
         });
     }

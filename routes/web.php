@@ -24,7 +24,7 @@ Route::view('/informasi-dikecualikan', 'informasi-dikecualikan');
 //     Route::get('/dashboard/create', [DashboardController::class, 'create'])->name('dashboard.create');
 // });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'phone.verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/create', [DashboardController::class, 'create'])->name('dashboard.create');
     Route::post('/dashboard', [DashboardController::class, 'store'])->name('dashboard.store');
@@ -41,9 +41,5 @@ Route::get('/login',[SessionController::class, 'create'])->name('login');
 Route::post('/login',[SessionController::class, 'store']);
 Route::post('/logout',[SessionController::class, 'destroy']);
 
-//phone
-Route::middleware(['auth'])->group(function () {
-    Route::get('/otp.verify-phone', [PhoneVerificationController::class, 'showForm'])->name('verify-phone');
-    Route::post('/otp.verify-phone', [PhoneVerificationController::class, 'sendOtp'])->name('verify-phone.send');
-    Route::post('/otp.verify-phone/confirm', [PhoneVerificationController::class, 'confirmOtp'])->name('verify-phone.confirm');
-});
+//phone and email verification
+Route::get('/verify-phone/{token}', [PhoneVerificationController::class, 'verify'])->name('verify.phone');

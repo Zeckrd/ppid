@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('ktp_foto')->nullable();
             $table->string('alamat')->nullable();
             $table->string('phone')->nullable()->unique();
+            $table->timestamp('phone_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

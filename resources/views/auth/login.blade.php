@@ -1,8 +1,14 @@
 <x-layout>
     <form method="POST" action="{{ route('login') }}">
     @csrf
+    
+    @if($errors->has('phone'))
+        <div class="alert alert-warning position-fixed top-0 start-50 translate-middle-x mt-5 pt-5 z-1050" style="min-width: 300px;">
+            {{ $errors->first('phone') }}
+        </div>
+    @endif
 
-    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center position-relative">
         <div class="row w-100 justify-content-center">
             <div class="col-8 col-md-8 col-lg-8 col-xl-3">
                 <div class="card shadow py-3 px-2">
