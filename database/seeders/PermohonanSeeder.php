@@ -14,7 +14,7 @@ class PermohonanSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::where('email', 'test@example.com')->first();
+        $user = User::where('email', 'raditfathi@gmail.com')->first();
 
         Permohonan::factory(40)->create([
             'user_id' => $user->id,
