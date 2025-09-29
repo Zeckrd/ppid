@@ -5,7 +5,7 @@
             <div>
                 {{-- Use Policy to check if user can update --}}
                 @can('update', $permohonan)
-                    <a href="{{ route('dashboard.edit', $permohonan) }}" class="btn btn-warning me-2">
+                    <a href="{{ route('user.permohonan.edit', $permohonan) }}" class="btn btn-warning me-2">
                         <i class="fas fa-edit"></i> Edit Permohonan
                     </a>
                 @endcan
@@ -131,6 +131,43 @@
                         </a>
                     </div>
                     @endif
+                    @if(in_array($permohonan->status, ['Perlu Diperbaiki', 'Selesai']))
+                        <hr>
+
+                        <div class="mt-2">
+                            <h5 class="text-muted">Keberatan</h5>
+
+                            @if($permohonan->keberatan)
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <p><strong>Diajukan pada:</strong> {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}</p>
+                                        <p><strong>Keterangan User:</strong></p>
+                                        <p class="border p-3 bg-light rounded">
+                                            {{ $permohonan->keberatan->keterangan_user }}
+                                        </p>
+
+                                        @if($permohonan->keberatan->keberatan_file)
+                                            <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}"
+                                            class="btn btn-outline-primary btn-sm"
+                                            target="_blank">
+                                                <i class="fas fa-download"></i> Download File Keberatan
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @else
+                                <div class="alert alert-info d-flex justify-content-between align-items-center">
+                                    <div>
+                                        Anda bisa mengajukan keberatan untuk permohonan ini.
+                                    </div>
+                                    <a href="{{ route('user.keberatan.create', $permohonan->id) }}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-plus"></i> Buat Keberatan
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignIdFor(App\Models\Permohonan::class)->constrained()->onDelete('cascade');
             $table->string('keberatan_file');
             $table->string('status')->default('Menunggu Verifikasi Berkas Dari Petugas');
-            $table->text('alasan');
+            $table->text('keterangan_user');
             $table->text('keterangan_petugas')->nullable();
             $table->string('reply_file')->nullable();
             $table->timestamps();

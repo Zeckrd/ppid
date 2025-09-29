@@ -12,7 +12,7 @@ class Keberatan extends Model
 
     protected $guarded =[];
 
-    public function user()
+    public function permohonan()
     {
         return $this->belongsTo(Permohonan::class);
     }

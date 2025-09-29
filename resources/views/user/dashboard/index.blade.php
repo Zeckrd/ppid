@@ -5,7 +5,7 @@
             <a href="/dashboard/create" class="btn btn-primary">Tambah Pengajuan</a>
         </div>
 
-        {{-- CHECK IF PERMOHONAN IS EMTPY RETURN WARNING INSTEAD --}}
+        {{-- CHECK IF PERMOHONAN IS EMTPY RETURN ALERT INSTEAD --}}
         @if($permohonans->isEmpty())
             <div class="alert alert-warning" role="alert">
                 Anda belum membuat permohonan apapun. Silakan klik tombol "Tambah Pengajuan" untuk mengajukan permohonan.
@@ -43,7 +43,7 @@
                             </td>
                             <td colspan="4" class="text-end">
                                 {{-- <a href="#" class="btn btn-sm btn-outline-primary">Lihat Detil</a> --}}
-                                <a href="{{ route('dashboard.show', $permohonan->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detil</a>
+                                <a href="{{ route('user.permohonan.show', $permohonan->id) }}" class="btn btn-sm btn-outline-primary">Lihat Detil</a>
                             </td>
                         </tr>
                     @endforeach

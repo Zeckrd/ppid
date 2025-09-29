@@ -1,65 +1,50 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Storage;
 
-class DashboardController extends Controller
+class PermohonanController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-
-        $permohonans = Permohonan::with('user')
-            ->where('user_id', $user->id)
-            ->latest()
-            ->paginate(10);
-
-        return view('dashboard.index', [
-            'permohonans' => $permohonans
-        ]);
-    }
-
     public function create()
     {
-        return view('dashboard.create');
-        
+        return view('user.dashboard.permohonan.create');
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        request()->validate([
+        $request->validate([
             'permohonan_type' => 'required|in:biasa,khusus',
-            'permohonan_file' => 'required|file|mimes:pdf,doc,docx|max:2048',//DONOT SET MAX ABOVE 2MB UNLESS PHP CONFIG CHANGE
+            'permohonan_file' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'keterangan_user' => 'required|string|max:512',
             'reply_type' => 'required|in:softcopy,hardcopy',
         ]);
 
-
-        $path = request()->file('permohonan_file')->store('permohonan', 'public');
+        $path = $request->file('permohonan_file')->store('permohonan', 'public');
 
         Permohonan::create([
             'user_id' => auth()->id(),
-            'permohonan_type' => request('permohonan_type'),
+            'permohonan_type' => $request->permohonan_type,
             'permohonan_file' => $path,
-            'keterangan_user' => request('keterangan_user'),
-            'reply_type' => request('reply_type'),
+            'keterangan_user' => $request->keterangan_user,
+            'reply_type' => $request->reply_type,
         ]);
 
-        return redirect('/dashboard');
+        return redirect()->route('user.dashboard.index')
+                         ->with('success', 'Permohonan berhasil dibuat.');
     }
 
     public function show(Permohonan $permohonan)
     {
-        return view('dashboard.show', compact('permohonan'));
+        return view('user.dashboard.permohonan.show', compact('permohonan'));
     }
 
     public function edit(Permohonan $permohonan)
     {
-        return view('dashboard.edit', compact('permohonan'));
+        return view('user.dashboard.permohonan.edit', compact('permohonan'));
     }
 
     public function update(Request $request, Permohonan $permohonan)
@@ -71,22 +56,14 @@ class DashboardController extends Controller
             'permohonan_file' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
         ]);
 
-        $updateData = [
-            'permohonan_type' => $request->permohonan_type,
-            'keterangan_user' => $request->keterangan_user,
-            'reply_type' => $request->reply_type,
-        ];
-
+        $updateData = $request->only(['permohonan_type', 'keterangan_user', 'reply_type']);
 
         if ($request->hasFile('permohonan_file')) {
-
             if ($permohonan->permohonan_file && Storage::disk('public')->exists($permohonan->permohonan_file)) {
                 Storage::disk('public')->delete($permohonan->permohonan_file);
             }
-            
             $updateData['permohonan_file'] = $request->file('permohonan_file')->store('permohonan', 'public');
         }
-
 
         if ($permohonan->status == 'Perlu Diperbaiki') {
             $updateData['status'] = 'Menunggu Verifikasi Berkas Dari Petugas';
@@ -95,7 +72,7 @@ class DashboardController extends Controller
 
         $permohonan->update($updateData);
 
-        return redirect()->route('dashboard.show', $permohonan)
-                       ->with('success', 'Permohonan berhasil diperbarui.');
+        return redirect()->route('user.permohonan.show', $permohonan)
+                         ->with('success', 'Permohonan berhasil diperbarui.');
     }
 }

@@ -13,33 +13,32 @@ class SessionController extends Controller
         return view('auth.login');
     }
 
-        public function store()
+    public function store(Request $request)
     {
-        // dd(request()->all());
-
-        //validate
-        $attributes = request()->validate([
-            'email'=>['required','email'],
-            'password'=>['required']
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        //attempt login user
-        if (! Auth::attempt($attributes)){
+        if (!Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
-                'credential' => 'Email atau Password salah'
+                'credential' => 'Email atau Password salah',
             ]);
-        };
+        }
 
-        //if succeedd regenerate session token
-        request()->session()->regenerate();
+        $request->session()->regenerate();
 
-        //redirect
-        return redirect('dashboard');
+        return auth()->user()->is_admin
+            ? redirect()->route('admin.dashboard.index')
+            : redirect()->route('user.dashboard.index');
     }
 
-    public function destroy()
+    public function destroy(Request $request)
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/');
     }
