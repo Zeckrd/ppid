@@ -54,7 +54,7 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                        Halo, {{ Auth::user()->name }}
+                                        Halo, {{ Str::limit(Auth::user()->name, 12, '...') }}
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                         <li><a class="dropdown-item" href="{{ route('dashboard') }}">
