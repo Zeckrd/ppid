@@ -2,7 +2,7 @@
     <div class="container mt-5 pt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="mb-0">Daftar Permohonan</h3>
-            <a href="/dashboard/create" class="btn btn-primary">Tambah Pengajuan</a>
+            <a href="{{ route('user.permohonan.create') }}" class="btn btn-primary">Tambah Pengajuan</a>
         </div>
 
         {{-- CHECK IF PERMOHONAN IS EMTPY RETURN ALERT INSTEAD --}}

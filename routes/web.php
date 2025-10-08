@@ -58,8 +58,13 @@ Route::middleware(['auth', 'phone.verified'])
             ->except(['index']); // user doesn’t need to see all
 
         // Keberatan
-        Route::resource('keberatan', KeberatanController::class)
-            ->only(['show','create','store']);
+        Route::get('/keberatan/show', [KeberatanController::class, 'show'])
+            ->name('keberatan.show');
+        Route::get('/permohonan/{permohonan}/keberatan/create', [KeberatanController::class, 'create'])
+            ->name('keberatan.create');
+        Route::post('/permohonan/{permohonan}/keberatan', [KeberatanController::class, 'store'])
+            ->name('keberatan.store');
+
     });
 
 // Dashboard Routing
@@ -76,7 +81,7 @@ Route::post('/register', [RegisterUserController::class, 'store']);
 
 Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store']);
-Route::post('/logout', [SessionController::class, 'destroy']);
+Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');

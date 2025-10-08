@@ -1,11 +1,11 @@
 <x-layout>
-    <form action="{{ route('dashboard.update', $permohonan->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('user.permohonan.update', $permohonan->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
         <div class="container mt-5 pt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="mb-0">Edit Permohonan</h3>
-                <a href="{{ route('dashboard.show', $permohonan->id) }}" class="btn btn-secondary">Kembali Ke Daftar</a>
+                <a href="{{ route('user.permohonan.show', $permohonan->id) }}" class="btn btn-secondary">Kembali Ke Daftar</a>
             </div>
 
             {{-- success/error message --}}
@@ -104,7 +104,7 @@
                     @endif
 
                     <div class="d-flex justify-content-between">
-                        <a href="{{ route('dashboard.show', $permohonan->id) }}" class="btn btn-secondary">Batal</a>
+                        <a href="{{ route('user.permohonan.show', $permohonan->id) }}" class="btn btn-secondary">Batal</a>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Simpan Perubahan
                         </button>

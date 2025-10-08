@@ -44,29 +44,39 @@
                                 </ul>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="/standar-layanan">Standar Layanan</a></li>
+                            <li class="nav-item d-none d-lg-block"><span class="nav-link text-muted">|</span></li>
                             @guest
-                                <li class="nav-item"><a class="nav-link" href='/login' :active="request()->is('login')">Log In</a></li>
-                                <li class="nav-item"><a class="nav-link" href='/register' :active="request()->is('register')">Daftar</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Log In</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Daftar</a></li>
                             @endguest
 
                             @auth
-                                <li class="nav-item"><a class="nav-link" href='/dashboard' :active="request()->is('login')">Dashboard</a></li>
-                                
-                                <li class="nav-item">
-                                    <a class="nav-link text-danger" href="#"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Log Out
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                        Halo, {{ Auth::user()->name }}
                                     </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="{{ route('dashboard') }}">
+                                        <i class="ri-home-2-fill"></i><span> Beranda</span>
+                                        </a></li>
 
-                                    <form id="logout-form" action="/logout" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
+                                        <li><a class="dropdown-item" href="#">
+                                        <i class="ri-booklet-fill"></i><span> Panduan Pengguna</span>
+                                        </a></li>
+
+                                        <li><a class="dropdown-item" href="{{ route('password.request') }}">
+                                        <i class="ri-key-fill"></i><span> Ubah Kata Sandi</span>
+                                        </a></li>
+
+                                        <li><hr class="dropdown-divider"></li>
+                                        <a class="dropdown-item text-danger" href="#"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="ri-logout-box-r-fill"></i> <span> Keluar</span>
+                                        </a><form id="logout-form" action="/logout" method="POST" style="display: none;"> @csrf </form>
+                                        </li>
+                                    </ul>
                                 </li>
-
-                                {{-- <form method='POST'action='/logout'>
-                                    @csrf
-                                    <x-form-button>Log Out</x-form-button>
-                                </form> --}}
                             @endauth
                         </ul>
                     </div>
@@ -89,14 +99,13 @@
                         <span class="text-white mx-1">&middot;</span>
                         <a class="link-light small" href="mailto:informasi@ptun-bandung.go.id">✉️ informasi@ptun-bandung.go.id</a>
                         <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="https://g.co/kgs/ECfzF8b" target="_blank">
-                            📍 Lokasi
-                        </a>
+                        <a class="link-light small" href="https://g.co/kgs/ECfzF8b" target="_blank">📍 Lokasi</a>
                     </div>
                 </div>
             </div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        @stack('scripts')
     </body>
 </html>

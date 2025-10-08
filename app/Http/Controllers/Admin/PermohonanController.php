@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Permohonan;
+use Illuminate\Support\Facades\Storage;
 
 class PermohonanController extends Controller
 {
@@ -40,14 +41,14 @@ class PermohonanController extends Controller
             'reply_file'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
-        // if ($request->hasFile('reply_file')) {
-        //     // Delete old reply file if exists
-        //     if ($permohonan->reply_file && Storage::disk('public')->exists($permohonan->reply_file)) {
-        //         Storage::disk('public')->delete($permohonan->reply_file);
-        //     }
+        if ($request->hasFile('reply_file')) {
+            // Delete old reply file if exists
+            if ($permohonan->reply_file && Storage::disk('public')->exists($permohonan->reply_file)) {
+                Storage::disk('public')->delete($permohonan->reply_file);
+            }
 
-        //     $validated['reply_file'] = $request->file('reply_file')->store('reply_files', 'public');
-        // }
+            $validated['reply_file'] = $request->file('reply_file')->store('reply_files', 'public');
+        }
 
         $permohonan->update($validated);
 

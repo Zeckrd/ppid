@@ -12,17 +12,24 @@ class KeberatanController extends Controller
 {
     public function create(Permohonan $permohonan)
     {
-        // Only allow if status is Perlu Diperbaiki or Selesai
-        if (!in_array($permohonan->status, ['Perlu Diperbaiki', 'Selesai'])) {
+        $status = strtolower(trim($permohonan->status));
+
+        $allowedStatuses = [
+            'perlu diperbaiki',
+            'menunggu verifikasi berkas dari petugas',
+            'selesai',
+        ];
+
+        if (!in_array($status, $allowedStatuses)) {
             return redirect()->back()->with('error', 'Permohonan ini tidak dapat diajukan keberatan.');
         }
 
-        // Prevent duplicate
         if ($permohonan->keberatan) {
-            return redirect()->route('user.permohonan.show', $permohonan)->with('error', 'Keberatan sudah diajukan.');
+            return redirect()->route('user.permohonan.show', $permohonan)
+                            ->with('error', 'Keberatan sudah diajukan.');
         }
 
-        return view('user.keberatan.create', compact('permohonan'));
+        return view('user.dashboard.keberatan.create', compact('permohonan'));
     }
 
     public function store(Request $request, Permohonan $permohonan)
@@ -49,6 +56,6 @@ class KeberatanController extends Controller
 
     public function show(Keberatan $keberatan)
     {
-        return view('user.keberatan.show', compact('keberatan'));
+        return view('user.dashboard.keberatan.show', compact('keberatan'));
     }
 }

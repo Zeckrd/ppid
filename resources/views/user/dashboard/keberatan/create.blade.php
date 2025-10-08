@@ -1,5 +1,5 @@
 <x-layout>
-    <form method="POST" action="{{ route('keberatan.store', $permohonan->id) }}"  enctype="multipart/form-data">
+    <form method="POST" action="{{ route('user.keberatan.store', $permohonan) }}"  enctype="multipart/form-data">
         @csrf
 
         <div class="container mt-5 pt-5">
