@@ -1,84 +1,57 @@
 <x-layout>
-    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center position-relative">
+    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
         <div class="row w-100 justify-content-center">
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <div class="card shadow border-0">
-                    <div class="card-body p-4">
-                        <h4 class="card-title text-center mb-4">Reset Password</h4>
-                        
-                        {{-- error checks --}}
-                        @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <ul class="mb-0 list-unstyled">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
+                    <div class="card-body p-4 text-center">
+                        <i class="ri-key-2-fill text-primary fs-2"></i>
+                        <h4 class="mt-2">Atur Ulang Password</h4>
 
-                        {{-- Display email --}}
-                        <div class="mb-3">
-                            <p class="text-muted small mb-0">Reset password untuk:</p>
-                            <p class="fw-bold mb-0">{{ $email }}</p>
-                        </div>
+                        <x-alert type="error" />
+                        <x-alert type="success" />
 
                         <form method="POST" action="{{ route('password.update') }}">
                             @csrf
-                            
-                            {{-- Hidden --}}
                             <input type="hidden" name="token" value="{{ $token }}">
                             <input type="hidden" name="email" value="{{ $email }}">
-                            
-                            {{-- New Password --}}
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password Baru</label>
-                                <input type="password" 
-                                       name="password" 
-                                       id="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
-                                       required 
-                                       minlength="8"
-                                       autocomplete="new-password">
-                                <div class="form-text">
-                                    Password minimal 5 karakter
-                                </div>
-                                <x-form-error name='password'></x-form-error>
-                            </div>
-                            
-                            {{-- Password Confirmation --}}
-                            <div class="mb-3">
+
+                            <x-form.password name="password" label="Password" help="Minimal 5 karakter, kombinasi huruf, angka, dan simbol" />
+
+                            <div class="mb-1 text-start">
                                 <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                                <input type="password" 
-                                       name="password_confirmation" 
-                                       id="password_confirmation" 
-                                       class="form-control @error('password_confirmation') is-invalid @enderror" 
-                                       required 
-                                       minlength="8"
-                                       autocomplete="new-password">
-                                <x-form-error name='password_confirmation'></x-form-error>
+                                <div class="input-group">
+                                    <input type="password"
+                                           name="password_confirmation"
+                                           id="password_confirmation"
+                                           class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}"
+                                           required
+                                           minlength="5">
+                                    <button class="btn btn-outline-secondary"
+                                            type="button"
+                                            data-toggle="password"
+                                            data-target="password_confirmation">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div id="passwordMatch" class="form-text"></div>
+                                <x-form.error name="password_confirmation" />
                             </div>
-                            
-                            {{-- Submit --}}
-                            <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-shield-lock me-2"></i>Reset Password
-                                </button>
+                            <div class="form-text text-start">
+                                <i class="bi bi-info-circle me-1"></i>Ketik ulang password
                             </div>
+
+                            <button type="submit" class="btn btn-primary w-100 mt-3">
+                                <i class="ri-shield-keyhole-line me-2"></i>Reset
+                            </button>
                         </form>
-                        
-                        {{-- Back to Login Link --}}
-                        <div class="text-center mt-3">
-                            <p class="mb-0">
-                                <a href="{{ route('login') }}" class='text-decoration-none'>
-                                    <i class="bi bi-arrow-left me-1"></i>Kembali ke Login
-                                </a>
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script async src="https://www.google.com/recaptcha/api.js"></script>
+        <script src="{{ asset('js/toggle-password.js') }}"></script>
+    @endpush
 </x-layout>
