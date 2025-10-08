@@ -51,8 +51,15 @@ class KeberatanController extends Controller
             'keberatan_file' => $filePath,
         ]);
 
-        return redirect()->route('user.permohonan.show', $permohonan)->with('success', 'Keberatan berhasil diajukan.');
+        $permohonan->update([
+            'status' => 'Menunggu Verifikasi Berkas Dari Petugas',
+        ]);
+
+        return redirect()
+            ->route('user.permohonan.show', $permohonan)
+            ->with('success', 'Keberatan berhasil diajukan dan status permohonan diperbarui.');
     }
+
 
     public function show(Keberatan $keberatan)
     {

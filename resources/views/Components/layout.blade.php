@@ -14,6 +14,8 @@
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="https://cdn.jsdelivr.net/npm/remixicon@3.6.0/fonts/remixicon.css" rel="stylesheet">
+        
+        @stack('styles') {{-- allows page CSS to load --}}
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0 pt-5">

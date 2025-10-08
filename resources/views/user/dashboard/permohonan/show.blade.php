@@ -1,93 +1,141 @@
 <x-layout>
     <div class="container mt-5 pt-5 pb-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="mb-0">Detail Permohonan</h3>
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <a href="/dashboard" class="text-muted text-decoration-none">
+                        <i class="ri-arrow-left-line"></i> Kembali
+                    </a>
+                </div>
+                <h3 class="mb-1">Detail Permohonan Informasi</h3>
+                <p class="text-muted mb-0">Informasi lengkap tentang permohonan Anda</p>
+            </div>
             <div class="d-flex gap-2">
                 @can('update', $permohonan)
                     <a href="{{ route('user.permohonan.edit', $permohonan) }}" class="btn btn-warning">
-                        <i class="fas fa-edit"></i> Edit Permohonan
+                        <i class="ri-edit-line me-1"></i> Edit
                     </a>
                 @endcan
-                <a href="/dashboard" class="btn btn-secondary">Kembali ke Daftar</a>
             </div>
         </div>
 
         {{-- Flash messages --}}
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                {{ session('success') }}
+            <div class="alert alert-success alert-dismissible fade show mb-4 d-flex align-items-center" role="alert">
+                <i class="ri-checkbox-circle-line me-2" style="font-size: 1.25rem;"></i>
+                <div class="flex-grow-1">{{ session('success') }}</div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                {{ session('error') }}
+            <div class="alert alert-danger alert-dismissible fade show mb-4 d-flex align-items-center" role="alert">
+                <i class="ri-error-warning-line me-2" style="font-size: 1.25rem;"></i>
+                <div class="flex-grow-1">{{ session('error') }}</div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         {{-- Status alerts --}}
         @if($permohonan->status == 'Perlu Diperbaiki')
-            <div class="alert alert-warning mb-4">
-                <h6 class="alert-heading mb-1"><i class="fas fa-exclamation-triangle"></i> Permohonan Perlu Diperbaiki</h6>
-                <p class="mb-0">Silakan perbaiki permohonan Anda berdasarkan keterangan petugas.</p>
+            <div class="alert alert-warning mb-4 d-flex align-items-start border-0 shadow-sm">
+                <i class="ri-error-warning-line me-3 mt-1" style="font-size: 1.5rem;"></i>
+                <div>
+                    <h6 class="alert-heading mb-2 fw-bold">Permohonan Perlu Diperbaiki</h6>
+                    <p class="mb-0">Silakan perbaiki permohonan Anda berdasarkan keterangan petugas di bawah.</p>
+                </div>
             </div>
         @elseif($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
-            <div class="alert alert-info mb-4">
-                <h6 class="alert-heading mb-1"><i class="fas fa-info-circle"></i> Status Menunggu Verifikasi</h6>
-                <p class="mb-0">Permohonan Anda masih dapat diedit sebelum diverifikasi oleh petugas.</p>
+            <div class="alert alert-info mb-4 d-flex align-items-start border-0 shadow-sm">
+                <i class="ri-information-line me-3 mt-1" style="font-size: 1.5rem;"></i>
+                <div>
+                    <h6 class="alert-heading mb-2 fw-bold">Status Menunggu Verifikasi</h6>
+                    <p class="mb-0">Permohonan Anda masih dapat diedit sebelum diverifikasi oleh petugas.</p>
+                </div>
+            </div>
+        @elseif($permohonan->status == 'Selesai')
+            <div class="alert alert-success mb-4 d-flex align-items-start border-0 shadow-sm">
+                <i class="ri-checkbox-circle-line me-3 mt-1" style="font-size: 1.5rem;"></i>
+                <div>
+                    <h6 class="alert-heading mb-2 fw-bold">Permohonan Selesai</h6>
+                    <p class="mb-0">Permohonan Anda telah selesai diproses. File balasan tersedia untuk diunduh.</p>
+                </div>
             </div>
         @endif
 
-        <div class="card shadow-sm border-1">
-            <div class="card-body py-4 px-4">
-                <div class="row mb-3">
+        <!-- Main Card -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <!-- Status Banner -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background-color: #f8f9fa;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div>
+                                    <h5 class="mb-1 fw-bold">{{ ucfirst($permohonan->permohonan_type) }}</h5>
+                                    <div class="text-muted small">
+                                        <i class="ri-calendar-line me-1"></i>
+                                        Dibuat {{ $permohonan->created_at->format('d M Y, H:i') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                @switch($permohonan->status)
+                                    @case('Menunggu Verifikasi Berkas Dari Petugas')
+                                        <span class="badge bg-warning text-dark px-3 py-2">
+                                            <i class="ri-time-line me-1"></i>Menunggu Verifikasi
+                                        </span>
+                                        @break
+                                    @case('Sedang Diverifikasi petugas')
+                                        <span class="badge bg-primary px-3 py-2">
+                                            <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                        </span>
+                                        @break
+                                    @case('Perlu Diperbaiki')
+                                        <span class="badge bg-danger px-3 py-2">
+                                            <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                        </span>
+                                        @break
+                                    @case('Permohonan Sedang Diproses')
+                                        <span class="badge bg-info text-dark px-3 py-2">
+                                            <i class="ri-loader-4-line me-1"></i>Diproses
+                                        </span>
+                                        @break
+                                    @case('Selesai')
+                                        <span class="badge bg-success px-3 py-2">
+                                            <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                        </span>
+                                        @break
+                                    @default
+                                        <span class="badge bg-secondary px-3 py-2">
+                                            {{ ucfirst($permohonan->status) }}
+                                        </span>
+                                @endswitch
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details Grid -->
+                <div class="row g-4 mb-4">
                     <div class="col-md-6">
-                        <table class="table table-borderless table-sm mb-0">
-                            <tbody>
-                                <tr>
-                                    <td class="fw-semibold text-muted">Jenis Permohonan:</td>
-                                    <td>{{ ucfirst($permohonan->permohonan_type) }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-muted">Status:</td>
-                                    <td>
-                                        @switch($permohonan->status)
-                                            @case('Menunggu Verifikasi Berkas Dari Petugas')
-                                                <span class="badge bg-warning text-dark">Menunggu Verifikasi</span>
-                                                @break
-                                            @case('Sedang Diverifikasi petugas')
-                                                <span class="badge bg-primary">Diverifikasi</span>
-                                                @break
-                                            @case('Perlu Diperbaiki')
-                                                <span class="badge bg-danger">Perlu Diperbaiki</span>
-                                                @break
-                                            @case('Permohonan Sedang Diproses')
-                                                <span class="badge bg-info text-dark">Diproses</span>
-                                                @break
-                                            @case('Selesai')
-                                                <span class="badge bg-success">Selesai</span>
-                                                @break
-                                            @default
-                                                <span class="badge bg-secondary">{{ ucfirst($permohonan->status) }}</span>
-                                        @endswitch
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-muted">Waktu Dibuat:</td>
-                                    <td>{{ $permohonan->created_at->format('d M Y, H:i') }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-muted">Waktu Update:</td>
-                                    <td>{{ $permohonan->updated_at->format('d M Y, H:i') }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-muted">Jenis Balasan:</td>
-                                    <td>{{ ucfirst($permohonan->reply_type) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="d-flex align-items-start">
+                            <i class="ri-time-line text-muted me-2 mt-1"></i>
+                            <div>
+                                <div class="text-muted small mb-1">Waktu Update</div>
+                                <div class="fw-medium">{{ $permohonan->updated_at->format('d M Y, H:i') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <i class="ri-mail-line text-muted me-2 mt-1"></i>
+                            <div>
+                                <div class="text-muted small mb-1">Jenis Balasan</div>
+                                <div class="fw-medium">{{ ucfirst($permohonan->reply_type) }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -95,77 +143,140 @@
 
                 {{-- Keterangan User --}}
                 <div class="mb-4">
-                    <h5 class="text-muted mb-2">Keterangan User</h5>
-                    <p class="border rounded p-3 bg-light mb-0">{{ $permohonan->keterangan_user }}</p>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-message-3-line text-primary me-2"></i>
+                        <h6 class="mb-0 fw-bold">Keterangan User</h6>
+                    </div>
+                    <div class="p-3 rounded bg-light border">
+                        <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keterangan_user }}</p>
+                    </div>
                 </div>
 
                 {{-- Keterangan Petugas --}}
                 @if($permohonan->keterangan_petugas)
                     <div class="mb-4">
-                        <h5 class="text-muted mb-2">Keterangan Petugas</h5>
-                        <p class="border rounded p-3 bg-info bg-opacity-10 mb-0">{{ $permohonan->keterangan_petugas }}</p>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="ri-admin-line text-info me-2"></i>
+                            <h6 class="mb-0 fw-bold">Keterangan Petugas</h6>
+                        </div>
+                        <div class="p-3 rounded border" style="background-color: #e7f3ff;">
+                            <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keterangan_petugas }}</p>
+                        </div>
                     </div>
                 @endif
 
                 <hr class="my-4">
 
-                <div class="row gy-4">
+                <!-- Files Section -->
+                <div class="row g-4">
                     <div class="col-md-6">
-                        <h5 class="text-muted mb-2">File Permohonan</h5>
-                        @if($permohonan->permohonan_file)
-                            <a href="{{ Storage::url($permohonan->permohonan_file) }}" class="btn btn-outline-primary btn-sm" target="_blank">
-                                <i class="fas fa-download"></i> Download File
-                            </a>
-                        @else
-                            <span class="text-muted">Tidak ada file</span>
-                        @endif
+                        <div class="card h-100 border">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="ri-file-text-line text-primary me-2" style="font-size: 1.25rem;"></i>
+                                    <h6 class="mb-0 fw-bold">File Permohonan</h6>
+                                </div>
+                                @if($permohonan->permohonan_file)
+                                    <a href="{{ Storage::url($permohonan->permohonan_file) }}" 
+                                       class="btn btn-outline-primary w-100" 
+                                       target="_blank">
+                                        <i class="ri-download-line me-1"></i> Download File Permohonan
+                                    </a>
+                                @else
+                                    <div class="text-center py-3 text-muted">
+                                        <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                        <p class="small mb-0 mt-2">Tidak ada file</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
 
-                    @if($permohonan->reply_file)
-                        <div class="col-md-6">
-                            <h5 class="text-muted mb-2">File Balasan</h5>
-                            <a href="{{ Storage::url($permohonan->reply_file) }}" class="btn btn-outline-success btn-sm" target="_blank">
-                                <i class="fas fa-download"></i> Download Balasan
-                            </a>
-                        </div>
-                    @endif
-                </div>
-
-                {{-- Keberatan --}}
-                <hr class="my-4">
-                <div>
-                    <h5 class="text-muted mb-3">Keberatan</h5>
-
-                    @if($permohonan->keberatan)
-                        <div class="mb-3">
-                            <p class="mb-2"><strong>Diajukan pada:</strong> {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}</p>
-                            <p class="mb-1"><strong>Keterangan User:</strong></p>
-                            <p class="border rounded p-3 bg-light mb-3">{{ $permohonan->keberatan->keterangan_user }}</p>
-
-                            @if($permohonan->keberatan->keberatan_file)
-                                <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}" 
-                                class="btn btn-outline-primary btn-sm" 
-                                target="_blank">
-                                    <i class="fas fa-download"></i> Download File Keberatan
-                                </a>
-                            @endif
-                        </div>
-                    @else
-                        @if(in_array($permohonan->status, ['Perlu Diperbaiki', 'Selesai']))
-                            <div class="alert alert-info d-flex justify-content-between align-items-center mt-3">
-                                <span>Anda bisa mengajukan keberatan untuk permohonan ini.</span>
-                                <a href="{{ route('user.keberatan.create', $permohonan->id) }}" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-plus"></i> Buat Keberatan
-                                </a>
+                    <div class="col-md-6">
+                        <div class="card h-100 border">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="ri-file-check-line text-success me-2" style="font-size: 1.25rem;"></i>
+                                    <h6 class="mb-0 fw-bold">File Balasan</h6>
+                                </div>
+                                @if($permohonan->reply_file)
+                                    <a href="{{ Storage::url($permohonan->reply_file) }}" 
+                                       class="btn btn-outline-success w-100" 
+                                       target="_blank">
+                                        <i class="ri-download-line me-1"></i> Download File Balasan
+                                    </a>
+                                @else
+                                    <div class="text-center py-3 text-muted">
+                                        <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                        <p class="small mb-0 mt-2">Belum tersedia</p>
+                                    </div>
+                                @endif
                             </div>
-                        @else
-                            <div class="alert alert-secondary mt-3">
-                                <i class="fas fa-info-circle"></i> Keberatan tidak tersedia pada status ini.
-                            </div>
-                        @endif
-                    @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Keberatan Section -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="ri-alert-line text-danger me-2" style="font-size: 1.25rem;"></i>
+                    <h5 class="mb-0 fw-bold">Keberatan</h5>
+                </div>
+
+                @if($permohonan->keberatan)
+                    <div class="border rounded p-3 bg-light mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="ri-calendar-event-line text-muted me-2"></i>
+                                <span class="text-muted small">
+                                    Diajukan pada {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}
+                                </span>
+                            </div>
+                            <span class="badge bg-danger">Keberatan Aktif</span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="fw-semibold mb-2 text-muted small">Keterangan:</div>
+                            <p class="mb-0 p-3 bg-white rounded border" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_user }}</p>
+                        </div>
+
+                        @if($permohonan->keberatan->keberatan_file)
+                            <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}" 
+                               class="btn btn-outline-danger btn-sm" 
+                               target="_blank">
+                                <i class="ri-download-line me-1"></i> Download File Keberatan
+                            </a>
+                        @endif
+                    </div>
+                @else
+                    @if(in_array($permohonan->status, ['Perlu Diperbaiki', 'Selesai']))
+                        <div class="alert alert-info border-0 d-flex align-items-center justify-content-between mb-0">
+                            <div class="d-flex align-items-center">
+                                <i class="ri-information-line me-3" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-semibold mb-1">Anda dapat mengajukan keberatan</div>
+                                    <div class="small">Jika Anda tidak puas dengan hasil permohonan, silakan ajukan keberatan.</div>
+                                </div>
+                            </div>
+                            <a href="{{ route('user.keberatan.create', $permohonan->id) }}" class="btn btn-danger ms-3">
+                                <i class="ri-add-line me-1"></i> Buat Keberatan
+                            </a>
+                        </div>
+                    @else
+                        <div class="text-center py-4">
+                            <i class="ri-information-line text-muted" style="font-size: 3rem; opacity: 0.3;"></i>
+                            <p class="text-muted mb-0 mt-2">Keberatan tidak tersedia pada status ini</p>
+                        </div>
+                    @endif
+                @endif
+            </div>
+        </div>
     </div>
+    @push('styles')
+        <link rel="stylesheet" href="{{ asset('css/pages/permohonan-show.css') }}">
+    @endpush
+
 </x-layout>
