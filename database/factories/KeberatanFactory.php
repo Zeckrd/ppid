@@ -18,7 +18,7 @@ class KeberatanFactory extends Factory
     {
         return [
             'keberatan_file' => 'keberatan_files/' . $this->faker->uuid . '.pdf',
-            'status' => 'Menunggu Verifikasi Berkas Dari Petugas',
+            'status' => 'pending',
             'keterangan_user' => fake()->sentence(10),
             'keterangan_petugas' => null,
             'reply_file' => null,

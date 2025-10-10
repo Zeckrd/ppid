@@ -41,6 +41,10 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         // Permohonan
         Route::resource('permohonan', AdminPermohonanController::class)
             ->only(['index', 'show', 'update']);
+
+        // Export dashboard as csv
+        Route::get('/admin/dashboard/export', [AdminDashboardController::class, 'export'])
+        ->name('admin.dashboard.export');
     });
 
 // User Routes

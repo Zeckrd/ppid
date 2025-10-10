@@ -55,27 +55,33 @@
                             @auth
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                        Halo, {{ Str::limit(Auth::user()->name, 12, '...') }}
+                                    data-bs-toggle="dropdown" aria-expanded="false"> Halo, {{ Str::limit(Auth::user()->name, 12, '...') }}
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="{{ route('dashboard') }}">
-                                        <i class="ri-home-2-fill"></i><span> Beranda</span>
-                                        </a></li>
-
-                                        <li><a class="dropdown-item" href="#">
-                                        <i class="ri-booklet-fill"></i><span> Panduan Pengguna</span>
-                                        </a></li>
-
-                                        <li><a class="dropdown-item" href="{{ route('password.request') }}">
-                                        <i class="ri-key-fill"></i><span> Ubah Kata Sandi</span>
-                                        </a></li>
-
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                                <i class="ri-dashboard-line me-2"></i>Dashboard
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ri-book-open-line me-2"></i>Panduan Pengguna
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('password.request') }}">
+                                                <i class="ri-shield-keyhole-line me-2"></i>Ubah Kata Sandi
+                                            </a>
+                                        </li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <a class="dropdown-item text-danger" href="#"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="ri-logout-box-r-fill"></i> <span> Keluar</span>
-                                        </a><form id="logout-form" action="/logout" method="POST" style="display: none;"> @csrf </form>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="#"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="ri-logout-box-r-line me-2"></i>Keluar
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
                                         </li>
                                     </ul>
                                 </li>

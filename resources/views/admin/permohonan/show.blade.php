@@ -4,7 +4,7 @@
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <div class="d-flex align-items-center gap-2 mb-2">
-                    <a href="{{ route('admin.permohonan.index') }}" class="text-muted text-decoration-none">
+                    <a href="{{ route('admin.dashboard.index') }}" class="text-muted text-decoration-none">
                         <i class="ri-arrow-left-line"></i> Kembali
                     </a>
                 </div>
@@ -244,7 +244,7 @@
                                 </select>
                                 <div class="form-text small text-muted">
                                     <i class="ri-information-line"></i>
-                                    Status akan mempengaruhi apa yang dapat dilakukan pemohon
+                                    Mengubah status ke "Perlu Diperbaiki" dan "Selesai" akan mengirim notifikasi kepada user
                                 </div>
                             </div>
 
@@ -260,7 +260,7 @@
                                           placeholder="Berikan keterangan atau instruksi kepada pemohon...">{{ old('keterangan_petugas', $permohonan->keterangan_petugas) }}</textarea>
                                 <div class="form-text small text-muted">
                                     <i class="ri-information-line"></i>
-                                    Keterangan ini akan dilihat oleh pemohon
+                                    Keterangan akan dilihat oleh pemohon
                                 </div>
                             </div>
 
@@ -294,6 +294,43 @@
                                     </div>
                                 @endif
                             </div>
+                            {{-- Keberatan Status --}}
+                            @if($permohonan->keberatan)
+                                <hr class="my-4">
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="ri-alert-line text-danger me-2"></i>
+                                        <h6 class="mb-0 fw-bold">Status Keberatan</h6>
+                                    </div>
+
+                                    <form action="#" 
+                                        method="POST" 
+                                        class="border rounded p-3 bg-light">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <div class="mb-3">
+                                            <label for="keberatan_status" class="form-label">
+                                                <i class="ri-flag-2-line me-1"></i>
+                                                Ubah Status Keberatan
+                                            </label>
+                                            <select name="status" id="keberatan_status" class="form-select">
+                                                <option value="Pending" @selected($permohonan->keberatan->status == 'Pending')>Pending</option>
+                                                <option value="Diproses" @selected($permohonan->keberatan->status == 'Diproses')>Diproses</option>
+                                                <option value="Selesai" @selected($permohonan->keberatan->status == 'Selesai')>Selesai</option>
+                                            </select>
+                                            <div class="form-text small text-muted">
+                                                <i class="ri-information-line"></i>
+                                                Admin dapat memperbarui status keberatan pengguna
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-danger w-100">
+                                            <i class="ri-save-3-line me-1"></i> Update Status Keberatan
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
 
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="ri-save-line me-1"></i> Simpan Perubahan
