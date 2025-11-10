@@ -97,7 +97,7 @@
                                             <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
                                         </span>
                                         @break
-                                    @case('Permohonan Sedang Diproses')
+                                    @case('Diproses')
                                         <span class="badge bg-info text-dark px-3 py-2">
                                             <i class="ri-loader-4-line me-1"></i>Diproses
                                         </span>

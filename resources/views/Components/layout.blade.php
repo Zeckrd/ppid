@@ -63,6 +63,13 @@
                                                 <i class="ri-dashboard-line me-2"></i>Dashboard
                                             </a>
                                         </li>
+                                        @if(Auth::user()->is_admin === 1)
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('admin.permohonan.search') }}">
+                                                    <i class="ri-search-line me-2"></i>Cari Permohonan
+                                                </a>
+                                            </li>
+                                        @endif
                                         <li>
                                             <a class="dropdown-item" href="#">
                                                 <i class="ri-book-open-line me-2"></i>Panduan Pengguna

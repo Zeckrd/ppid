@@ -10,6 +10,7 @@ use App\Http\Controllers\User\KeberatanController;
 // Admin controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PermohonanController as AdminPermohonanController;
+use App\Http\Controllers\Admin\KeberatanController as AdminKeberatanController;
 
 // Auth & system controllers
 use App\Http\Controllers\RegisterUserController;
@@ -37,14 +38,16 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         // Dashboard
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard.index');
+        
+        Route::get('permohonan/search', [AdminPermohonanController::class, 'search'])->name('permohonan.search');
 
         // Permohonan
         Route::resource('permohonan', AdminPermohonanController::class)
             ->only(['index', 'show', 'update']);
 
-        // Export dashboard as csv
-        Route::get('/admin/dashboard/export', [AdminDashboardController::class, 'export'])
-        ->name('admin.dashboard.export');
+        // Keberatan
+        Route::put('/keberatan/{id}', [AdminKeberatanController::class, 'update'])->name('keberatan.update');
+
     });
 
 // User Routes
@@ -97,6 +100,8 @@ Route::post('/reset-password', [PasswordResetController::class, 'updatePassword'
 
 // Phone Verification
 Route::get('/verify-phone/{token}', [PhoneVerificationController::class, 'verify'])->name('verify.phone');
+
+
 
 
 

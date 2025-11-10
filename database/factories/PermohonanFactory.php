@@ -25,7 +25,7 @@ class PermohonanFactory extends Factory
                 'Menunggu Verifikasi Berkas Dari Petugas',
                 'Sedang Diverifikasi petugas',
                 'Perlu Diperbaiki',
-                'Permohonan Sedang Diproses',
+                'Diproses',
                 'Selesai',
             ]),
             'keterangan_user' => fake()->sentence(10),

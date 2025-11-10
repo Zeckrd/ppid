@@ -21,7 +21,7 @@ class CheckPhoneVerified
         if ($user && is_null($user->phone_verified_at)) {
             Auth::logout(); // log them out
             return redirect('/login')->withErrors([
-                'phone' => 'Nomor telepon Anda belum diverifikasi.',
+                'phone' => 'Silahkan Verifikasi Nomor Whatsapp Anda',
             ]);
         }
 

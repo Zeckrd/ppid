@@ -11,52 +11,52 @@
         </div>
 
         {{-- QUICK FILTERS --}}
-<div class="mb-4">
-    <ul class="nav nav-pills">
-        @php
-            $statuses = [
-                'Semua',
-                'Menunggu Verifikasi Berkas Dari Petugas',
-                'Sedang Diverifikasi petugas',
-                'Perlu Diperbaiki',
-                'Diproses',
-                'Selesai'
-            ];
-        @endphp
+        <div class="mb-4">
+            <ul class="nav nav-pills">
+                @php
+                    $statuses = [
+                        'Semua',
+                        'Menunggu Verifikasi Berkas Dari Petugas',
+                        'Sedang Diverifikasi petugas',
+                        'Perlu Diperbaiki',
+                        'Diproses',
+                        'Selesai'
+                    ];
+                @endphp
 
-        @foreach($statuses as $item)
-            @php
-                // determine if this filter is active
-                $active = (request('status') == $item || (request('status') == null && $item == 'Semua')) ? 'active' : '';
-            @endphp
-            <li class="nav-item">
-                <a class="nav-link {{ $active }}" 
-                   href="{{ route('user.dashboard.index', ['status' => $item == 'Semua' ? null : $item]) }}">
-                    @switch($item)
-                        @case('Semua')
-                            <i class="ri-file-list-3-line me-1"></i>Semua
-                            @break
-                        @case('Menunggu Verifikasi Berkas Dari Petugas')
-                            <i class="ri-time-line me-1"></i>Menunggu Verifikasi
-                            @break
-                        @case('Sedang Diverifikasi petugas')
-                            <i class="ri-search-eye-line me-1"></i>Diverifikasi
-                            @break
-                        @case('Perlu Diperbaiki')
-                            <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
-                            @break
-                        @case('Diproses')
-                            <i class="ri-loader-4-line me-1"></i>Diproses
-                            @break
-                        @case('Selesai')
-                            <i class="ri-checkbox-circle-line me-1"></i>Selesai
-                            @break
-                    @endswitch
-                </a>
-            </li>
-        @endforeach
-    </ul>
-</div>
+                @foreach($statuses as $item)
+                    @php
+                        // determine if this filter is active
+                        $active = (request('status') == $item || (request('status') == null && $item == 'Semua')) ? 'active' : '';
+                    @endphp
+                    <li class="nav-item">
+                        <a class="nav-link {{ $active }}" 
+                        href="{{ route('user.dashboard.index', ['status' => $item == 'Semua' ? null : $item]) }}">
+                            @switch($item)
+                                @case('Semua')
+                                    <i class="ri-file-list-3-line me-1"></i>Semua
+                                    @break
+                                @case('Menunggu Verifikasi Berkas Dari Petugas')
+                                    <i class="ri-time-line me-1"></i>Menunggu Verifikasi
+                                    @break
+                                @case('Sedang Diverifikasi petugas')
+                                    <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                    @break
+                                @case('Perlu Diperbaiki')
+                                    <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                    @break
+                                @case('Diproses')
+                                    <i class="ri-loader-4-line me-1"></i>Diproses
+                                    @break
+                                @case('Selesai')
+                                    <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                    @break
+                            @endswitch
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
 
 
@@ -73,7 +73,7 @@
                 </a>
             </div>
         @else
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm d-none d-lg-block">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
@@ -91,6 +91,7 @@
                                     </div>
                                 </th>
                                 <th class="px-4 py-3 border-0">Status</th>
+                                <th class="px-4 py-3 border-0">Ajuan Keberatan</th>
                                 <th class="px-4 py-3 border-0 text-end">Aksi</th>
                             </tr>
                         </thead>
@@ -135,6 +136,46 @@
                                             </span>
                                         @endif
                                     </td>
+
+                                {{-- Status Keberatan --}}
+                                <td class="px-4 py-3 align-middle">
+                                    @if ($permohonan->keberatan)
+                                        @php
+                                            $status = $permohonan->keberatan->status ?? 'Pending';
+                                        @endphp
+                                    @switch($status)
+                                        @case('Pending')
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="ri-time-line me-1"></i> Pending
+                                            </span>
+                                            @break
+
+                                        @case('Diproses')
+                                            <span class="badge bg-info text-dark">
+                                                <i class="ri-loader-4-line me-1"></i> Diproses
+                                            </span>
+                                            @break
+
+                                        @case('Selesai')
+                                            <span class="badge bg-success">
+                                                <i class="ri-checkbox-circle-line me-1"></i> Selesai
+                                            </span>
+                                            @break
+
+                                        @default
+                                            <span class="badge bg-secondary">
+                                                <i class="ri-question-line me-1"></i> {{ ucfirst($status) }}
+                                            </span>
+                                    @endswitch
+
+                                    @else
+                                        <span class="text-muted">
+                                            <i class="ri-close-circle-line me-1"></i> Tidak Ada
+                                        </span>
+                                    @endif
+
+                                </td>
+
                                     <td class="px-4 py-3 align-middle text-end">
                                         <a href="{{ route('user.permohonan.show', $permohonan->id) }}" 
                                         class="btn btn-sm btn-outline-primary"
@@ -148,6 +189,104 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            {{-- Mobile Card View --}}
+            <div class="d-lg-none mt-3">
+                @foreach($permohonans as $permohonan)
+                    <div class="card border-0 shadow-sm mb-3"
+                        onclick="window.location='{{ route('user.permohonan.show', $permohonan->id) }}';"
+                        style="cursor: pointer;">
+                        <div class="card-body p-3">
+
+                            {{-- Header: Status + Keberatan --}}
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                {{-- Status --}}
+                                <div>
+                                    @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
+                                        <span class="badge bg-warning text-dark small">
+                                            <i class="ri-time-line me-1"></i>Menunggu
+                                        </span>
+                                    @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
+                                        <span class="badge bg-primary small">
+                                            <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                        </span>
+                                    @elseif($permohonan->status == 'Perlu Diperbaiki')
+                                        <span class="badge bg-danger small">
+                                            <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                        </span>
+                                    @elseif($permohonan->status == 'Diproses')
+                                        <span class="badge bg-info text-dark small">
+                                            <i class="ri-loader-4-line me-1"></i>Diproses
+                                        </span>
+                                    @elseif($permohonan->status == 'Selesai')
+                                        <span class="badge bg-success small">
+                                            <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>
+                                    @endif
+                                </div>
+
+                                {{-- Keberatan --}}
+                                @if($permohonan->keberatan)
+                                    @php
+                                        $status = $permohonan->keberatan->status ?? 'Pending';
+                                    @endphp
+                                    @switch($status)
+                                        @case('Pending')
+                                            <span class="badge bg-warning-subtle text-warning border border-warning small">
+                                                <i class="ri-time-line"></i>
+                                            </span>
+                                            @break
+                                        @case('Diproses')
+                                            <span class="badge bg-info-subtle text-info border border-info small">
+                                                <i class="ri-loader-4-line"></i>
+                                            </span>
+                                            @break
+                                        @case('Selesai')
+                                            <span class="badge bg-success-subtle text-success border border-success small">
+                                                <i class="ri-checkbox-circle-line"></i>
+                                            </span>
+                                            @break
+                                        @default
+                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary small">
+                                                <i class="ri-question-line"></i>
+                                            </span>
+                                    @endswitch
+                                @endif
+                            </div>
+
+                            {{-- Jenis Permohonan --}}
+                            <h6 class="mb-2 fw-semibold">
+                                <i class="ri-file-text-line text-muted me-1"></i>
+                                {{ ucfirst($permohonan->permohonan_type ?? '-') }}
+                            </h6>
+
+                            {{-- Info Row --}}
+                            <div class="row g-2 small text-muted mb-3">
+                                <div class="col-6">
+                                    <i class="ri-calendar-line me-1"></i>
+                                    {{ $permohonan->created_at->format('d M Y') }}
+                                </div>
+                                <div class="col-6 text-end">
+                                    @if($permohonan->keberatan)
+                                        <i class="ri-error-warning-line me-1 text-danger"></i>Keberatan
+                                    @else
+                                        <i class="ri-check-line me-1 text-success"></i>Tidak Ada Keberatan
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Action --}}
+                            <a href="{{ route('user.permohonan.show', $permohonan->id) }}"
+                            class="btn btn-outline-primary btn-sm w-100"
+                            onclick="event.stopPropagation();">
+                                Lihat Detail <i class="ri-arrow-right-line ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-4">

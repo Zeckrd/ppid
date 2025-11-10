@@ -12,7 +12,7 @@
                         <div class="card-body p-4">
                             <div class="row align-items-center">
                                 <div class="col-md-8 text-center text-md-start">
-                                    <h4 class="fw-bold mb-2">Layanan PPID</h4>
+                                    <h4 class="fw-bold mb-2">Layanan PPID Online</h4>
                                     <p class="mb-md-0 opacity-90 small">Ajukan permohonan informasi atau keberatan melalui dashboard</p>
                                 </div>
                                 <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">

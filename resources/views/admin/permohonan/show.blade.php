@@ -4,7 +4,7 @@
         <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
                 <div class="d-flex align-items-center gap-2 mb-2">
-                    <a href="{{ route('admin.dashboard.index') }}" class="text-muted text-decoration-none">
+                    <a href="{{ route('admin.permohonan.search') }}" class="text-muted text-decoration-none">
                         <i class="ri-arrow-left-line"></i> Kembali
                     </a>
                 </div>
@@ -44,13 +44,13 @@
                                 <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle" style="width: 48px; height: 48px;">
                                     <i class="ri-user-line text-primary" style="font-size: 1.5rem;"></i>
                                 </div>
-                                <div>
-                                    <h5 class="mb-1 fw-bold">{{ $permohonan->user->name ?? '-' }}</h5>
-                                    <div class="text-muted small">
-                                        <i class="ri-shield-user-line me-1"></i>
-                                        Pemohon
-                                    </div>
+                            <div>
+                                <h5 class="mb-1 fw-bold">{{ $permohonan->user->name ?? '-' }}</h5>
+                                <div class="text-muted small">
+                                    <i class="ri-mail-line me-1"></i>
+                                    {{ $permohonan->user->email ?? '-' }}
                                 </div>
+                            </div>
                             </div>
                             <div>
                                 @switch($permohonan->status)
@@ -69,7 +69,7 @@
                                             <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
                                         </span>
                                         @break
-                                    @case('Permohonan Sedang Diproses')
+                                    @case('Diproses')
                                         <span class="badge bg-info text-dark px-3 py-2">
                                             <i class="ri-loader-4-line me-1"></i>Diproses
                                         </span>
@@ -207,7 +207,7 @@
                 </div>
             </div>
 
-            <!-- Right Column: Admin Actions -->
+            <!-- RIGHT: Admin Actions -->
             <div class="col-lg-5">
                 <div class="card shadow-sm border-0 position-sticky" style="top: 2rem;">
                     <div class="card-body p-4">
@@ -216,126 +216,159 @@
                             <h5 class="mb-0 fw-bold">Aksi Admin</h5>
                         </div>
 
+                        {{-- FORM 1: Update Permohonan --}}
                         <form action="{{ route('admin.permohonan.update', $permohonan->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
+                            <!-- Status -->
                             <div class="mb-4">
-                                <label for="status" class="form-label">
-                                    <i class="ri-flag-line me-1"></i>
-                                    <span class="fw-bold">Update Status</span>
+                                <label for="status" class="form-label fw-bold">
+                                    <i class="ri-flag-line me-1"></i> Update Status
                                 </label>
                                 <select name="status" id="status" class="form-select">
-                                    <option value="Menunggu Verifikasi Berkas Dari Petugas" @selected($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')>
-                                        Menunggu Verifikasi
-                                    </option>
-                                    <option value="Sedang Diverifikasi petugas" @selected($permohonan->status == 'Sedang Diverifikasi petugas')>
-                                        Sedang Diverifikasi
-                                    </option>
-                                    <option value="Perlu Diperbaiki" @selected($permohonan->status == 'Perlu Diperbaiki')>
-                                        Perlu Diperbaiki
-                                    </option>
-                                    <option value="Permohonan Sedang Diproses" @selected($permohonan->status == 'Permohonan Sedang Diproses')>
-                                        Diproses
-                                    </option>
-                                    <option value="Selesai" @selected($permohonan->status == 'Selesai')>
-                                        Selesai
-                                    </option>
+                                    <option value="Menunggu Verifikasi Berkas Dari Petugas" @selected($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')>Menunggu Verifikasi</option>
+                                    <option value="Sedang Diverifikasi petugas" @selected($permohonan->status == 'Sedang Diverifikasi petugas')>Sedang Diverifikasi</option>
+                                    <option value="Perlu Diperbaiki" @selected($permohonan->status == 'Perlu Diperbaiki')>Perlu Diperbaiki</option>
+                                    <option value="Diproses" @selected($permohonan->status == 'Diproses')>Diproses</option>
+                                    <option value="Selesai" @selected($permohonan->status == 'Selesai')>Selesai</option>
                                 </select>
-                                <div class="form-text small text-muted">
-                                    <i class="ri-information-line"></i>
-                                    Mengubah status ke "Perlu Diperbaiki" dan "Selesai" akan mengirim notifikasi kepada user
+                                <div class="form-text small text-muted mt-1">
+                                    <i class="ri-information-line"></i> Notifikasi akan mengirimkan perubahan status ke pengguna
                                 </div>
                             </div>
 
+                            <!-- Notify User -->
                             <div class="mb-4">
-                                <label for="keterangan_petugas" class="form-label">
-                                    <i class="ri-message-2-line me-1"></i>
-                                    <span class="fw-bold">Keterangan Petugas</span>
+                                <label class="form-label fw-bold">
+                                    <i class="ri-notification-line me-1"></i> Kirim Notifikasi ke Pengguna
                                 </label>
-                                <textarea name="keterangan_petugas" 
-                                          id="keterangan_petugas" 
-                                          class="form-control" 
-                                          rows="4"
-                                          placeholder="Berikan keterangan atau instruksi kepada pemohon...">{{ old('keterangan_petugas', $permohonan->keterangan_petugas) }}</textarea>
-                                <div class="form-text small text-muted">
-                                    <i class="ri-information-line"></i>
-                                    Keterangan akan dilihat oleh pemohon
+                                <div class="ps-2">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="notify_whatsapp" name="notify_whatsapp" value="1">
+                                        <label class="form-check-label" for="notify_whatsapp">
+                                            Kirim melalui WhatsApp
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="notify_email" name="notify_email" value="1">
+                                        <label class="form-check-label" for="notify_email">
+                                            Kirim melalui Email
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
+                            <!-- Keterangan Petugas -->
                             <div class="mb-4">
-                                <label for="reply_file" class="form-label">
-                                    <i class="ri-file-upload-line me-1"></i>
-                                    <span class="fw-bold">Upload File Balasan</span>
+                                <label for="keterangan_petugas" class="form-label fw-bold">
+                                    <i class="ri-message-2-line me-1"></i> Keterangan Petugas
                                 </label>
-                                <input type="file" 
-                                       class="form-control" 
-                                       name="reply_file" 
-                                       id="reply_file">
+                                <textarea name="keterangan_petugas" id="keterangan_petugas" rows="4" class="form-control" placeholder="Berikan keterangan...">{{ old('keterangan_petugas', $permohonan->keterangan_petugas) }}</textarea>
                                 <div class="form-text small text-muted">
-                                    <i class="ri-information-line"></i>
-                                    Upload dokumen balasan untuk permohonan ini
+                                    <i class="ri-information-line"></i> Keterangan ini akan ditampilkan kepada pengguna.
                                 </div>
-                                
+                            </div>
+
+                            <!-- Upload File Balasan -->
+                            <div class="mb-4">
+                                <label for="reply_file" class="form-label fw-bold">
+                                    <i class="ri-file-upload-line me-1"></i> Upload File Balasan
+                                </label>
+                                <input type="file" name="reply_file" id="reply_file" class="form-control">
+                                <div class="form-text small text-muted">
+                                    <i class="ri-information-line"></i> Upload dokumen balasan untuk permohonan ini.
+                                </div>
+
                                 @if($permohonan->reply_file)
                                     <div class="mt-3 p-3 bg-success bg-opacity-10 border border-success rounded">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <i class="ri-file-check-line text-success me-2"></i>
-                                                <span class="small fw-semibold text-success">File balasan tersedia</span>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div><i class="ri-file-check-line text-success me-2"></i>
+                                                <span class="text-success small fw-semibold">File balasan tersedia</span>
                                             </div>
-                                            <a href="{{ Storage::url($permohonan->reply_file) }}" 
-                                               target="_blank" 
-                                               class="btn btn-sm btn-outline-success">
+                                            <a href="{{ Storage::url($permohonan->reply_file) }}" target="_blank" class="btn btn-sm btn-outline-success">
                                                 <i class="ri-download-line me-1"></i> Lihat
                                             </a>
                                         </div>
                                     </div>
                                 @endif
                             </div>
-                            {{-- Keberatan Status --}}
-                            @if($permohonan->keberatan)
-                                <hr class="my-4">
-                                <div class="mb-4">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="ri-alert-line text-danger me-2"></i>
-                                        <h6 class="mb-0 fw-bold">Status Keberatan</h6>
-                                    </div>
-
-                                    <form action="#" 
-                                        method="POST" 
-                                        class="border rounded p-3 bg-light">
-                                        @csrf
-                                        @method('PUT')
-
-                                        <div class="mb-3">
-                                            <label for="keberatan_status" class="form-label">
-                                                <i class="ri-flag-2-line me-1"></i>
-                                                Ubah Status Keberatan
-                                            </label>
-                                            <select name="status" id="keberatan_status" class="form-select">
-                                                <option value="Pending" @selected($permohonan->keberatan->status == 'Pending')>Pending</option>
-                                                <option value="Diproses" @selected($permohonan->keberatan->status == 'Diproses')>Diproses</option>
-                                                <option value="Selesai" @selected($permohonan->keberatan->status == 'Selesai')>Selesai</option>
-                                            </select>
-                                            <div class="form-text small text-muted">
-                                                <i class="ri-information-line"></i>
-                                                Admin dapat memperbarui status keberatan pengguna
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" class="btn btn-danger w-100">
-                                            <i class="ri-save-3-line me-1"></i> Update Status Keberatan
-                                        </button>
-                                    </form>
-                                </div>
-                            @endif
 
                             <button type="submit" class="btn btn-primary w-100">
-                                <i class="ri-save-line me-1"></i> Simpan Perubahan
+                                <i class="ri-save-line me-1"></i> Simpan Perubahan Permohonan
                             </button>
                         </form>
+
+                        {{-- FORM 2: Update Keberatan --}}
+                        @if($permohonan->keberatan)
+                            <hr class="my-4">
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="ri-alert-line text-danger me-2"></i>
+                                    <h6 class="mb-0 fw-bold">Status Keberatan</h6>
+                                </div>
+                                <form action="{{ route('admin.keberatan.update', $permohonan->keberatan->id) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <!-- Status Keberatan -->
+                                    <div class="mb-3">
+                                        <label for="keberatan_status" class="form-label">
+                                            <i class="ri-flag-2-line me-1"></i> Ubah Status Keberatan
+                                        </label>
+                                        <select name="status" id="keberatan_status" class="form-select">
+                                            <option value="Pending" @selected($permohonan->keberatan->status == 'Pending')>Pending</option>
+                                            <option value="Diproses" @selected($permohonan->keberatan->status == 'Diproses')>Diproses</option>
+                                            <option value="Selesai" @selected($permohonan->keberatan->status == 'Selesai')>Selesai</option>
+                                        </select>
+                                        <div class="form-text small text-muted">
+                                            <i class="ri-information-line"></i> Gunakan ini untuk memperbarui progres keberatan.
+                                        </div>
+                                    </div>
+
+                                    <!-- Keterangan Petugas -->
+                                    <div class="mb-3">
+                                        <label for="keberatan_keterangan_petugas" class="form-label fw-bold">
+                                            <i class="ri-message-2-line me-1"></i> Keterangan Petugas
+                                        </label>
+                                        <textarea name="keterangan_petugas" id="keberatan_keterangan_petugas" rows="4" class="form-control" placeholder="Masukkan keterangan petugas...">{{ old('keterangan_petugas', $permohonan->keberatan->keterangan_petugas) }}</textarea>
+                                        <div class="form-text small text-muted">
+                                            <i class="ri-information-line"></i> Keterangan ini akan ditampilkan kepada pemohon.
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload File Balasan Keberatan -->
+                                    <div class="mb-4">
+                                        <label for="keberatan_file" class="form-label fw-bold">
+                                            <i class="ri-file-upload-line me-1"></i> Upload File Balasan Keberatan
+                                        </label>
+                                        <input type="file" name="keberatan_file" id="keberatan_file" class="form-control" required accept=".pdf,.doc,.docx">
+                                        <div class="form-text small text-muted">
+                                            <i class="ri-information-line"></i> Upload dokumen balasan untuk keberatan ini (PDF, DOCX, dll).
+                                        </div>
+
+                                        @if($permohonan->keberatan->reply_file ?? false)
+                                            <div class="mt-3 p-3 bg-success bg-opacity-10 border border-success rounded">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="ri-file-check-line text-success me-2"></i>
+                                                        <span class="text-success small fw-semibold">File balasan keberatan tersedia</span>
+                                                    </div>
+                                                    <a href="{{ Storage::url($permohonan->keberatan->reply_file) }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                                        <i class="ri-download-line me-1"></i> Lihat
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <button type="submit" class="btn btn-danger w-100">
+                                        <i class="ri-save-3-line me-1"></i> Update Keberatan
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>
