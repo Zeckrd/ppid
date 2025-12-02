@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\PermohonanController as UserPermohonanController;
 use App\Http\Controllers\User\KeberatanController;
+use App\Http\Controllers\UserSetupController as UserSetupController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\User\Profile\EmailChangeController;
 
 // Admin controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -30,6 +33,74 @@ Route::view('/informasi-berkala', 'user.informasi-berkala');
 Route::view('/informasi-tersedia-setiap-saat', 'user.informasi-tersedia-setiap-saat');
 Route::view('/informasi-dikecualikan', 'user.informasi-dikecualikan');
 
+// UNVERIFIED user routes and basic profile change
+Route::middleware(['auth'])
+    ->prefix('user')
+    ->name('user.')
+    ->group(function () {
+
+        // Setup / Verification Required Page
+        Route::get('/setup', [UserSetupController::class, 'index'])
+            ->name('setup');
+
+        // Edit Profile (Email, Phone, Name, etc.)
+        Route::get('/profile', [UserProfileController::class, 'edit'])
+            ->name('profile.edit');
+
+        Route::post('/profile', [UserProfileController::class, 'update'])
+            ->name('profile.update');
+
+        Route::post('/profile/password', [UserProfileController::class, 'updatePassword'])
+            ->name('profile.password.update');
+
+        Route::post('/profile/phone', [UserProfileController::class, 'updatePhone'])
+            ->name('profile.phone.update');
+
+        // Reverify WhatsApp Number
+        Route::post('/phone/reverify', [PhoneVerificationController::class, 'send'])
+            ->name('phone.reverify');
+    });
+
+// Email n password change    
+Route::middleware(['auth'])
+    ->group(function () {
+
+        Route::post('/email/change', [EmailChangeController::class, 'requestChange'])
+            ->name('email.change');
+
+        Route::get('/email/change/verify/{token}', [EmailChangeController::class, 'verify'])
+            ->name('email.change.verify');
+        
+    });
+
+
+// Verified User Routes
+Route::middleware(['auth', 'phone.verified'])
+    ->prefix('user')
+    ->name('user.')
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/dashboard', [UserDashboardController::class, 'index'])
+            ->name('dashboard.index');
+
+        // Permohonan
+        Route::resource('permohonan', UserPermohonanController::class)
+            ->except(['index']);
+
+        // Keberatan
+        Route::get('/keberatan/show', [KeberatanController::class, 'show'])
+            ->name('keberatan.show');
+
+        Route::get('/permohonan/{permohonan}/keberatan/create', [KeberatanController::class, 'create'])
+            ->name('keberatan.create');
+
+        Route::post('/permohonan/{permohonan}/keberatan', [KeberatanController::class, 'store'])
+            ->name('keberatan.store');
+    });
+
+
+
 // Admin Routes
 Route::middleware(['auth', 'phone.verified', 'is_admin'])
     ->prefix('admin')
@@ -50,28 +121,6 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
 
     });
 
-// User Routes
-Route::middleware(['auth', 'phone.verified'])
-    ->prefix('user')
-    ->name('user.')
-    ->group(function () {
-        // Dashboard
-        Route::get('/dashboard', [UserDashboardController::class, 'index'])
-            ->name('dashboard.index');
-
-        // Permohonan (user submit & view their own)
-        Route::resource('permohonan', UserPermohonanController::class)
-            ->except(['index']); // user doesn’t need to see all
-
-        // Keberatan
-        Route::get('/keberatan/show', [KeberatanController::class, 'show'])
-            ->name('keberatan.show');
-        Route::get('/permohonan/{permohonan}/keberatan/create', [KeberatanController::class, 'create'])
-            ->name('keberatan.create');
-        Route::post('/permohonan/{permohonan}/keberatan', [KeberatanController::class, 'store'])
-            ->name('keberatan.store');
-
-    });
 
 // Dashboard Routing
 Route::get('/dashboard', function () {
@@ -100,6 +149,10 @@ Route::post('/reset-password', [PasswordResetController::class, 'updatePassword'
 
 // Phone Verification
 Route::get('/verify-phone/{token}', [PhoneVerificationController::class, 'verify'])->name('verify.phone');
+Route::post('/verify-phone/send', [PhoneVerificationController::class, 'send'])
+     ->middleware(['auth'])
+     ->name('phone.send');
+
 
 
 

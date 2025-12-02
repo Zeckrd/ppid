@@ -2,6 +2,7 @@
     'type' => 'text',
     'name',
     'label' => null,
+    'value' => null,
 ])
 
 <div class="mb-3 text-start">
@@ -12,7 +13,7 @@
     <input type="{{ $type }}"
            name="{{ $name }}"
            id="{{ $name }}"
-           value="{{ old($name) }}"
+           value="{{ old($name, $value) }}"
            {{ $attributes->merge(['class' => 'form-control' . ($errors->has($name) ? ' is-invalid' : '')]) }}
            autocomplete="{{ $name }}"
            {{ $type === 'email' ? 'autofocus' : '' }}>

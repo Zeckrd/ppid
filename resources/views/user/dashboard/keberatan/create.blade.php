@@ -27,7 +27,7 @@
 
                             {{-- Submit --}}
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Kirim Permohonan</button>
+                                <button type="submit" class="btn btn-primary">Kirim Formulir Keberatan</button>
                             </div>
                         </div>
                     </div>

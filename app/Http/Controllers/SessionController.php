@@ -31,12 +31,25 @@ class SessionController extends Controller
             ]);
         }
 
-        // regenerate session and redirect
+        // Regenerate session
         $request->session()->regenerate();
 
-        return auth()->user()->is_admin
-            ? redirect()->route('admin.dashboard.index')
-            : redirect()->route('user.dashboard.index');
+        $user = auth()->user();
+
+        // Admin login
+        if ($user->is_admin) {
+            return redirect()->route('admin.dashboard.index');
+        }
+
+        // If user has NOT verified their phone = send to setup page
+        if (is_null($user->phone_verified_at)) {
+            return redirect()->route('user.setup')
+                ->with('warning', 'Silakan verifikasi nomor WhatsApp Anda sebelum mengakses dashboard.');
+        }
+
+        // Normal verified user = dashboard
+        return redirect()->route('user.dashboard.index');
+
     }
 
     public function destroy(Request $request)

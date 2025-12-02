@@ -15,8 +15,24 @@
 
                         <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" id="registerForm">
                             @csrf
-
                             <x-form.input name="name" label="Nama Lengkap" placeholder="Masukkan nama lengkap Anda" required />
+
+                        <x-form.select 
+                            name="pekerjaan"
+                            label="Pekerjaan"
+                            required="true"
+                            :options="[
+                                'Wiraswasta' => 'Wiraswasta',
+                                'Karyawan Swasta' => 'Karyawan Swasta',
+                                'Pelajar/Mahasiswa' => 'Pelajar/Mahasiswa',
+                                'PNS/ASN' => 'PNS/ASN',
+                                'TNI/Polri' => 'TNI/Polri',
+                                'Pengacara/Advocat' => 'Pengacara/Advocat',
+                                'Buruh' => 'Buruh',
+                                'Lainnya' => 'Lainnya',
+                            ]"
+                        />
+
                             <x-form.input type="email" name="email" label="Alamat Email" placeholder="contoh@email.com" required>
                                 <x-slot name="help">
                                     <i class="bi bi-info-circle me-1"></i>Email akan digunakan untuk login akun

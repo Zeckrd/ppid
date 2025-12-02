@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->onDelete('cascade');
             $table->string('token')->unique();
+            $table->timestamp('last_sent_at')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+    Schema::table('phone_verifications', function (Blueprint $table) {
+        $table->dropColumn('last_sent_at');
+    });
     }
 };
