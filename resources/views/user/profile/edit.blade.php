@@ -115,10 +115,11 @@
                                 @endif
                             </div>
 
+                            {{-- Satu form saja untuk update + kirim / kirim ulang verifikasi --}}
                             <form method="POST" action="{{ route('user.profile.phone.update') }}" id="changePhoneForm">
                                 @csrf
 
-                                {{-- Nomor WhatsApp saat ini --}}
+                                {{-- Nomor WhatsApp saat ini (hanya info) --}}
                                 <div class="mb-3">
                                     <label class="form-label">Nomor WhatsApp Saat Ini</label>
                                     <input type="tel"
@@ -136,8 +137,7 @@
                                     name="current_password"
                                     label="Password Saat Ini"
                                     required
-                                >
-                                </x-form.password>
+                                />
 
                                 {{-- Nomor WhatsApp baru --}}
                                 <x-form.input
@@ -147,27 +147,28 @@
                                     :value="old('phone', $user->phone)"
                                     placeholder="Contoh: 0812xxxxxxxx"
                                     required
-                                >
-                                </x-form.input>
+                                />
 
-                                <div class="d-flex flex-wrap gap-2 mt-3">
+                                <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 mt-3">
                                     <button type="submit" class="btn btn-primary">
-                                        <span>Update Nomor WA</span>
+                                        <i class="bi bi-whatsapp me-1"></i>
+                                        Simpan & Kirim Verifikasi
                                     </button>
 
                                     @if(!$user->phone_verified_at)
-                                        <form method="POST" action="{{ route('user.phone.reverify') }}">
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-primary">
-                                                <i class="bi bi-whatsapp me-1"></i>
-                                                Kirim Ulang Verifikasi WA
-                                            </button>
-                                        </form>
+                                        <small class="text-muted">
+                                            Jika nomor tidak diubah, tombol ini akan mengirim ulang link verifikasi.
+                                        </small>
+                                    @else
+                                        <small class="text-muted">
+                                            Mengubah nomor akan membatalkan verifikasi lama dan mengirim link verifikasi baru.
+                                        </small>
                                     @endif
                                 </div>
                             </form>
                         </div>
                     </div>
+
 
 
                     {{-- ========== SECTION: CHANGE EMAIL ========== --}}

@@ -32,6 +32,17 @@ class User extends Authenticatable implements CanResetPassword
     ];
 
     /**
+     * get admins with phone number
+     * for notifiable wablas
+     */
+    public function scopeAdmins($query)
+    {
+        return $query->where('is_admin', 1)
+                     ->whereNotNull('phone')
+                     ->where('phone', '!=', '');
+    }
+    
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>

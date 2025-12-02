@@ -116,19 +116,23 @@
                                             </span>
                                         @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
                                             <span class="badge bg-primary">
-                                                <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                                <i class="ri-search-eye-line me-1"></i> Diverifikasi
                                             </span>
                                         @elseif($permohonan->status == 'Perlu Diperbaiki')
                                             <span class="badge bg-danger">
-                                                <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                                <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
                                             </span>
                                         @elseif($permohonan->status == 'Diproses')
                                             <span class="badge bg-info text-dark">
-                                                <i class="ri-loader-4-line me-1"></i>Diproses
+                                                <i class="ri-loader-4-line me-1"></i> Diproses
                                             </span>
-                                        @elseif($permohonan->status == 'Selesai')
-                                            <span class="badge bg-success">
-                                                <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                        @elseif($permohonan->status == 'Diterima')
+                                            <span class="badge bg-success small">
+                                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                            </span>
+                                        @elseif($permohonan->status == 'Ditolak')
+                                            <span class="badge bg-danger small">
+                                                <i class="ri-close-circle-line"></i> Ditolak
                                             </span>
                                         @else
                                             <span class="badge bg-secondary">
@@ -156,9 +160,15 @@
                                             </span>
                                             @break
 
-                                        @case('Selesai')
+                                        @case('Diterima')
                                             <span class="badge bg-success">
-                                                <i class="ri-checkbox-circle-line me-1"></i> Selesai
+                                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                            </span>
+                                            @break
+                                        
+                                        @case('Ditolak')
+                                            <span class="badge bg-danger">
+                                                <i class="ri-close-circle-line"></i> Ditolak
                                             </span>
                                             @break
 
@@ -219,9 +229,13 @@
                                         <span class="badge bg-info text-dark small">
                                             <i class="ri-loader-4-line me-1"></i>Diproses
                                         </span>
-                                    @elseif($permohonan->status == 'Selesai')
+                                    @elseif($permohonan->status == 'Diterima')
                                         <span class="badge bg-success small">
-                                            <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                            <i class="ri-checkbox-circle-line me-1"></i>Diterima
+                                        </span>
+                                    @elseif($permohonan->status == 'Ditolak')
+                                        <span class="badge bg-danger small">
+                                            <i class="ri-close-circle-line"></i>Ditolak
                                         </span>
                                     @else
                                         <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Storage;
+use App\Services\WhatsAppNotificationService;
 
 class PermohonanController extends Controller
 {
@@ -20,18 +21,23 @@ class PermohonanController extends Controller
             'permohonan_type' => 'required|in:biasa,khusus',
             'permohonan_file' => 'required|file|mimes:pdf,doc,docx|max:2048',
             'keterangan_user' => 'required|string|max:512',
-            'reply_type' => 'required|in:softcopy,hardcopy',
+            'reply_type'      => 'required|in:softcopy,hardcopy',
         ]);
 
         $path = $request->file('permohonan_file')->store('permohonan', 'public');
 
-        Permohonan::create([
-            'user_id' => auth()->id(),
+        // keep the created model instance to notify
+        $permohonan = Permohonan::create([
+            'user_id'         => auth()->id(),
             'permohonan_type' => $request->permohonan_type,
             'permohonan_file' => $path,
             'keterangan_user' => $request->keterangan_user,
-            'reply_type' => $request->reply_type,
+            'reply_type'      => $request->reply_type,
         ]);
+
+        // WhatsApp notification on permohonan created
+        app(WhatsAppNotificationService::class)
+            ->notifyPermohonanCreated($permohonan);
 
         return redirect()->route('user.dashboard.index')
                          ->with('success', 'Permohonan berhasil dibuat.');
@@ -52,8 +58,8 @@ class PermohonanController extends Controller
         $request->validate([
             'permohonan_type' => 'required|in:biasa,khusus',
             'keterangan_user' => 'required|string',
-            'reply_type' => 'required|in:softcopy,hardcopy',
-            'permohonan_file' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
+            'reply_type'      => 'required|in:softcopy,hardcopy',
+            'permohonan_file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
         $updateData = $request->only(['permohonan_type', 'keterangan_user', 'reply_type']);
@@ -71,6 +77,10 @@ class PermohonanController extends Controller
         }
 
         $permohonan->update($updateData);
+
+        // WhatsApp notification on permohonan updated by user
+        app(WhatsAppNotificationService::class)
+            ->notifyPermohonanUpdatedByUser($permohonan);
 
         return redirect()->route('user.permohonan.show', $permohonan)
                          ->with('success', 'Permohonan berhasil diperbarui.');

@@ -56,9 +56,6 @@ Route::middleware(['auth'])
         Route::post('/profile/phone', [UserProfileController::class, 'updatePhone'])
             ->name('profile.phone.update');
 
-        // Reverify WhatsApp Number
-        Route::post('/phone/reverify', [PhoneVerificationController::class, 'send'])
-            ->name('phone.reverify');
     });
 
 // Email n password change    

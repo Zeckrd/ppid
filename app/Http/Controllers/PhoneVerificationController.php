@@ -26,15 +26,32 @@ class PhoneVerificationController extends Controller
         // Check existing active verification token
         $existing = PhoneVerification::where('user_id', $user->id)->first();
 
+        // Just because x minute x seconds thingy
         if ($existing && $existing->last_sent_at) {
-            $secondsSinceLast = now()->diffInSeconds($existing->last_sent_at);
+            $secondsSinceLast = $existing->last_sent_at->diffInSeconds(now());
 
-            if ($secondsSinceLast < 120) {
-                $remaining = 120 - $secondsSinceLast;
+            $remaining = max(0, 120 - $secondsSinceLast);
 
-                return back()->with('error', 'Silakan tunggu ' . $remaining . ' detik sebelum mengirim ulang.');
+            if ($remaining > 0) {
+                $minutes = intdiv($remaining, 60);
+                $seconds = $remaining % 60;
+
+                $text = 'Silakan tunggu ';
+
+                if ($minutes > 0) {
+                    $text .= $minutes . ' menit ';
+                }
+
+                if ($seconds > 0) {
+                    $text .= $seconds . ' detik ';
+                }
+
+                $text .= 'sebelum mengirim ulang verifikasi WA.';
+
+                return back()->withErrors(['phone' => trim($text)]);
             }
         }
+
 
         // delete old token
         PhoneVerification::where('user_id', $user->id)->delete();
@@ -55,7 +72,6 @@ class PhoneVerificationController extends Controller
                 . "Klik link berikut untuk verifikasi nomor WhatsApp Anda:\n\n"
                 . "$url\n\n"
                 . "Link berlaku 120 menit.";
-
         $this->wablas->sendMessage($user->phone, $message);
 
         return back()->with('success', 'Link verifikasi telah dikirim ke WhatsApp Anda.');

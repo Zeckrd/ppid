@@ -32,8 +32,11 @@ class WablasService
                 'phone'   => $phone,
                 'message' => $message,
             ]);
-
             $response = Http::get("{$this->baseUrl}?{$query}");
+            \Log::info('Wablas response:', [
+                'status' => $response->status(),
+                'body'   => $response->body(),
+            ]);
 
             return $response->successful();
         }

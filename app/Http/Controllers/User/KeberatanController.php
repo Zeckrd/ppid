@@ -5,8 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Keberatan;
 use App\Models\Permohonan;
+use App\Services\WhatsAppNotificationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class KeberatanController extends Controller
 {
@@ -17,7 +17,8 @@ class KeberatanController extends Controller
         $allowedStatuses = [
             'perlu diperbaiki',
             'menunggu verifikasi berkas dari petugas',
-            'selesai',
+            'diterima',
+            'ditolak'
         ];
 
         if (!in_array($status, $allowedStatuses)) {
@@ -26,7 +27,7 @@ class KeberatanController extends Controller
 
         if ($permohonan->keberatan) {
             return redirect()->route('user.permohonan.show', $permohonan)
-                            ->with('error', 'Keberatan sudah diajukan.');
+                             ->with('error', 'Keberatan sudah diajukan.');
         }
 
         return view('user.dashboard.keberatan.create', compact('permohonan'));
@@ -36,7 +37,7 @@ class KeberatanController extends Controller
     {
         $request->validate([
             'keterangan_user' => 'required|string|max:1000',
-            'keberatan_file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'keberatan_file'  => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
         $filePath = null;
@@ -45,21 +46,24 @@ class KeberatanController extends Controller
             $filePath = $request->file('keberatan_file')->store('keberatan', 'public');
         }
 
-        Keberatan::create([
-            'permohonan_id' => $permohonan->id,
+        $keberatan = Keberatan::create([
+            'permohonan_id'   => $permohonan->id,
             'keterangan_user' => $request->keterangan_user,
-            'keberatan_file' => $filePath,
+            'keberatan_file'  => $filePath,
         ]);
 
         $permohonan->update([
             'status' => 'Menunggu Verifikasi Berkas Dari Petugas',
         ]);
 
+        // WhatsApp notification on keberatan created
+        app(WhatsAppNotificationService::class)
+            ->notifyKeberatanCreated($keberatan);
+
         return redirect()
             ->route('user.permohonan.show', $permohonan)
             ->with('success', 'Keberatan berhasil diajukan dan status permohonan diperbarui.');
     }
-
 
     public function show(Keberatan $keberatan)
     {

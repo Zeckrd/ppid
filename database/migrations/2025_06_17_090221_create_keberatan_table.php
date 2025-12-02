@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(App\Models\Permohonan::class)->constrained()->onDelete('cascade');
             $table->string('keberatan_file');
-            $table->enum('status', ['Pending','Diproses', 'Selesai'])->default('Pending');
+            $table->enum('status', ['Pending','Diproses', 'Diterima','Ditolak'])->default('Pending');
             $table->text('keterangan_user');
             $table->text('keterangan_petugas')->nullable();
             $table->string('reply_file')->nullable();

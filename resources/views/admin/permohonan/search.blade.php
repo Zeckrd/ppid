@@ -176,7 +176,8 @@
                         'Sedang Diverifikasi petugas',
                         'Perlu Diperbaiki',
                         'Diproses',
-                        'Selesai'
+                        'Diterima',
+                        'Ditolak',
                     ];
                 @endphp
 
@@ -194,22 +195,25 @@
                            ]) }}">
                             @switch($item)
                                 @case('Semua')
-                                    <i class="ri-file-list-3-line me-1"></i>Semua
+                                    <i class="ri-file-list-3-line me-1"></i> Semua
                                     @break
                                 @case('Menunggu Verifikasi Berkas Dari Petugas')
-                                    <i class="ri-time-line me-1"></i>Menunggu Verifikasi
+                                    <i class="ri-time-line me-1"></i> Menunggu Verifikasi
                                     @break
                                 @case('Sedang Diverifikasi petugas')
-                                    <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                    <i class="ri-search-eye-line me-1"></i> Diverifikasi
                                     @break
                                 @case('Perlu Diperbaiki')
-                                    <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                    <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
                                     @break
                                 @case('Diproses')
-                                    <i class="ri-loader-4-line me-1"></i>Diproses
+                                    <i class="ri-loader-4-line me-1"></i> Diproses
                                     @break
-                                @case('Selesai')
-                                    <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                @case('Diterima')
+                                    <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                    @break
+                                @case('Ditolak')
+                                    <i class="ri-close-circle-line"></i></i> Ditolak
                                     @break
                             @endswitch
                         </a>
@@ -258,23 +262,27 @@
                                     <td class="px-4 py-3 align-middle">
                                         @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
                                             <span class="badge bg-warning text-dark">
-                                                <i class="ri-time-line me-1"></i>Menunggu Verifikasi
+                                                <i class="ri-time-line me-1"></i> Menunggu Verifikasi
                                             </span>
                                         @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
                                             <span class="badge bg-primary">
-                                                <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                                <i class="ri-search-eye-line me-1"></i> Diverifikasi
                                             </span>
                                         @elseif($permohonan->status == 'Perlu Diperbaiki')
                                             <span class="badge bg-danger">
-                                                <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                                <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
                                             </span>
                                         @elseif($permohonan->status == 'Diproses')
                                             <span class="badge bg-info text-dark">
-                                                <i class="ri-loader-4-line me-1"></i>Diproses
+                                                <i class="ri-loader-4-line me-1"></i> Diproses
                                             </span>
-                                        @elseif($permohonan->status == 'Selesai')
+                                        @elseif($permohonan->status == 'Diterima')
                                             <span class="badge bg-success">
-                                                <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                            </span>
+                                        @elseif($permohonan->status == 'Ditolak')
+                                            <span class="badge bg-danger">
+                                                <i class="ri-close-circle-line"></i> Ditolak
                                             </span>
                                         @else
                                             <span class="badge bg-secondary">
@@ -302,9 +310,15 @@
                                             </span>
                                             @break
 
-                                        @case('Selesai')
+                                        @case('Diterima')
                                             <span class="badge bg-success">
-                                                <i class="ri-checkbox-circle-line me-1"></i> Selesai
+                                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                            </span>
+                                            @break
+                                        
+                                        @case('Ditolak')
+                                            <span class="badge bg-danger">
+                                                <i class="ri-close-circle-line"></i> Ditolak
                                             </span>
                                             @break
 
@@ -362,9 +376,13 @@
                                         <span class="badge bg-info text-dark small">
                                             <i class="ri-loader-4-line me-1"></i>Diproses
                                         </span>
-                                    @elseif($permohonan->status == 'Selesai')
+                                    @elseif($permohonan->status == 'Diterima')
                                         <span class="badge bg-success small">
-                                            <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                            <i class="ri-checkbox-circle-line me-1"></i>Diterima
+                                        </span>
+                                    @elseif($permohonan->status == 'Ditolak')
+                                        <span class="badge bg-danger small">
+                                            <i class="ri-close-circle-line"></i>Ditolak
                                         </span>
                                     @else
                                         <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>

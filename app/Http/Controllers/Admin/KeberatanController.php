@@ -15,7 +15,7 @@ class KeberatanController extends Controller
         $keberatan = Keberatan::findOrFail($id);
 
         $validated = $request->validate([
-            'status' => 'required|in:Pending,Diproses,Selesai',
+            'status' => 'required|in:Pending,Diproses,Diterima,Ditolak',
             'keterangan_petugas' => 'nullable|string|max:1000',
             'keberatan_file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
@@ -26,7 +26,6 @@ class KeberatanController extends Controller
             if ($keberatan->reply_file && Storage::exists($keberatan->reply_file)) {
                 Storage::delete($keberatan->reply_file);
             }
-
 
             $path = $request->file('keberatan_file')->store('public/keberatan');
             $validated['reply_file'] = $path;

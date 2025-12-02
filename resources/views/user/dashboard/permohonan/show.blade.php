@@ -97,9 +97,15 @@
                                             <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
                                         </span>
                                         @break
-                                    @case('Diproses')
-                                        <span class="badge bg-info text-dark px-3 py-2">
-                                            <i class="ri-loader-4-line me-1"></i>Diproses
+                                    @case('Diterima')
+                                        <span class="badge bg-success">
+                                            <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                        </span>
+                                        @break
+                                    
+                                    @case('Ditolak')
+                                        <span class="badge bg-danger">
+                                            <i class="ri-close-circle-line"></i> Ditolak
                                         </span>
                                         @break
                                     @case('Selesai')
@@ -227,52 +233,124 @@
                 </div>
 
                 @if($permohonan->keberatan)
-                    <div class="border rounded p-4 bg-light mb-3">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
-                            <div class="d-flex align-items-center mb-2 mb-md-0">
-                                <i class="ri-calendar-event-line text-muted me-2"></i>
-                                <span class="text-muted small">
-                                    Diajukan pada {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}
-                                </span>
-                            </div>
-
-                            {{--Status Badge --}}
-                            @php
-                                $status = $permohonan->keberatan->status;
-                                $badgeClass = match($status) {
-                                    'Pending' => 'bg-warning text-dark',
-                                    'Selesai' => 'bg-success',
-                                    default    => 'bg-secondary'
-                                };
-                            @endphp
-                            <span class="badge {{ $badgeClass }} px-3 py-2">{{ ucfirst($status) }}</span>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <div class="fw-semibold text-muted small mb-2">Keterangan Pengguna</div>
-                            <div class="p-3 bg-white rounded border">
-                                <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_user }}</p>
-                            </div>
+                    {{-- Meta info (date + status) --}}
+                    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+                        <div class="d-flex align-items-center mb-2 mb-md-0">
+                            <i class="ri-calendar-event-line text-muted me-2"></i>
+                            <span class="text-muted small">
+                                Diajukan pada {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}
+                            </span>
                         </div>
 
-                        @if($permohonan->keberatan->keberatan_file)
-                            <div class="pt-2">
-                                <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}" 
-                                class="btn btn-outline-danger btn-sm d-inline-flex align-items-center"
-                                target="_blank">
-                                    <i class="ri-download-line me-1"></i> Download File Keberatan
-                                </a>
-                            </div>
-                        @endif
+                        @php
+                            $status = $permohonan->keberatan->status;
+                            $badgeClass = match($status) {
+                                'Pending'  => 'bg-warning text-dark',
+                                'Diterima' => 'bg-success',
+                                'Ditolak'  => 'bg-danger',
+                                default    => 'bg-secondary'
+                            };
+                        @endphp
+                        <span class="badge {{ $badgeClass }} px-3 py-2">
+                            {{ ucfirst($status) }}
+                        </span>
                     </div>
+
+                    <hr class="my-3">
+
+                    {{-- Keterangan User (match permohonan UI) --}}
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="ri-message-3-line text-primary me-2"></i>
+                            <h6 class="mb-0 fw-bold">Keterangan User</h6>
+                        </div>
+                        <div class="p-3 rounded bg-light border">
+                            <p class="mb-0" style="white-space: pre-wrap;">
+                                {{ $permohonan->keberatan->keterangan_user }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Keterangan Petugas --}}
+                    @if($permohonan->keberatan->keterangan_petugas)
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="ri-admin-line text-info me-2"></i>
+                                <h6 class="mb-0 fw-bold">Keterangan Petugas</h6>
+                            </div>
+                            <div class="p-3 rounded border" style="background-color: #e7f3ff;">
+                                <p class="mb-0" style="white-space: pre-wrap;">
+                                    {{ $permohonan->keberatan->keterangan_petugas }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+
+                    <hr class="my-4">
+
+                    {{-- Files Section --}}
+                    <div class="row g-4">
+                        {{-- File Keberatan (user upload) --}}
+                        <div class="col-md-6">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="ri-file-text-line text-primary me-2" style="font-size: 1.25rem;"></i>
+                                        <h6 class="mb-0 fw-bold">File Keberatan</h6>
+                                    </div>
+
+                                    @if($permohonan->keberatan->keberatan_file)
+                                        <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}" 
+                                        class="btn btn-outline-primary w-100"
+                                        target="_blank">
+                                            <i class="ri-download-line me-1"></i> Download File Keberatan
+                                        </a>
+                                    @else
+                                        <div class="text-center py-3 text-muted">
+                                            <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                            <p class="small mb-0 mt-2">Tidak ada file</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- File Balasan Keberatan --}}
+                        <div class="col-md-6">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="ri-file-check-line text-success me-2" style="font-size: 1.25rem;"></i>
+                                        <h6 class="mb-0 fw-bold">File Balasan Keberatan</h6>
+                                    </div>
+
+                                    @if($permohonan->keberatan->reply_file)
+                                        <a href="{{ Storage::url($permohonan->keberatan->reply_file) }}" 
+                                        class="btn btn-outline-success w-100"
+                                        target="_blank">
+                                            <i class="ri-download-line me-1"></i> Download File Balasan Keberatan
+                                        </a>
+                                    @else
+                                        <div class="text-center py-3 text-muted">
+                                            <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                            <p class="small mb-0 mt-2">Belum tersedia</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 @else
-                    @if(in_array($permohonan->status, ['Perlu Diperbaiki', 'Selesai']))
+                    @if(in_array($permohonan->status, ['Perlu Diperbaiki', 'Diterima', 'Ditolak']))
                         <div class="alert alert-info border-0 d-flex flex-wrap align-items-center justify-content-between py-3 px-4 mb-0">
                             <div class="d-flex align-items-center mb-2 mb-md-0">
                                 <i class="ri-information-line me-3" style="font-size: 1.6rem;"></i>
                                 <div>
                                     <div class="fw-semibold mb-1">Anda dapat mengajukan keberatan</div>
-                                    <div class="small text-muted">Jika Anda tidak puas dengan hasil permohonan, silakan ajukan keberatan.</div>
+                                    <div class="small text-muted">
+                                        Jika Anda tidak puas dengan hasil permohonan, silakan ajukan keberatan.
+                                    </div>
                                 </div>
                             </div>
                             <a href="{{ route('user.keberatan.create', $permohonan->id) }}" 
