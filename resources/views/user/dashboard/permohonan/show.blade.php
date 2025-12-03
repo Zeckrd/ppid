@@ -183,7 +183,7 @@
                         <ul class="list-group mb-3">
                             @foreach($permohonan->files as $file)
                                 <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                    <div class="d-flex justify-content-between align-items-center gap-3">
                                         <div class="flex-grow-1 min-width-0">
                                             <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
                                                 <i class="ri-file-line me-1"></i>
@@ -224,7 +224,7 @@
                         <ul class="list-group mb-3">
                             @foreach($permohonan->replyFiles as $file)
                                 <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                    <div class="d-flex justify-content-between align-items-center gap-3">
                                         <div class="flex-grow-1 min-width-0">
                                             <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
                                                 <i class="ri-file-line me-1"></i>
