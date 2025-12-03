@@ -108,6 +108,7 @@ class DashboardController extends Controller
         // Pekerjaan count
         $pekerjaanStats = User::select('pekerjaan', DB::raw('COUNT(*) as total'))
             ->whereNotNull('pekerjaan')
+            ->where('is_admin', false)
             ->groupBy('pekerjaan')
             ->orderBy('pekerjaan')
             ->get();
