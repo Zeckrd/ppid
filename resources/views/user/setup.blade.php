@@ -51,7 +51,7 @@
                                 Edit Profil (Email / No. WhatsApp / Nama)
                             </a>
 
-                            {{-- reverify phone --}}
+                            {{-- reverify phone
                             <form action="{{ route('phone.send') }}" method="POST">
                                 @csrf
 
@@ -76,7 +76,7 @@
                                         Kirim Ulang Link Verifikasi
                                     </button>
                                 @endif
-                            </form>
+                            </form> --}}
 
                             {{-- logout --}}
                             <form method="POST" action="{{ route('logout') }}">

@@ -44,13 +44,13 @@
                                 <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle" style="width: 48px; height: 48px;">
                                     <i class="ri-user-line text-primary" style="font-size: 1.5rem;"></i>
                                 </div>
-                            <div>
-                                <h5 class="mb-1 fw-bold">{{ $permohonan->user->name ?? '-' }}</h5>
-                                <div class="text-muted small">
-                                    <i class="ri-mail-line me-1"></i>
-                                    {{ $permohonan->user->email ?? '-' }}
+                                <div>
+                                    <h5 class="mb-1 fw-bold">{{ $permohonan->user->name ?? '-' }}</h5>
+                                    <div class="text-muted small">
+                                        <i class="ri-mail-line me-1"></i>
+                                        {{ $permohonan->user->email ?? '-' }}
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             <div>
                                 @switch($permohonan->status)
@@ -92,11 +92,11 @@
                             </div>
                         </div>
 
-                        <!-- Detail Pemngajuan -->
+                        <!-- Detail Pengajuan -->
                         <div class="row g-4 mb-4">
                             <div class="col-md-6">
                                 <div class="d-flex align-items-start">
-                                        <i class="ri-booklet-line text-muted me-2 mt-1"></i>
+                                    <i class="ri-booklet-line text-muted me-2 mt-1"></i>
                                     <div>
                                         <div class="text-muted small mb-1">Jenis Permohonan</div>
                                         <div class="fw-medium">{{ ucfirst($permohonan->permohonan_type) }}</div>
@@ -154,30 +154,35 @@
 
                             @if($permohonan->files->count())
                                 <ul class="list-group mb-3">
-                                    @foreach($permohonan->files as $file)
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <div class="fw-medium">
-                                                    <i class="ri-file-line me-1"></i>
-                                                    {{ $file->original_name }}
-                                                </div>
-                                                @if($file->size)
-                                                    <div class="small text-muted">
-                                                        {{ number_format($file->size / 1024, 1) }} KB
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <a href="{{ route('admin.permohonan.files.download', [$permohonan->id, $file->id]) }}"
-                                            class="btn btn-sm btn-outline-primary"
-                                            target="_blank">
-                                                <i class="ri-download-line me-1"></i> Download
-                                            </a>
-                                        </li>
-                                    @endforeach
+@foreach($permohonan->files as $file)
+    <li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-start gap-3">
+            <div class="flex-grow-1 min-width-0">
+                <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                    <i class="ri-file-line me-1"></i>
+                    {{ $file->original_name }}
+                </div>
+                @if($file->size)
+                    <div class="small text-muted">
+                        {{ number_format($file->size / 1024, 1) }} KB
+                    </div>
+                @endif
+            </div>
+            <div class="flex-shrink-0">
+                <a href="{{ route('admin.permohonan.files.download', [$permohonan->id, $file->id]) }}"
+                   class="btn btn-sm btn-outline-primary text-nowrap"
+                   target="_blank">
+                    <i class="ri-download-line me-1"></i> Download
+                </a>
+            </div>
+        </div>
+    </li>
+@endforeach
+
                                 </ul>
 
                                 <a href="{{ route('admin.permohonan.files.zip', $permohonan->id) }}"
-                                class="btn btn-outline-primary">
+                                   class="btn btn-outline-primary">
                                     <i class="ri-folder-download-line me-1"></i>
                                     Download Semua Lampiran (ZIP)
                                 </a>
@@ -189,9 +194,6 @@
                             @endif
                         </div>
 
-
-
-
                         {{-- Keberatan Section --}}
                         <div>
                             <div class="d-flex align-items-center mb-3">
@@ -200,7 +202,7 @@
                             </div>
 
                             @if($permohonan->keberatan)
-                                <div class="border rounded p-3 mb-3" style="background-color: #fff3cd;">
+                                <div class="border rounded p-3 mb-3" style="background-color: #fffdf7;">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                         <div class="d-flex align-items-center">
                                             <i class="ri-calendar-event-line text-muted me-2"></i>
@@ -235,7 +237,7 @@
                                                 </span>
                                         @endswitch
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <div class="fw-bold mb-2 small text-muted">Keterangan Keberatan:</div>
                                         <div class="p-3 bg-white rounded border">
@@ -244,11 +246,17 @@
                                     </div>
 
                                     @if($permohonan->keberatan->keberatan_file)
-                                        <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}" 
-                                           class="btn btn-outline-danger btn-sm" 
-                                           target="_blank">
-                                            <i class="ri-download-line me-1"></i> Download File Keberatan
-                                        </a>
+                                        <div class="d-flex justify-content-between align-items-center mt-2 p-2 border rounded bg-white">
+                                            <div class="small text-muted">
+                                                <i class="ri-attachment-2 me-1"></i>
+                                                File keberatan
+                                            </div>
+                                            <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}"
+                                               class="btn btn-sm btn-outline-danger"
+                                               target="_blank">
+                                                <i class="ri-download-line me-1"></i> Download
+                                            </a>
+                                        </div>
                                     @endif
                                 </div>
                             @else
@@ -336,11 +344,11 @@
                                     <i class="ri-file-upload-line me-1"></i> Upload File Balasan
                                 </label>
                                 <input type="file"
-                                    name="reply_files[]"
-                                    id="reply_files"
-                                    class="form-control @error('reply_files') is-invalid @enderror"
-                                    accept=".pdf,.doc,.docx"
-                                    multiple>
+                                       name="reply_files[]"
+                                       id="reply_files"
+                                       class="form-control @error('reply_files') is-invalid @enderror"
+                                       accept=".pdf,.doc,.docx"
+                                       multiple>
                                 <x-form-error name="reply_files"></x-form-error>
                                 <div class="form-text small text-muted">
                                     <i class="ri-information-line"></i>
@@ -348,48 +356,48 @@
                                 </div>
 
                                 @if($replyFiles->count())
-                                    <div class="mt-3 p-3 bg-success bg-opacity-10 border border-success rounded">
+                                    <div class="mt-3">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <div>
-                                                <i class="ri-file-check-line text-success me-2"></i>
-                                                <span class="text-success small fw-semibold">
-                                                    {{ $replyFiles->count() }} file balasan tersedia
-                                                </span>
-                                            </div>
+                                            <span class="small text-muted">
+                                                <i class="ri-file-check-line me-1"></i>
+                                                {{ $replyFiles->count() }} file balasan
+                                            </span>
                                         </div>
 
-                                        <ul class="list-group">
+                                        <ul class="list-group list-group-flush rounded border">
                                             @foreach($replyFiles as $file)
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <div class="fw-medium">
-                                                            <i class="ri-file-line me-1"></i>
-                                                            {{ $file->original_name }}
-                                                        </div>
-                                                        @if($file->size)
-                                                            <div class="small text-muted">
-                                                                {{ number_format($file->size / 1024, 1) }} KB
+                                                <li class="list-group-item">
+                                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                                        <div class="flex-grow-1 min-width-0">
+                                                            <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                                <i class="ri-file-line me-1"></i>
+                                                                {{ $file->original_name }}
                                                             </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="d-flex align-items-center gap-3">
-                                                        <a href="{{ route('admin.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
-                                                        target="_blank"
-                                                        class="btn btn-sm btn-outline-success">
-                                                            <i class="ri-download-line me-1"></i> Lihat
-                                                        </a>
+                                                            @if($file->size)
+                                                                <div class="small text-muted">
+                                                                    {{ number_format($file->size / 1024, 1) }} KB
+                                                                </div>
+                                                            @endif
+                                                        </div>
 
-                                                        {{-- Admin delete toggle for reply file --}}
-                                                        <div class="form-check mb-0">
-                                                            <input class="form-check-input"
-                                                                type="checkbox"
-                                                                name="delete_reply_file_ids[]"
-                                                                value="{{ $file->id }}"
-                                                                id="delete_reply_file_{{ $file->id }}">
-                                                            <label class="form-check-label small text-danger"
-                                                                for="delete_reply_file_{{ $file->id }}">
-                                                                Hapus
-                                                            </label>
+                                                        <div class="d-flex align-items-center gap-3 flex-shrink-0">
+                                                            <a href="{{ route('admin.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
+                                                            target="_blank"
+                                                            class="btn btn-sm btn-outline-secondary text-nowrap">
+                                                                <i class="ri-download-line me-1"></i> Lihat
+                                                            </a>
+
+                                                            <div class="form-check mb-0">
+                                                                <input class="form-check-input"
+                                                                    type="checkbox"
+                                                                    name="delete_reply_file_ids[]"
+                                                                    value="{{ $file->id }}"
+                                                                    id="delete_reply_file_{{ $file->id }}">
+                                                                <label class="form-check-label small text-danger"
+                                                                    for="delete_reply_file_{{ $file->id }}">
+                                                                    Hapus
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -398,8 +406,6 @@
                                     </div>
                                 @endif
                             </div>
-
-
 
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="ri-save-line me-1"></i> Simpan Perubahan Permohonan
@@ -454,22 +460,25 @@
                                         <div class="form-text small text-muted">
                                             <i class="ri-information-line"></i> Upload dokumen balasan untuk keberatan ini (PDF, DOCX, dll).
                                         </div>
-
-                                        @if($permohonan->keberatan->reply_file ?? false)
-                                            <div class="mt-3 p-3 bg-success bg-opacity-10 border border-success rounded">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i class="ri-file-check-line text-success me-2"></i>
-                                                        <span class="text-success small fw-semibold">File balasan keberatan tersedia</span>
+                                        @if($permohonan->keberatan->keberatan_file)
+                                            <div class="mt-2 p-2 border rounded bg-white">
+                                                <div class="d-flex justify-content-between align-items-start gap-3">
+                                                    <div class="small text-muted flex-grow-1 min-width-0 text-truncate"
+                                                        title="{{ $permohonan->keberatan->keberatan_file }}">
+                                                        <i class="ri-attachment-2 me-1"></i>
+                                                        File keberatan
                                                     </div>
-                                                    <a href="{{ Storage::url($permohonan->keberatan->reply_file) }}" target="_blank" class="btn btn-sm btn-outline-success">
-                                                        <i class="ri-download-line me-1"></i> Lihat
-                                                    </a>
+                                                    <div class="flex-shrink-0">
+                                                        <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}"
+                                                        class="btn btn-sm btn-outline-danger text-nowrap"
+                                                        target="_blank">
+                                                            <i class="ri-download-line me-1"></i> Download
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
-
                                     <button type="submit" class="btn btn-danger w-100">
                                         <i class="ri-save-3-line me-1"></i> Update Keberatan
                                     </button>

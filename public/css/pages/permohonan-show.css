@@ -50,3 +50,11 @@
         .card.shadow-sm {
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
         }
+
+        .min-width-0 {
+            min-width: 0; /* for safety if not using Bootstrap 5's min-width-0 */
+        }
+
+        .file-name-wrap {
+            word-break: break-word;
+        }

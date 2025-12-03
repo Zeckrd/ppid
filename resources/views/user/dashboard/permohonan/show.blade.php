@@ -179,27 +179,30 @@
                         <i class="ri-file-text-line text-primary me-2"></i>
                         <h6 class="mb-0 fw-bold">File Permohonan</h6>
                     </div>
-
                     @if($permohonan->files->count())
                         <ul class="list-group mb-3">
                             @foreach($permohonan->files as $file)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-medium">
-                                            <i class="ri-file-line me-1"></i>
-                                            {{ $file->original_name }}
-                                        </div>
-                                        @if($file->size)
-                                            <div class="small text-muted">
-                                                {{ number_format($file->size / 1024, 1) }} KB
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                        <div class="flex-grow-1 min-width-0">
+                                            <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                <i class="ri-file-line me-1"></i>
+                                                {{ $file->original_name }}
                                             </div>
-                                        @endif
+                                            @if($file->size)
+                                                <div class="small text-muted">
+                                                    {{ number_format($file->size / 1024, 1) }} KB
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <a href="{{ route('user.permohonan.files.download', [$permohonan->id, $file->id]) }}"
+                                            class="btn btn-sm btn-outline-primary text-nowrap"
+                                            target="_blank">
+                                                <i class="ri-download-line me-1"></i> Download
+                                            </a>
+                                        </div>
                                     </div>
-                                    <a href="{{ route('user.permohonan.files.download', [$permohonan->id, $file->id]) }}"
-                                    class="btn btn-sm btn-outline-primary"
-                                    target="_blank">
-                                        <i class="ri-download-line me-1"></i> Download
-                                    </a>
                                 </li>
                             @endforeach
                         </ul>
@@ -217,27 +220,30 @@
                         <i class="ri-mail-check-line text-success me-2"></i>
                         <h6 class="mb-0 fw-bold">File Balasan</h6>
                     </div>
-
                     @if($permohonan->replyFiles->count())
                         <ul class="list-group mb-3">
                             @foreach($permohonan->replyFiles as $file)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-medium">
-                                            <i class="ri-file-line me-1"></i>
-                                            {{ $file->original_name }}
-                                        </div>
-                                        @if($file->size)
-                                            <div class="small text-muted">
-                                                {{ number_format($file->size / 1024, 1) }} KB
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                        <div class="flex-grow-1 min-width-0">
+                                            <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                <i class="ri-file-line me-1"></i>
+                                                {{ $file->original_name }}
                                             </div>
-                                        @endif
+                                            @if($file->size)
+                                                <div class="small text-muted">
+                                                    {{ number_format($file->size / 1024, 1) }} KB
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <a href="{{ route('user.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
+                                            class="btn btn-sm btn-outline-success text-nowrap"
+                                            target="_blank">
+                                                <i class="ri-download-line me-1"></i> Download
+                                            </a>
+                                        </div>
                                     </div>
-                                    <a href="{{ route('user.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
-                                    class="btn btn-sm btn-outline-success"
-                                    target="_blank">
-                                        <i class="ri-download-line me-1"></i> Download
-                                    </a>
                                 </li>
                             @endforeach
                         </ul>
@@ -270,14 +276,15 @@
                                 Diajukan pada {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}
                             </span>
                         </div>
-
                         @php
-                            $status = $permohonan->keberatan->status;
+                            $status = $permohonan->keberatan->status ?? 'Pending';
+
                             $badgeClass = match($status) {
                                 'Pending'  => 'bg-warning text-dark',
+                                'Diproses' => 'bg-info text-dark',
                                 'Diterima' => 'bg-success',
                                 'Ditolak'  => 'bg-danger',
-                                default    => 'bg-secondary'
+                                default    => 'bg-secondary',
                             };
                         @endphp
                         <span class="badge {{ $badgeClass }} px-3 py-2">
@@ -287,33 +294,29 @@
 
                     <hr class="my-3">
 
-                    {{-- Keterangan User --}}
+                {{-- Keterangan User --}}
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-message-3-line text-primary me-2"></i>
+                        <h6 class="mb-0 fw-bold">Keterangan User</h6>
+                    </div>
+                    <div class="p-3 rounded bg-light border">
+                        <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_user }}</p>
+                    </div>
+                </div>
+
+                {{-- Keterangan Petugas --}}
+                @if($permohonan->keterangan_petugas)
                     <div class="mb-4">
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="ri-message-3-line text-primary me-2"></i>
-                            <h6 class="mb-0 fw-bold">Keterangan User</h6>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="ri-admin-line text-info me-2"></i>
+                            <h6 class="mb-0 fw-bold">Keterangan Petugas</h6>
                         </div>
-                        <div class="p-3 rounded bg-light border">
-                            <p class="mb-0" style="white-space: pre-wrap;">
-                                {{ $permohonan->keberatan->keterangan_user }}
-                            </p>
+                        <div class="p-3 rounded border" style="background-color: #e7f3ff;">
+                            <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_petugas }}</p>
                         </div>
                     </div>
-
-                    {{-- Keterangan Petugas --}}
-                    @if($permohonan->keberatan->keterangan_petugas)
-                        <div class="mb-4">
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="ri-admin-line text-info me-2"></i>
-                                <h6 class="mb-0 fw-bold">Keterangan Petugas</h6>
-                            </div>
-                            <div class="p-3 rounded border" style="background-color: #e7f3ff;">
-                                <p class="mb-0" style="white-space: pre-wrap;">
-                                    {{ $permohonan->keberatan->keterangan_petugas }}
-                                </p>
-                            </div>
-                        </div>
-                    @endif
+                @endif
 
                     <hr class="my-4">
 
