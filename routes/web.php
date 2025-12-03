@@ -103,6 +103,9 @@ Route::middleware(['auth', 'phone.verified'])
 
         Route::post('/permohonan/{permohonan}/keberatan', [KeberatanController::class, 'store'])
             ->name('keberatan.store');
+
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-file', [KeberatanController::class, 'downloadReplyFile'])
+            ->name('keberatan.reply-file.download');
     });
 
 

@@ -346,8 +346,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{-- File Balasan Keberatan --}}
+                        {{-- File Balasan Keberatan (admin) --}}
                         <div class="col-md-6">
                             <div class="card h-100 border">
                                 <div class="card-body">
@@ -357,7 +356,7 @@
                                     </div>
 
                                     @if($permohonan->keberatan->reply_file)
-                                        <a href="{{ Storage::url($permohonan->keberatan->reply_file) }}" 
+                                        <a href="{{ route('user.keberatan.reply-file.download', [$permohonan->id, $permohonan->keberatan->id]) }}" 
                                         class="btn btn-outline-success w-100"
                                         target="_blank">
                                             <i class="ri-download-line me-1"></i> Download File Balasan Keberatan
@@ -372,7 +371,6 @@
                             </div>
                         </div>
                     </div>
-
                 @else
                     @if(in_array($permohonan->status, ['Perlu Diperbaiki', 'Diterima', 'Ditolak']))
                         <div class="alert alert-info border-0 d-flex flex-wrap align-items-center justify-content-between py-3 px-4 mb-0">

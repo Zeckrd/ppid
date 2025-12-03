@@ -7,6 +7,8 @@ use App\Models\Keberatan;
 use App\Models\Permohonan;
 use App\Services\WhatsAppNotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class KeberatanController extends Controller
 {
@@ -68,5 +70,29 @@ class KeberatanController extends Controller
     public function show(Keberatan $keberatan)
     {
         return view('user.dashboard.keberatan.show', compact('keberatan'));
+    }
+
+    public function downloadReplyFile(Permohonan $permohonan, Keberatan $keberatan)
+    {
+        // Make sure this keberatan belongs to this permohonan
+        if ($keberatan->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        // Make sure this permohonan belongs to logged-in user
+        if ($permohonan->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (! $keberatan->reply_file || ! Storage::disk('local')->exists($keberatan->reply_file)) {
+            abort(404, 'File balasan keberatan tidak ditemukan.');
+        }
+
+        $absolutePath = Storage::disk('local')->path($keberatan->reply_file);
+
+        $extension    = pathinfo($absolutePath, PATHINFO_EXTENSION);
+        $downloadName = 'balasan-keberatan-' . $keberatan->id . '.' . $extension;
+
+        return response()->download($absolutePath, $downloadName);
     }
 }
