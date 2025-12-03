@@ -173,54 +173,44 @@
 
                 <hr class="my-4">
 
-                <!-- Files Section -->
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="card h-100 border">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="ri-file-text-line text-primary me-2" style="font-size: 1.25rem;"></i>
-                                    <h6 class="mb-0 fw-bold">File Permohonan</h6>
-                                </div>
-                                @if($permohonan->permohonan_file)
-                                    <a href="{{ Storage::url($permohonan->permohonan_file) }}" 
-                                       class="btn btn-outline-primary w-100" 
-                                       target="_blank">
-                                        <i class="ri-download-line me-1"></i> Download File Permohonan
-                                    </a>
-                                @else
-                                    <div class="text-center py-3 text-muted">
-                                        <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
-                                        <p class="small mb-0 mt-2">Tidak ada file</p>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
+                {{-- File Permohonan --}}
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-file-text-line text-primary me-2"></i>
+                        <h6 class="mb-0 fw-bold">File Permohonan</h6>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="card h-100 border">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-3">
-                                    <i class="ri-file-check-line text-success me-2" style="font-size: 1.25rem;"></i>
-                                    <h6 class="mb-0 fw-bold">File Balasan</h6>
-                                </div>
-                                @if($permohonan->reply_file)
-                                    <a href="{{ Storage::url($permohonan->reply_file) }}" 
-                                       class="btn btn-outline-success w-100" 
-                                       target="_blank">
-                                        <i class="ri-download-line me-1"></i> Download File Balasan
-                                    </a>
-                                @else
-                                    <div class="text-center py-3 text-muted">
-                                        <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
-                                        <p class="small mb-0 mt-2">Belum tersedia</p>
+                    @if($permohonan->files->count())
+                        <ul class="list-group mb-3">
+                            @foreach($permohonan->files as $file)
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-medium">
+                                            <i class="ri-file-line me-1"></i>
+                                            {{ $file->original_name }}
+                                        </div>
+                                        @if($file->size)
+                                            <div class="small text-muted">
+                                                {{ number_format($file->size / 1024, 1) }} KB
+                                            </div>
+                                        @endif
                                     </div>
-                                @endif
-                            </div>
+                                    <a href="{{ route('user.permohonan.files.download', [$permohonan->id, $file->id]) }}"
+                                    class="btn btn-sm btn-outline-primary"
+                                    target="_blank">
+                                        <i class="ri-download-line me-1"></i> Download
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="text-center py-3 text-muted border rounded">
+                            <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                            <p class="small mb-0 mt-2">Tidak ada file</p>
                         </div>
-                    </div>
+                    @endif
                 </div>
+
             </div>
         </div>
 
@@ -258,7 +248,7 @@
 
                     <hr class="my-3">
 
-                    {{-- Keterangan User (match permohonan UI) --}}
+                    {{-- Keterangan User --}}
                     <div class="mb-4">
                         <div class="d-flex align-items-center mb-2">
                             <i class="ri-message-3-line text-primary me-2"></i>

@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Permohonan;
+use App\Models\PermohonanFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StatusUpdateMail;
 use App\Services\WablasService;
 use Illuminate\Support\Arr;
+use ZipArchive;
 
 
 class PermohonanController extends Controller
@@ -31,7 +33,7 @@ class PermohonanController extends Controller
 
     public function show(Permohonan $permohonan)
     {
-        $permohonan->load('user', 'keberatan');
+        $permohonan->load('user','files', 'keberatan');
 
         return view('admin.permohonan.show', compact('permohonan'));
     }
@@ -140,6 +142,58 @@ class PermohonanController extends Controller
                             ->appends($request->all());
 
         return view('admin.permohonan.search', compact('permohonans', 'keyword'));
+    }
+
+    public function downloadFile(Permohonan $permohonan, PermohonanFile $file)
+    {
+        if ($file->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404);
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        return response()->download($absolutePath, $file->original_name);
+    }
+
+
+    public function downloadAllFilesZip(Permohonan $permohonan)
+    {
+        $files = $permohonan->files;
+
+        if ($files->isEmpty()) {
+            return back()->with('error', 'Tidak ada lampiran untuk diunduh.');
+        }
+
+        $zipFileName = 'permohonan-' . $permohonan->id . '-lampiran.zip';
+        $tempDir     = storage_path('app/temp');
+        $tempPath    = $tempDir . '/' . $zipFileName;
+
+        if (! is_dir($tempDir)) {
+            mkdir($tempDir, 0777, true);
+        }
+
+        $zip = new ZipArchive;
+        if ($zip->open($tempPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return back()->with('error', 'Gagal membuat file ZIP.');
+        }
+
+        foreach ($files as $file) {
+            if (Storage::disk('local')->exists($file->path)) {
+                // Absolute path via Storage so it's consistent with your single download
+                $absolutePath = Storage::disk('local')->path($file->path);
+
+                // Use original_name inside the zip
+                $zip->addFile($absolutePath, $file->original_name);
+            }
+        }
+
+        $zip->close();
+
+        return response()->download($tempPath, $zipFileName)->deleteFileAfterSend(true);
     }
  
 }

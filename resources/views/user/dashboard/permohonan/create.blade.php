@@ -130,23 +130,24 @@
                         </div>
 
                         <!-- File Upload -->
-                        <label for="permohonan_file" class="form-label">
+                        <label for="permohonan_files" class="form-label">
                             <i class="ri-upload-cloud-line me-1"></i>
                             <span class="fw-bold">Upload File Permohonan</span>
                             <span class="text-danger">*</span>
                         </label>
-                        <input type="file" 
-                            class="form-control @error('permohonan_file') is-invalid @enderror"
-                            id="permohonan_file"
-                            name="permohonan_file"
+                        <input type="file"
+                            class="form-control @error('permohonan_files') is-invalid @enderror"
+                            id="permohonan_files"
+                            name="permohonan_files[]"
                             accept=".pdf,.doc,.docx"
-                            required>
-                        <x-form-error name='permohonan_file'></x-form-error>
+                            multiple>
+                        <x-form-error name="permohonan_files"></x-form-error>
+                        <div id="permohonan_files_error" class="text-danger small mt-1 d-none"></div>
                         <div class="form-text small text-muted">
                             <i class="ri-information-line"></i>
-                            Format yang diterima: PDF, DOC, DOCX (maksimal 2 MB).
+                            Format yang diterima: PDF, DOC, DOCX. Maksimal 10 file, masing-masing 2 MB.
                         </div>
-                    </div>
+
 
                     <hr class="my-4">
 
@@ -165,5 +166,8 @@
     </div>
     @push('styles')
         <link rel="stylesheet" href="{{ asset('css/pages/permohonan-show.css') }}">
+    @endpush
+    @push('scripts')
+        <script src="{{ asset('js/permohonan-files.js') }}"></script>
     @endpush
 </x-layout>

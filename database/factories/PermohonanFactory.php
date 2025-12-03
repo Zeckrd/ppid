@@ -20,7 +20,6 @@ class PermohonanFactory extends Factory
         return [
             'user_id' => User::factory(),
             'permohonan_type' => fake()->randomElement(['Biasa', 'Khusus']),
-            'permohonan_file' => fake()->word() . '.pdf',
             'status' => fake()->randomElement([
                 'Menunggu Verifikasi Berkas Dari Petugas',
                 'Sedang Diverifikasi petugas',

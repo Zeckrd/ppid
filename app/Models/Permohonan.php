@@ -22,4 +22,9 @@ class Permohonan extends Model
     {
         return $this->hasOne(Keberatan::class);
     }
+
+    public function files()
+    {
+        return $this->hasMany(PermohonanFile::class);
+    }
 }

@@ -151,11 +151,35 @@
                                 <i class="ri-file-text-line text-primary me-2"></i>
                                 <h6 class="mb-0 fw-bold">File Permohonan</h6>
                             </div>
-                            @if($permohonan->permohonan_file)
-                                <a href="{{ Storage::url($permohonan->permohonan_file) }}" 
-                                   class="btn btn-outline-primary" 
-                                   target="_blank">
-                                    <i class="ri-download-line me-1"></i> Download File Permohonan
+
+                            @if($permohonan->files->count())
+                                <ul class="list-group mb-3">
+                                    @foreach($permohonan->files as $file)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="fw-medium">
+                                                    <i class="ri-file-line me-1"></i>
+                                                    {{ $file->original_name }}
+                                                </div>
+                                                @if($file->size)
+                                                    <div class="small text-muted">
+                                                        {{ number_format($file->size / 1024, 1) }} KB
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <a href="{{ route('admin.permohonan.files.download', [$permohonan->id, $file->id]) }}"
+                                            class="btn btn-sm btn-outline-primary"
+                                            target="_blank">
+                                                <i class="ri-download-line me-1"></i> Download
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
+                                <a href="{{ route('admin.permohonan.files.zip', $permohonan->id) }}"
+                                class="btn btn-outline-primary">
+                                    <i class="ri-folder-download-line me-1"></i>
+                                    Download Semua Lampiran (ZIP)
                                 </a>
                             @else
                                 <div class="text-center py-3 text-muted border rounded">
@@ -165,7 +189,6 @@
                             @endif
                         </div>
 
-                        <hr class="my-4">
 
                         {{-- Keberatan Section --}}
                         <div>

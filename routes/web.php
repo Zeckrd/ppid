@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\PermohonanFile;
 
 // User controllers
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
@@ -85,6 +86,10 @@ Route::middleware(['auth', 'phone.verified'])
         Route::resource('permohonan', UserPermohonanController::class)
             ->except(['index']);
 
+        // Single file download (user can only access own)
+        Route::get('/permohonan/{permohonan}/files/{file}', [UserPermohonanController::class, 'downloadFile'])
+            ->name('permohonan.files.download');
+
         // Keberatan
         Route::get('/keberatan/show', [KeberatanController::class, 'show'])
             ->name('keberatan.show');
@@ -112,6 +117,14 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         // Permohonan
         Route::resource('permohonan', AdminPermohonanController::class)
             ->only(['index', 'show', 'update']);
+
+        // Single file download
+        Route::get('/permohonan/{permohonan}/files/{file}', [AdminPermohonanController::class, 'downloadFile'])
+            ->name('permohonan.files.download');
+
+        // Download all as ZIP
+        Route::get('/permohonan/{permohonan}/files-zip', [AdminPermohonanController::class, 'downloadAllFilesZip'])
+            ->name('permohonan.files.zip');
 
         // Keberatan
         Route::put('/keberatan/{id}', [AdminKeberatanController::class, 'update'])->name('keberatan.update');

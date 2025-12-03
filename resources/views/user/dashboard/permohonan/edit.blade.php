@@ -80,7 +80,7 @@
                                 <span class="fw-bold">Jenis Permohonan</span>
                                 <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select @error('permohonan_type') is-invalid @enderror" 
+                            <select class="form-select @error('permohonan_type') is-invalid @enderror"
                                     id="permohonan_type" name="permohonan_type" required>
                                 <option value="biasa" {{ $permohonan->permohonan_type == 'biasa' ? 'selected' : '' }}>
                                     Biasa
@@ -89,7 +89,7 @@
                                     Khusus
                                 </option>
                             </select>
-                            <x-form-error name='permohonan-type'></x-form-error>
+                            <x-form-error name="permohonan_type"></x-form-error>
                             <div class="form-text small text-muted">
                                 <i class="ri-information-line"></i>
                                 Pilih jenis permohonan yang sesuai
@@ -102,7 +102,7 @@
                                 <span class="fw-bold">Jenis Balasan</span>
                                 <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select @error('reply_type') is-invalid @enderror" 
+                            <select class="form-select @error('reply_type') is-invalid @enderror"
                                     id="reply_type" name="reply_type" required>
                                 <option value="softcopy" {{ $permohonan->reply_type == 'softcopy' ? 'selected' : '' }}>
                                     Softcopy
@@ -111,7 +111,7 @@
                                     Hardcopy
                                 </option>
                             </select>
-                            <x-form-error name='reply-type'></x-form-error>
+                            <x-form-error name="reply_type"></x-form-error>
                             <div class="form-text small text-muted">
                                 <i class="ri-information-line"></i>
                                 Pilih format balasan yang diinginkan
@@ -125,13 +125,13 @@
                             <span class="fw-bold">Keterangan</span>
                             <span class="text-danger">*</span>
                         </label>
-                        <textarea class="form-control @error('keterangan_user') is-invalid @enderror" 
-                                id="keterangan_user" 
-                                name="keterangan_user" 
-                                rows="5" 
-                                required
-                                placeholder="Jelaskan detail permohonan Anda dengan jelas...">{{ old('keterangan_user', $permohonan->keterangan_user) }}</textarea>
-                        <x-form-error name='keterangan_user'></x-form-error>
+                        <textarea class="form-control @error('keterangan_user') is-invalid @enderror"
+                                  id="keterangan_user"
+                                  name="keterangan_user"
+                                  rows="5"
+                                  required
+                                  placeholder="Jelaskan detail permohonan Anda dengan jelas...">{{ old('keterangan_user', $permohonan->keterangan_user) }}</textarea>
+                        <x-form-error name="keterangan_user"></x-form-error>
                         <div class="form-text small text-muted">
                             <i class="ri-information-line"></i>
                             Berikan penjelasan lengkap tentang permohonan Anda
@@ -140,7 +140,14 @@
 
                     <hr class="my-4">
 
-                    <!-- File Section -->
+                    {{-- File Section --}}
+                    @php
+                        $canEditFiles = in_array(
+                            $permohonan->status,
+                            ['Menunggu Verifikasi Berkas Dari Petugas', 'Perlu Diperbaiki']
+                        );
+                    @endphp
+
                     <div class="mb-4">
                         <div class="d-flex align-items-center mb-3">
                             <i class="ri-file-text-line text-primary me-2"></i>
@@ -153,57 +160,90 @@
                             <div class="flex-grow-1">
                                 <div class="fw-semibold mb-2">Unduh format formulir terlebih dahulu</div>
                                 <p class="small mb-2">Isi dan unggah formulir sesuai dengan format yang disediakan.</p>
-                                <a href="https://drive.google.com/file/d/1w2YJRxdMBdEyeeiB06He_R9oSqakNyxj/" 
-                                   target="_blank" 
+                                <a href="https://drive.google.com/file/d/1w2YJRxdMBdEyeeiB06He_R9oSqakNyxj/"
+                                   target="_blank"
                                    class="btn btn-sm btn-outline-info">
                                     <i class="ri-download-cloud-line me-1"></i> Download Format Formulir
                                 </a>
                             </div>
                         </div>
 
-                        <!-- Current File Display -->
-                        @if($permohonan->permohonan_file)
-                            <div class="p-3 mb-3 bg-success bg-opacity-10 border border-success rounded">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <i class="ri-file-check-line text-success me-2" style="font-size: 1.25rem;"></i>
-                                        <div>
-                                            <div class="small fw-semibold text-success mb-1">File saat ini:</div>
-                                            <a href="{{ Storage::url($permohonan->permohonan_file) }}" 
-                                               target="_blank" 
-                                               class="text-decoration-none">
-                                                <i class="ri-link me-1"></i>
-                                                {{ basename($permohonan->permohonan_file) }}
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <a href="{{ Storage::url($permohonan->permohonan_file) }}" 
-                                       target="_blank" 
-                                       class="btn btn-sm btn-outline-success">
-                                        <i class="ri-eye-line me-1"></i> Lihat
-                                    </a>
+                        {{-- Existing files --}}
+                        @if($permohonan->files->count())
+                            <div class="mb-3">
+                                <div class="small fw-semibold mb-2">File saat ini:</div>
+                                <ul class="list-group">
+                                    @foreach($permohonan->files as $file)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="fw-medium">
+                                                    <i class="ri-file-line me-1"></i>
+                                                    {{ $file->original_name }}
+                                                </div>
+                                                @if($file->size)
+                                                    <div class="small text-muted">
+                                                        {{ number_format($file->size / 1024, 1) }} KB
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <a href="{{ route('user.permohonan.files.download', [$permohonan->id, $file->id]) }}"
+                                                   class="btn btn-sm btn-outline-success">
+                                                    <i class="ri-eye-line me-1"></i> Lihat
+                                                </a>
+
+                                                @if($canEditFiles)
+                                                    <div class="form-check mb-0">
+                                                        <input class="form-check-input"
+                                                               type="checkbox"
+                                                               name="delete_file_ids[]"
+                                                               value="{{ $file->id }}"
+                                                               id="delete_file_{{ $file->id }}">
+                                                        <label class="form-check-label small" for="delete_file_{{ $file->id }}">
+                                                            Hapus
+                                                        </label>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <div class="form-text small text-muted mt-1">
+                                    <i class="ri-information-line"></i>
+                                    Centang "Hapus" untuk menghapus file tertentu.
                                 </div>
+                            </div>
+                        @else
+                            <div class="p-3 mb-3 bg-light border rounded text-muted small">
+                                <i class="ri-file-forbid-line me-1"></i> Belum ada file terlampir.
                             </div>
                         @endif
 
-                        <!-- File Upload -->
-                        <label for="permohonan_file" class="form-label">
-                            <i class="ri-upload-cloud-line me-1"></i>
-                            <span class="fw-bold">{{ $permohonan->permohonan_file ? 'Ganti File Permohonan' : 'Upload File Permohonan' }}</span>
-                        </label>
-                        <input type="file" 
-                               class="form-control @error('permohonan_file') is-invalid @enderror" 
-                               id="permohonan_file" 
-                               name="permohonan_file" 
-                               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                        <x-form-error name='permohonan_file'></x-form-error>
-                        <div class="form-text small text-muted">
-                            <i class="ri-information-line"></i>
-                            Tipe file yang diterima: PDF, DOC, DOCX (maksimal 2 MB)
-                        </div>
+                        {{-- Add new files (only when allowed) --}}
+                        @if($canEditFiles)
+                            <label for="permohonan_files" class="form-label">
+                                <i class="ri-upload-cloud-line me-1"></i>
+                                <span class="fw-bold">Tambah File Permohonan</span>
+                            </label>
+                            <input type="file"
+                                class="form-control @error('permohonan_files') is-invalid @enderror"
+                                id="permohonan_files"
+                                name="permohonan_files[]"
+                                accept=".pdf,.doc,.docx"
+                                multiple>
+                            <x-form-error name="permohonan_files"></x-form-error>
+                            <div id="permohonan_files_error" class="text-danger small mt-1 d-none"></div>
+                            <div class="form-text small text-muted">
+                                <i class="ri-information-line"></i>
+                                Anda dapat menambah file baru. Total maksimal 10 file, masing-masing 2 MB.
+                            </div>
+                        @else
+                            <div class="alert alert-secondary mt-3 mb-0 small">
+                                <i class="ri-information-line me-1"></i>
+                                File tidak dapat diubah pada status ini.
+                            </div>
+                        @endif
                     </div>
-
-                    <hr class="my-4">
 
                     <!-- Action Buttons -->
                     <div class="d-flex justify-content-between align-items-center">
@@ -214,12 +254,16 @@
                             <i class="ri-save-line me-1"></i> Simpan Perubahan
                         </button>
                     </div>
-                </div>
-            </div>
+                </div> {{-- card-body --}}
+            </div> {{-- card --}}
         </form>
     </div>
+
     @push('styles')
         <link rel="stylesheet" href="{{ asset('css/pages/permohonan-show.css') }}">
     @endpush
-    
+    @push('scripts')
+        <script src="{{ asset('js/permohonan-files.js') }}"></script>
+    @endpush
+
 </x-layout>
