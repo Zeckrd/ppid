@@ -86,6 +86,7 @@
         </div>
 
         {{-- Charts --}}
+        {{-- Distribusi status --}}
         <div class="row g-4 mb-4">
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
@@ -98,6 +99,7 @@
                 </div>
             </div>
 
+            {{-- Tren pengajuan --}}
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white fw-bold d-flex align-items-center">
@@ -112,9 +114,21 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        {{-- pie chart pekerjaan --}}
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-bold d-flex align-items-center">
+                <i class="ri-user-2-line me-2 text-info"></i> Distribusi Pekerjaan User
+            </div>
+            <div class="card-body d-flex justify-content-center align-items-center" style="height: 333px;">
+                <div class="pekerjaan-chart-wrapper">
+                    <canvas id="pekerjaanChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-        {{-- Notifications --}}
+        {{-- Pending / Sedang Berlangsung --}}
         <div class="card shadow-sm border-0">
             <div class="card-header bg-white fw-bold d-flex align-items-center">
                 <i class="ri-notification-3-line me-2 text-danger"></i> Pending / Sedang Berlangsung
@@ -165,7 +179,10 @@
 
                 dailyLabels: {!! json_encode($dailyData->pluck('day') ?? []) !!},
                 dailyPermohonan: {!! json_encode($dailyData->pluck('permohonan') ?? []) !!},
-                dailyKeberatan: {!! json_encode($dailyData->pluck('keberatan') ?? []) !!}
+                dailyKeberatan: {!! json_encode($dailyData->pluck('keberatan') ?? []) !!},
+
+                pekerjaanLabels: {!! json_encode($pekerjaanLabels ?? []) !!},
+                pekerjaanCounts: {!! json_encode($pekerjaanCounts ?? []) !!}
             };
         </script>
 

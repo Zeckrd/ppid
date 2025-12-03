@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const data = window.dashboardData;
 
-    // === Status Bar Chart (already implemented) ===
+    // === Status Bar Chart ===
     const wrapLabel = (label) => {
         const maxCharsPerLine = 10;
         const words = label.split(" ");
@@ -20,10 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return lines;
     };
 
-    const wrappedLabels = data.statusLabels.map(l => wrapLabel(l));
+    const wrappedLabels = (data.statusLabels || []).map(l => wrapLabel(l));
 
     const statusCtx = document.getElementById('statusChart');
-    if (statusCtx) {
+    if (statusCtx && wrappedLabels.length && data.statusData) {
         new Chart(statusCtx, {
             type: 'bar',
             data: {
@@ -32,11 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     label: 'Jumlah Permohonan per Status',
                     data: data.statusData,
                     backgroundColor: [
-                        '#0d6efd',
-                        '#17a2b8',
-                        '#ffc107',
-                        '#6f42c1',
-                        '#198754'
+                        '#fdbd0dff',
+                        '#0b41f5ff',
+                        '#ff6207ff',
+                        '#0ae3ebff',
+                        '#198754',
+                        '#eb1111ff',
                     ],
                     borderWidth: 1,
                     borderRadius: 6
@@ -66,9 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // === Trend Chart (Dynamic: Monthly or Daily) ===
     const trendCtx = document.getElementById('trendChart');
     if (trendCtx) {
-        const labels = data.isMonthly ? data.monthlyLabels : data.dailyLabels;
-        const permohonan = data.isMonthly ? data.monthlyPermohonan : data.dailyPermohonan;
-        const keberatan = data.isMonthly ? data.monthlyKeberatan : data.dailyKeberatan;
+        const labels = data.isMonthly ? (data.monthlyLabels || []) : (data.dailyLabels || []);
+        const permohonan = data.isMonthly ? (data.monthlyPermohonan || []) : (data.dailyPermohonan || []);
+        const keberatan = data.isMonthly ? (data.monthlyKeberatan || []) : (data.dailyKeberatan || []);
 
         new Chart(trendCtx, {
             type: 'line',
@@ -106,6 +107,44 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 scales: {
                     y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // === Pekerjaan Pie Chart ===
+    const pekerjaanCtx = document.getElementById('pekerjaanChart');
+    const pekerjaanLabels = data.pekerjaanLabels || [];
+    const pekerjaanCounts  = data.pekerjaanCounts || data.pekerjaanCounts || [];
+
+    if (pekerjaanCtx && pekerjaanLabels.length && pekerjaanCounts.length) {
+        const pekerjaanColors = pekerjaanLabels.map((_, idx) => {
+            const palette = [
+                '#0d6efd',
+                '#198754',
+                '#ffc107',
+                '#dc3545',
+                '#0dcaf0',
+                '#6f42c1',
+                '#6c757d',
+                '#cd65f7ff',
+            ];
+            return palette[idx % palette.length];
+        });
+
+        new Chart(pekerjaanCtx, {
+            type: 'pie',
+            data: {
+                labels: pekerjaanLabels,
+                datasets: [{
+                    data: pekerjaanCounts,
+                    backgroundColor: pekerjaanColors
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
                 }
             }
         });

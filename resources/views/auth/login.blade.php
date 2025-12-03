@@ -1,7 +1,8 @@
 <x-layout>
     <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
         <div class="row w-100 justify-content-center">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            {{-- Make sure the column is wide enough for reCAPTCHA on all breakpoints --}}
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                 <div class="card shadow border-0">
                     <div class="card-body p-4 text-center">
                         <i class="bi bi-box-arrow-in-right text-primary fs-2"></i>
@@ -27,7 +28,9 @@
                         </form>
 
                         <div class="text-center mt-3">
-                            <a href="{{ route('password.request') }}" class="text-decoration-none d-block mb-2">Lupa Password?</a>
+                            <a href="{{ route('password.request') }}" class="text-decoration-none d-block mb-2">
+                                Lupa Password?
+                            </a>
                             <span class="text-muted">Belum punya akun?</span>
                             <a href="{{ route('register') }}" class="fw-bold text-decoration-none">Daftar di sini</a>
                         </div>

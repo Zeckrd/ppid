@@ -104,6 +104,16 @@ class DashboardController extends Controller
         } else {
             $dailyData = collect([]);
         }
+
+        // Pekerjaan count
+        $pekerjaanStats = User::select('pekerjaan', DB::raw('COUNT(*) as total'))
+            ->whereNotNull('pekerjaan')
+            ->groupBy('pekerjaan')
+            ->orderBy('pekerjaan')
+            ->get();
+
+        $pekerjaanLabels = $pekerjaanStats->pluck('pekerjaan');
+        $pekerjaanCounts = $pekerjaanStats->pluck('total');
         
         $pendingPermohonanQuery = Permohonan::whereIn('status', [
             'Menunggu Verifikasi Berkas Dari Petugas',
@@ -122,7 +132,8 @@ class DashboardController extends Controller
         return view('admin.dashboard', compact(
             'year', 'month',
             'totalUsers', 'totalPermohonan', 'totalKeberatan', 'totalActive',
-            'statuses', 'statusCounts', 'monthlyData', 'dailyData', 'pendingPermohonan'
+            'statuses', 'statusCounts', 'monthlyData', 'dailyData', 'pendingPermohonan',
+            'pekerjaanLabels','pekerjaanCounts'
         ));
     }
 }
