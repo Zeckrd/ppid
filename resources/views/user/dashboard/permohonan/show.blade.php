@@ -351,7 +351,7 @@
                             <div class="card h-100 border">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center mb-3">
-                                        <i class="ri-file-check-line text-success me-2" style="font-size: 1.25rem;"></i>
+                                        <i class="ri-file-text-line text-success me-2" style="font-size: 1.25rem;"></i>
                                         <h6 class="mb-0 fw-bold">File Balasan Keberatan</h6>
                                     </div>
 
