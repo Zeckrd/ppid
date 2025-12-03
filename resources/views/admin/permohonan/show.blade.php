@@ -149,7 +149,7 @@
                         <div class="mb-4">
                             <div class="d-flex align-items-center mb-3">
                                 <i class="ri-file-text-line text-primary me-2"></i>
-                                <h6 class="mb-0 fw-bold">File Permohonan</h6>
+                                <h6 class="mb-0 fw-bold">Lampiran</h6>
                             </div>
 
                             @if($permohonan->files->count())
@@ -188,6 +188,8 @@
                                 </div>
                             @endif
                         </div>
+
+
 
 
                         {{-- Keberatan Section --}}
@@ -325,28 +327,79 @@
                             </div>
 
                             <!-- Upload File Balasan -->
+                            @php
+                                $replyFiles = $permohonan->replyFiles;
+                            @endphp
+
                             <div class="mb-4">
-                                <label for="reply_file" class="form-label fw-bold">
+                                <label for="reply_files" class="form-label fw-bold">
                                     <i class="ri-file-upload-line me-1"></i> Upload File Balasan
                                 </label>
-                                <input type="file" name="reply_file" id="reply_file" class="form-control">
+                                <input type="file"
+                                    name="reply_files[]"
+                                    id="reply_files"
+                                    class="form-control @error('reply_files') is-invalid @enderror"
+                                    accept=".pdf,.doc,.docx"
+                                    multiple>
+                                <x-form-error name="reply_files"></x-form-error>
                                 <div class="form-text small text-muted">
-                                    <i class="ri-information-line"></i> Upload dokumen balasan untuk permohonan ini.
+                                    <i class="ri-information-line"></i>
+                                    Upload satu atau beberapa dokumen balasan (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 2 MB.
                                 </div>
 
-                                @if($permohonan->reply_file)
+                                @if($replyFiles->count())
                                     <div class="mt-3 p-3 bg-success bg-opacity-10 border border-success rounded">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div><i class="ri-file-check-line text-success me-2"></i>
-                                                <span class="text-success small fw-semibold">File balasan tersedia</span>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div>
+                                                <i class="ri-file-check-line text-success me-2"></i>
+                                                <span class="text-success small fw-semibold">
+                                                    {{ $replyFiles->count() }} file balasan tersedia
+                                                </span>
                                             </div>
-                                            <a href="{{ Storage::url($permohonan->reply_file) }}" target="_blank" class="btn btn-sm btn-outline-success">
-                                                <i class="ri-download-line me-1"></i> Lihat
-                                            </a>
                                         </div>
+
+                                        <ul class="list-group">
+                                            @foreach($replyFiles as $file)
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <div class="fw-medium">
+                                                            <i class="ri-file-line me-1"></i>
+                                                            {{ $file->original_name }}
+                                                        </div>
+                                                        @if($file->size)
+                                                            <div class="small text-muted">
+                                                                {{ number_format($file->size / 1024, 1) }} KB
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <a href="{{ route('admin.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-success">
+                                                            <i class="ri-download-line me-1"></i> Lihat
+                                                        </a>
+
+                                                        {{-- Admin delete toggle for reply file --}}
+                                                        <div class="form-check mb-0">
+                                                            <input class="form-check-input"
+                                                                type="checkbox"
+                                                                name="delete_reply_file_ids[]"
+                                                                value="{{ $file->id }}"
+                                                                id="delete_reply_file_{{ $file->id }}">
+                                                            <label class="form-check-label small text-danger"
+                                                                for="delete_reply_file_{{ $file->id }}">
+                                                                Hapus
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 @endif
                             </div>
+
+
 
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="ri-save-line me-1"></i> Simpan Perubahan Permohonan

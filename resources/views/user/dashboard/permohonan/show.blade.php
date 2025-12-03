@@ -211,6 +211,45 @@
                     @endif
                 </div>
 
+                {{-- File Balasan dari Admin --}}
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-mail-check-line text-success me-2"></i>
+                        <h6 class="mb-0 fw-bold">File Balasan</h6>
+                    </div>
+
+                    @if($permohonan->replyFiles->count())
+                        <ul class="list-group mb-3">
+                            @foreach($permohonan->replyFiles as $file)
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-medium">
+                                            <i class="ri-file-line me-1"></i>
+                                            {{ $file->original_name }}
+                                        </div>
+                                        @if($file->size)
+                                            <div class="small text-muted">
+                                                {{ number_format($file->size / 1024, 1) }} KB
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <a href="{{ route('user.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
+                                    class="btn btn-sm btn-outline-success"
+                                    target="_blank">
+                                        <i class="ri-download-line me-1"></i> Download
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="text-center py-3 text-muted border rounded">
+                            <i class="ri-information-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                            <p class="small mb-0 mt-2">Belum ada file balasan dari admin.</p>
+                        </div>
+                    @endif
+                </div>
+
+
             </div>
         </div>
 

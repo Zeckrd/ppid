@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Permohonan;
 use App\Models\PermohonanFile;
+use App\Models\PermohonanReplyFile;
 use Illuminate\Support\Facades\Storage;
 use App\Services\WhatsAppNotificationService;
 
@@ -198,4 +199,24 @@ class PermohonanController extends Controller
         return response()->download($absolutePath, $file->original_name);
     }
 
+    public function downloadReplyFile(Permohonan $permohonan, PermohonanReplyFile $file)
+    {
+        if ($file->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if ($permohonan->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404);
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        return response()->download($absolutePath, $file->original_name);
+    }
+
 }
+

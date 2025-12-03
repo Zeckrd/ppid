@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Permohonan;
 use App\Models\PermohonanFile;
+use App\Models\PermohonanReplyFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -33,7 +34,7 @@ class PermohonanController extends Controller
 
     public function show(Permohonan $permohonan)
     {
-        $permohonan->load('user','files', 'keberatan');
+        $permohonan->load('user','files','replyFiles', 'keberatan');
 
         return view('admin.permohonan.show', compact('permohonan'));
     }
@@ -45,26 +46,71 @@ class PermohonanController extends Controller
     {
         $validated = $request->validate([
             'status'             => 'required|string',
-            'keterangan_petugas' => 'nullable|string|max:1000',
-            'reply_file'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'notify_whatsapp'    => 'nullable|boolean',
-            'notify_email'       => 'nullable|boolean',
+            'keterangan_petugas' => 'nullable|string',
+
+            // reply files (admin uploads)
+            'reply_files'   => 'nullable|array|max:10',
+            'reply_files.*' => 'file|mimes:pdf,doc,docx|max:2048',
+
+            // for delete admins reply files
+            'delete_reply_file_ids'   => 'nullable|array',
+            'delete_reply_file_ids.*' => 'integer|exists:permohonan_reply_files,id',
+            
+            // notification
+            'notify_whatsapp' => 'nullable|boolean',
+            'notify_email'    => 'nullable|boolean',
         ]);
 
-        // Handle reply file upload
-        if ($request->hasFile('reply_file')) {
-            if ($permohonan->reply_file && Storage::disk('public')->exists($permohonan->reply_file)) {
-                Storage::disk('public')->delete($permohonan->reply_file);
-            }
+        // DELETE: admin reply files
+        $deleteReplyFileIds = $validated['delete_reply_file_ids'] ?? [];
 
-            $validated['reply_file'] = $request->file('reply_file')->store('reply_files', 'public');
+        if (! empty($deleteReplyFileIds)) {
+            $replyFilesToDelete = $permohonan->replyFiles()
+                ->whereIn('id', $deleteReplyFileIds)
+                ->get();
+
+            foreach ($replyFilesToDelete as $file) {
+                if (Storage::disk('local')->exists($file->path)) {
+                    Storage::disk('local')->delete($file->path);
+                }
+                $file->delete();
+            }
         }
 
-        // Update data
-        $permohonan->update(Arr::except($validated, ['notify_whatsapp', 'notify_email']));
+        // ADD: new reply files
+        $replyFiles = $request->file('reply_files', []);
 
+        if (! empty($replyFiles)) {
+            $existingCount = $permohonan->replyFiles()->count();
+            $newCount      = count($replyFiles);
+            $totalAfter    = $existingCount + $newCount;
 
-        // Create message
+            if ($totalAfter > 10) {
+                return back()
+                    ->withErrors([
+                        'reply_files' => 'Jumlah file balasan tidak boleh lebih dari 10.',
+                    ])
+                    ->withInput();
+            }
+
+            foreach ($replyFiles as $uploadedFile) {
+                $path = $uploadedFile->store('permohonan_reply', 'local');
+
+                $permohonan->replyFiles()->create([
+                    'path'          => $path,
+                    'original_name' => $uploadedFile->getClientOriginalName(),
+                    'size'          => $uploadedFile->getSize(),
+                    'mime_type'     => $uploadedFile->getClientMimeType(),
+                ]);
+            }
+        }
+
+        // Update permohonan fields
+        $permohonan->update(
+            Arr::only($validated, ['status', 'keterangan_petugas'])
+        );
+
+        // Build message
         $message = "Status Permohonan Anda telah diperbarui menjadi: *{$permohonan->status}*.\n";
 
         if ($permohonan->keberatan) {
@@ -77,12 +123,12 @@ class PermohonanController extends Controller
 
         $message .= "\nTerima kasih telah menggunakan layanan kami.";
 
-        // Send WhatsApp notification
+        // send WhatsApp notification
         if ($request->boolean('notify_whatsapp')) {
             $wablas->sendMessage($permohonan->user->phone, $message);
         }
 
-        // Send Email notification
+        // send Email notification
         if ($request->boolean('notify_email')) {
             Mail::to($permohonan->user->email)->send(new StatusUpdateMail($permohonan, $message));
         }
@@ -91,6 +137,7 @@ class PermohonanController extends Controller
             ->route('admin.permohonan.show', $permohonan->id)
             ->with('success', 'Permohonan berhasil diperbarui.');
     }
+
     public function search(Request $request)
     {
         $keyword  = $request->input('q');
@@ -194,6 +241,21 @@ class PermohonanController extends Controller
         $zip->close();
 
         return response()->download($tempPath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    public function downloadReplyFile(Permohonan $permohonan, PermohonanReplyFile $file)
+    {
+        if ($file->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404);
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        return response()->download($absolutePath, $file->original_name);
     }
  
 }

@@ -27,4 +27,9 @@ class Permohonan extends Model
     {
         return $this->hasMany(PermohonanFile::class);
     }
+
+    public function replyFiles()
+    {
+        return $this->hasMany(PermohonanReplyFile::class);
+    }
 }

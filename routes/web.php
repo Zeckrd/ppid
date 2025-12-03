@@ -86,9 +86,13 @@ Route::middleware(['auth', 'phone.verified'])
         Route::resource('permohonan', UserPermohonanController::class)
             ->except(['index']);
 
-        // Single file download (user can only access own)
+        // user uploaded single file download (user can only access own)
         Route::get('/permohonan/{permohonan}/files/{file}', [UserPermohonanController::class, 'downloadFile'])
             ->name('permohonan.files.download');
+        
+        // User download reply files
+        Route::get('/permohonan/{permohonan}/reply-files/{file}', [UserPermohonanController::class, 'downloadReplyFile'])
+            ->name('permohonan.reply-files.download');
 
         // Keberatan
         Route::get('/keberatan/show', [KeberatanController::class, 'show'])
@@ -125,6 +129,10 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         // Download all as ZIP
         Route::get('/permohonan/{permohonan}/files-zip', [AdminPermohonanController::class, 'downloadAllFilesZip'])
             ->name('permohonan.files.zip');
+        
+        // Reply file download (admin)
+        Route::get('/permohonan/{permohonan}/reply-files/{file}', [AdminPermohonanController::class, 'downloadReplyFile'])
+            ->name('permohonan.reply-files.download');
 
         // Keberatan
         Route::put('/keberatan/{id}', [AdminKeberatanController::class, 'update'])->name('keberatan.update');
