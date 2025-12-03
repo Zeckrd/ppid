@@ -137,6 +137,11 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         // Keberatan
         Route::put('/keberatan/{id}', [AdminKeberatanController::class, 'update'])->name('keberatan.update');
 
+        // Reply file download for Keberatan
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-file', [AdminKeberatanController::class, 'downloadReplyFile'])
+            ->name('keberatan.reply-file.download');
+
+
     });
 
 

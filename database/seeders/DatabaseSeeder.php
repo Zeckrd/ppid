@@ -27,6 +27,15 @@ class DatabaseSeeder extends Seeder
             'phone_verified_at' => now(),
         ]);
 
+        User::factory()->create([
+            'name'              => 'reg',
+            'email'             => 'test@example.com',
+            'is_admin'          => 0,
+            'password'          => Hash::make('asdasd'),
+            'phone'             => '1111111111',
+            'phone_verified_at' => now(),
+        ]);
+
         $this->call([PermohonanSeeder::class,KeberatanSeeder::class]);
     }
 }

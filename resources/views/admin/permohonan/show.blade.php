@@ -460,16 +460,16 @@
                                         <div class="form-text small text-muted">
                                             <i class="ri-information-line"></i> Upload dokumen balasan untuk keberatan ini (PDF, DOCX, dll).
                                         </div>
-                                        @if($permohonan->keberatan->keberatan_file)
+                                        @if($permohonan->keberatan->reply_file)
                                             <div class="mt-2 p-2 border rounded bg-white">
                                                 <div class="d-flex justify-content-between align-items-start gap-3">
                                                     <div class="small text-muted flex-grow-1 min-width-0 text-truncate"
-                                                        title="{{ $permohonan->keberatan->keberatan_file }}">
+                                                        title="{{ $permohonan->keberatan->reply_file }}">
                                                         <i class="ri-attachment-2 me-1"></i>
-                                                        File keberatan
+                                                        File balasan keberatan
                                                     </div>
                                                     <div class="flex-shrink-0">
-                                                        <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}"
+                                                        <a href="{{ route('admin.keberatan.reply-file.download', [$permohonan->id, $permohonan->keberatan->id]) }}"
                                                         class="btn btn-sm btn-outline-danger text-nowrap"
                                                         target="_blank">
                                                             <i class="ri-download-line me-1"></i> Download
