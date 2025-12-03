@@ -154,33 +154,31 @@
 
                             @if($permohonan->files->count())
                                 <ul class="list-group mb-3">
-@foreach($permohonan->files as $file)
-    <li class="list-group-item">
-        <div class="d-flex justify-content-between align-items-start gap-3">
-            <div class="flex-grow-1 min-width-0">
-                <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
-                    <i class="ri-file-line me-1"></i>
-                    {{ $file->original_name }}
-                </div>
-                @if($file->size)
-                    <div class="small text-muted">
-                        {{ number_format($file->size / 1024, 1) }} KB
-                    </div>
-                @endif
-            </div>
-            <div class="flex-shrink-0">
-                <a href="{{ route('admin.permohonan.files.download', [$permohonan->id, $file->id]) }}"
-                   class="btn btn-sm btn-outline-primary text-nowrap"
-                   target="_blank">
-                    <i class="ri-download-line me-1"></i> Download
-                </a>
-            </div>
-        </div>
-    </li>
-@endforeach
-
+                                    @foreach($permohonan->files as $file)
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                                <div class="flex-grow-1 min-width-0">
+                                                    <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                        <i class="ri-file-line me-1"></i>
+                                                        {{ $file->original_name }}
+                                                    </div>
+                                                    @if($file->size)
+                                                        <div class="small text-muted">
+                                                            {{ number_format($file->size / 1024, 1) }} KB
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <a href="{{ route('admin.permohonan.files.download', [$permohonan->id, $file->id]) }}"
+                                                    class="btn btn-sm btn-outline-primary text-nowrap"
+                                                    target="_blank">
+                                                        <i class="ri-download-line me-1"></i> Download
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
                                 </ul>
-
                                 <a href="{{ route('admin.permohonan.files.zip', $permohonan->id) }}"
                                    class="btn btn-outline-primary">
                                     <i class="ri-folder-download-line me-1"></i>
@@ -367,7 +365,7 @@
                                         <ul class="list-group list-group-flush rounded border">
                                             @foreach($replyFiles as $file)
                                                 <li class="list-group-item">
-                                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                                    <div class="d-flex justify-content-between align-items-center gap-3">
                                                         <div class="flex-grow-1 min-width-0">
                                                             <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
                                                                 <i class="ri-file-line me-1"></i>
