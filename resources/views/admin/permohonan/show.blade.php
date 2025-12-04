@@ -342,12 +342,13 @@
                                     <i class="ri-file-upload-line me-1"></i> Upload File Balasan
                                 </label>
                                 <input type="file"
-                                       name="reply_files[]"
-                                       id="reply_files"
-                                       class="form-control @error('reply_files') is-invalid @enderror"
-                                       accept=".pdf,.doc,.docx"
-                                       multiple>
+                                    name="reply_files[]"
+                                    id="reply_files"
+                                    class="form-control @error('reply_files') is-invalid @enderror"
+                                    accept=".pdf,.doc,.docx"
+                                    multiple>
                                 <x-form-error name="reply_files"></x-form-error>
+                                <div id="reply_files_error" class="text-danger small mt-1 d-none"></div>
                                 <div class="form-text small text-muted">
                                     <i class="ri-information-line"></i>
                                     Upload satu atau beberapa dokumen balasan (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 2 MB.
@@ -491,5 +492,8 @@
     </div>
     @push('styles')
         <link rel="stylesheet" href="{{ asset('css/pages/permohonan-show.css') }}">
+    @endpush
+    @push('scripts')
+        <script src="{{ asset('js/permohonan-files.js') }}"></script>
     @endpush
 </x-layout>
