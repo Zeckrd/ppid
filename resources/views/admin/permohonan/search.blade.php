@@ -184,15 +184,17 @@
                 @foreach($statuses as $item)
                     @php
                         $active = (request('status') == $item || (request('status') == null && $item == 'Semua')) ? 'active' : '';
+
+                        $params = request()->except('page', 'status');
+
+                        if ($item !== 'Semua') {
+                            $params['status'] = $item;
+                        }
                     @endphp
+
                     <li class="nav-item mb-2 me-2">
-                        <a class="nav-link {{ $active }}" 
-                           href="{{ route('admin.permohonan.search', [
-                               'q' => request('q'),
-                               'status' => $item == 'Semua' ? null : $item,
-                               'date_from' => request('date_from'),
-                               'date_to' => request('date_to')
-                           ]) }}">
+                        <a class="nav-link {{ $active }}"
+                        href="{{ route('admin.permohonan.search', $params) }}">
                             @switch($item)
                                 @case('Semua')
                                     <i class="ri-file-list-3-line me-1"></i> Semua
@@ -213,7 +215,7 @@
                                     <i class="ri-checkbox-circle-line me-1"></i> Diterima
                                     @break
                                 @case('Ditolak')
-                                    <i class="ri-close-circle-line"></i></i> Ditolak
+                                    <i class="ri-close-circle-line"></i> Ditolak
                                     @break
                             @endswitch
                         </a>
