@@ -243,6 +243,29 @@ class PermohonanController extends Controller
         return response()->download($tempPath, $zipFileName)->deleteFileAfterSend(true);
     }
 
+    public function viewFile(Permohonan $permohonan, PermohonanFile $file)
+    {
+        if ($file->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404);
+        }
+
+        // (failsafe) if not PDF, just send them to the download route
+        if (! $file->isPdf()) {
+            return redirect()->route('admin.permohonan.files.download', [$permohonan->id, $file->id]);
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        // stream inline so browser opens PDF viewer
+        return response()->file($absolutePath, [
+            'Content-Disposition' => 'inline; filename="' . $file->original_name . '"',
+        ]);
+    }
+
     public function downloadReplyFile(Permohonan $permohonan, PermohonanReplyFile $file)
     {
         if ($file->permohonan_id !== $permohonan->id) {
@@ -257,5 +280,28 @@ class PermohonanController extends Controller
 
         return response()->download($absolutePath, $file->original_name);
     }
- 
+
+    public function viewReplyFile(Permohonan $permohonan, PermohonanReplyFile $file)
+    {
+        if ($file->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404);
+        }
+
+        // (failsafe) if not PDF, just send them to the download route
+        if (! $file->isPdf()) {
+            return redirect()->route('admin.permohonan.reply-files.download', [$permohonan->id, $file->id]);
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        // stream inline so browser opens PDF viewer
+        return response()->file($absolutePath, [
+            'Content-Disposition' => 'inline; filename="' . $file->original_name . '"',
+        ]);
+    }
+
 }

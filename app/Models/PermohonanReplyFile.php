@@ -18,4 +18,18 @@ class PermohonanReplyFile extends Model
     {
         return $this->belongsTo(Permohonan::class);
     }
+
+    public function isPdf(): bool
+    // for view/download button, checks if file stored is .pdf in mime or ends with
+    {
+        // Prefer MIME type if stored
+        if (! empty($this->mime_type) && str_contains(strtolower($this->mime_type), 'pdf')) {
+                return true;
+            }
+
+        $name = strtolower($this->original_name ?? '');
+        $path = strtolower($this->path ?? '');
+
+        return str_ends_with($name, '.pdf') || str_ends_with($path, '.pdf');
+    }
 }

@@ -168,13 +168,34 @@
                                                         </div>
                                                     @endif
                                                 </div>
-                                                <div class="flex-shrink-0">
+
+                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                    @if ($file->isPdf())
+                                                        {{-- View (PDF only) --}}
+                                                        <a href="{{ route('admin.permohonan.files.view', [$permohonan->id, $file->id]) }}"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        title="Lihat (buka di tab baru)">
+                                                            <i class="ri-eye-line"></i>
+                                                        </a>
+                                                    @else
+                                                        {{-- Disabled view for non-PDF --}}
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-secondary opacity-50"
+                                                                title="Hanya dapat dilihat untuk file PDF"
+                                                                aria-disabled="true">
+                                                            <i class="ri-eye-off-line"></i>
+                                                        </button>
+                                                    @endif
+
+                                                    {{-- Download (all types) --}}
                                                     <a href="{{ route('admin.permohonan.files.download', [$permohonan->id, $file->id]) }}"
-                                                    class="btn btn-sm btn-outline-primary text-nowrap"
-                                                    target="_blank">
-                                                        <i class="ri-download-line me-1"></i> Download
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    title="Download">
+                                                        <i class="ri-download-line"></i>
                                                     </a>
                                                 </div>
+
                                             </div>
                                         </li>
                                     @endforeach
@@ -342,16 +363,30 @@
                                     <i class="ri-file-upload-line me-1"></i> Upload File Balasan
                                 </label>
                                 <input type="file"
-                                       name="reply_files[]"
-                                       id="reply_files"
-                                       class="form-control @error('reply_files') is-invalid @enderror"
-                                       accept=".pdf,.doc,.docx"
-                                       multiple>
+                                    name="reply_files[]"
+                                    id="reply_files"
+                                    class="form-control @error('reply_files') is-invalid @enderror"
+                                    accept=".pdf,.doc,.docx"
+                                    multiple>
                                 <x-form-error name="reply_files"></x-form-error>
+                                <div id="reply_files_error" class="invalid-feedback"></div>
                                 <div class="form-text small text-muted">
                                     <i class="ri-information-line"></i>
                                     Upload satu atau beberapa dokumen balasan (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 2 MB.
                                 </div>
+    
+                                {{-- Preview files that are about to be uploaded --}}
+                                <div id="reply_files_preview" class="mt-2 d-none">
+                                    <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
+                                        <span class="mt-1">
+                                            <i class="ri-upload-2-line me-1"></i>
+                                            File yang akan diunggah:
+                                        </span>
+                                        <div id="reply_files_preview_chips"
+                                            class="d-flex flex-wrap gap-1"></div>
+                                    </div>
+                                </div>
+                            </div>
 
                                 @if($replyFiles->count())
                                     <div class="mt-3">
@@ -364,38 +399,70 @@
 
                                         <ul class="list-group list-group-flush rounded border">
                                             @foreach($replyFiles as $file)
-                                                <li class="list-group-item">
+                                                @php
+                                                    $isMarked = is_array(old('delete_reply_file_ids')) && in_array($file->id, old('delete_reply_file_ids'));
+                                                @endphp
+
+                                                <li class="list-group-item reply-file-item {{ $isMarked ? 'reply-file-marked-for-deletion' : '' }}">
                                                     <div class="d-flex justify-content-between align-items-center gap-3">
                                                         <div class="flex-grow-1 min-width-0">
-                                                            <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                            <div class="fw-medium text-truncate reply-file-name" title="{{ $file->original_name }}">
                                                                 <i class="ri-file-line me-1"></i>
                                                                 {{ $file->original_name }}
                                                             </div>
-                                                            @if($file->size)
-                                                                <div class="small text-muted">
-                                                                    {{ number_format($file->size / 1024, 1) }} KB
-                                                                </div>
-                                                            @endif
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                @if($file->size)
+                                                                    <div class="small text-muted">
+                                                                        {{ number_format($file->size / 1024, 1) }} KB
+                                                                    </div>
+                                                                @endif
+                                                            <span class="badge rounded-pill bg-danger-subtle text-danger small delete-badge"
+                                                                style="{{ $isMarked ? '' : 'display:none;' }}">
+                                                                Akan dihapus
+                                                            </span>
+                                                            </div>
                                                         </div>
 
-                                                        <div class="d-flex align-items-center gap-3 flex-shrink-0">
+                                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                            {{-- View --}}
+                                                            @if($file->isPdf())
+                                                                <a href="{{ route('admin.permohonan.reply-files.view', [$permohonan->id, $file->id]) }}"
+                                                                target="_blank"
+                                                                class="btn btn-sm btn-outline-secondary"
+                                                                title="Lihat (buka di tab baru)">
+                                                                    <i class="ri-eye-line"></i>
+                                                                </a>
+                                                            @else
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-outline-secondary opacity-50"
+                                                                    title="Hanya dapat dilihat untuk file PDF"
+                                                                    aria-disabled="true">
+                                                                <i class="ri-eye-off-line"></i>
+                                                            </button>
+                                                            @endif
+
+                                                            {{-- Download --}}
                                                             <a href="{{ route('admin.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
-                                                            target="_blank"
-                                                            class="btn btn-sm btn-outline-secondary text-nowrap">
-                                                                <i class="ri-download-line me-1"></i> Lihat
+                                                            class="btn btn-sm btn-outline-primary"
+                                                            title="Download">
+                                                                <i class="ri-download-line"></i>
                                                             </a>
 
-                                                            <div class="form-check mb-0">
-                                                                <input class="form-check-input"
-                                                                    type="checkbox"
-                                                                    name="delete_reply_file_ids[]"
-                                                                    value="{{ $file->id }}"
-                                                                    id="delete_reply_file_{{ $file->id }}">
-                                                                <label class="form-check-label small text-danger"
-                                                                    for="delete_reply_file_{{ $file->id }}">
-                                                                    Hapus
-                                                                </label>
-                                                            </div>
+                                                            {{-- Delete toggle (mark then save) --}}
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-outline-danger reply-file-delete-toggle"
+                                                                    data-file-id="{{ $file->id }}"
+                                                                    title="{{ $isMarked ? 'Batal tandai hapus' : 'Tandai untuk dihapus' }}">
+                                                                <i class="{{ $isMarked ? 'ri-delete-bin-fill' : 'ri-delete-bin-line' }}"></i>
+                                                            </button>
+
+                                                            {{-- Hidden checkbox sent to backend --}}
+                                                            <input type="checkbox"
+                                                                name="delete_reply_file_ids[]"
+                                                                value="{{ $file->id }}"
+                                                                id="delete_reply_file_{{ $file->id }}"
+                                                                class="reply-file-delete-checkbox d-none"
+                                                                {{ $isMarked ? 'checked' : '' }}>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -404,7 +471,6 @@
                                     </div>
                                 @endif
                             </div>
-
                             <button type="submit" class="btn btn-primary w-100">
                                 <i class="ri-save-line me-1"></i> Simpan Perubahan Permohonan
                             </button>
@@ -492,4 +558,10 @@
     @push('styles')
         <link rel="stylesheet" href="{{ asset('css/pages/permohonan-show.css') }}">
     @endpush
+
+    @push('scripts')
+        <script src="{{ asset('js/permohonan-files.js') }}"></script>
+    @endpush
+
+
 </x-layout>

@@ -129,6 +129,10 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         Route::get('/permohonan/{permohonan}/files/{file}', [AdminPermohonanController::class, 'downloadFile'])
             ->name('permohonan.files.download');
 
+        // View file (PDF only, inline)
+        Route::get('/permohonan/{permohonan}/files/{file}/view', [AdminPermohonanController::class, 'viewFile'])
+            ->name('permohonan.files.view');
+
         // Download all as ZIP
         Route::get('/permohonan/{permohonan}/files-zip', [AdminPermohonanController::class, 'downloadAllFilesZip'])
             ->name('permohonan.files.zip');
@@ -136,6 +140,10 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         // Reply file download (admin)
         Route::get('/permohonan/{permohonan}/reply-files/{file}', [AdminPermohonanController::class, 'downloadReplyFile'])
             ->name('permohonan.reply-files.download');
+        
+        // Reply file view (PDF only, inline)
+        Route::get('/permohonan/{permohonan}/reply-files/{file}/view', [AdminPermohonanController::class, 'viewReplyFile'])
+            ->name('permohonan.reply-files.view');
 
         // Keberatan
         Route::put('/keberatan/{id}', [AdminKeberatanController::class, 'update'])->name('keberatan.update');

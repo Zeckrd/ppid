@@ -52,9 +52,19 @@
         }
 
         .min-width-0 {
-            min-width: 0; /* for safety if not using Bootstrap 5's min-width-0 */
+            min-width: 0;
         }
 
         .file-name-wrap {
             word-break: break-word;
         }
+
+        .reply-file-item.reply-file-marked-for-deletion {
+            background-color: var(--bs-danger-bg-subtle, #f8d7da);
+        }
+
+        .reply-file-item.reply-file-marked-for-deletion .reply-file-name {
+            text-decoration: line-through;
+            color: #dc3545;
+        }
+

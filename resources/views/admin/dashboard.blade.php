@@ -117,7 +117,7 @@
         </div>
 
         {{-- pie chart pekerjaan --}}
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white fw-bold d-flex align-items-center">
                 <i class="ri-user-2-line me-2 text-info"></i> Distribusi Pekerjaan User
             </div>
@@ -129,7 +129,7 @@
         </div>
 
         {{-- Pending / Sedang Berlangsung --}}
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white fw-bold d-flex align-items-center">
                 <i class="ri-notification-3-line me-2 text-danger"></i> Pending / Sedang Berlangsung
             </div>

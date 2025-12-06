@@ -32,4 +32,5 @@ class Permohonan extends Model
     {
         return $this->hasMany(PermohonanReplyFile::class);
     }
+ 
 }
