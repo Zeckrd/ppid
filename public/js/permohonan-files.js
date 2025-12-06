@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
     const ALLOWED_EXT = ['pdf', 'doc', 'docx'];
-    const MAX_FILES = 10;
 
     function setupFileValidation(inputId, errorId, maxFiles = 10) {
         const fileInput = document.getElementById(inputId);
@@ -71,10 +70,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Attach to both user and admin uploads
+    // Attach to both aDMIN AND USER
     setupFileValidation('permohonan_files', 'permohonan_files_error', 10);
     setupFileValidation('reply_files', 'reply_files_error', 10);
 });
+
+
 
 
 
