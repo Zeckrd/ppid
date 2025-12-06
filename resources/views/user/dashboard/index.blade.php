@@ -12,7 +12,7 @@
 
         {{-- QUICK FILTERS --}}
         <div class="mb-4">
-            <ul class="nav nav-pills">
+            <ul class="nav nav-pills flex-wrap">
                 @php
                     $statuses = [
                         'Semua',
@@ -20,7 +20,8 @@
                         'Sedang Diverifikasi petugas',
                         'Perlu Diperbaiki',
                         'Diproses',
-                        'Selesai'
+                        'Diterima',
+                        'Ditolak',
                     ];
                 @endphp
 
@@ -29,7 +30,7 @@
                         // determine if this filter is active
                         $active = (request('status') == $item || (request('status') == null && $item == 'Semua')) ? 'active' : '';
                     @endphp
-                    <li class="nav-item">
+                    <li class="nav-item mb-2 me-2">
                         <a class="nav-link {{ $active }}" 
                         href="{{ route('user.dashboard.index', ['status' => $item == 'Semua' ? null : $item]) }}">
                             @switch($item)
@@ -37,19 +38,22 @@
                                     <i class="ri-file-list-3-line me-1"></i>Semua
                                     @break
                                 @case('Menunggu Verifikasi Berkas Dari Petugas')
-                                    <i class="ri-time-line me-1"></i>Menunggu Verifikasi
+                                    <i class="ri-time-line me-1"></i> Menunggu Verifikasi
                                     @break
                                 @case('Sedang Diverifikasi petugas')
-                                    <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                    <i class="ri-search-eye-line me-1"></i> Diverifikasi
                                     @break
                                 @case('Perlu Diperbaiki')
-                                    <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                    <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
                                     @break
                                 @case('Diproses')
-                                    <i class="ri-loader-4-line me-1"></i>Diproses
+                                    <i class="ri-loader-4-line me-1"></i> Diproses
                                     @break
-                                @case('Selesai')
-                                    <i class="ri-checkbox-circle-line me-1"></i>Selesai
+                                @case('Diterima')
+                                    <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                    @break
+                                @case('Ditolak')
+                                    <i class="ri-close-circle-line me-1"></i> Ditolak
                                     @break
                             @endswitch
                         </a>
@@ -57,8 +61,6 @@
                 @endforeach
             </ul>
         </div>
-
-
 
         {{-- CHECK IF PERMOHONAN IS EMPTY RETURN ALERT INSTEAD --}}
         @if($permohonans->isEmpty())
@@ -132,7 +134,7 @@
                                             </span>
                                         @elseif($permohonan->status == 'Ditolak')
                                             <span class="badge bg-danger small">
-                                                <i class="ri-close-circle-line"></i> Ditolak
+                                                <i class="ri-close-circle-line me-1"></i> Ditolak
                                             </span>
                                         @else
                                             <span class="badge bg-secondary">
@@ -168,7 +170,7 @@
                                         
                                         @case('Ditolak')
                                             <span class="badge bg-danger">
-                                                <i class="ri-close-circle-line"></i> Ditolak
+                                                <i class="ri-close-circle-line me-1"></i> Ditolak
                                             </span>
                                             @break
 
@@ -235,7 +237,7 @@
                                         </span>
                                     @elseif($permohonan->status == 'Ditolak')
                                         <span class="badge bg-danger small">
-                                            <i class="ri-close-circle-line"></i>Ditolak
+                                            <i class="ri-close-circle-line me-1"></i>Ditolak
                                         </span>
                                     @else
                                         <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>

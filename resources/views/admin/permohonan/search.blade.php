@@ -215,7 +215,7 @@
                                     <i class="ri-checkbox-circle-line me-1"></i> Diterima
                                     @break
                                 @case('Ditolak')
-                                    <i class="ri-close-circle-line"></i> Ditolak
+                                    <i class="ri-close-circle-line me-1"></i> Ditolak
                                     @break
                             @endswitch
                         </a>
