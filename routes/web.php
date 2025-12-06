@@ -86,6 +86,14 @@ Route::middleware(['auth', 'phone.verified'])
         Route::resource('permohonan', UserPermohonanController::class)
             ->except(['index']);
 
+        // view user uploaded file
+        Route::get('/permohonan/{permohonan}/files/{file}/view', [UserPermohonanController::class, 'viewFile'])
+            ->name('permohonan.files.view');
+        
+        // view (admin) reply file
+        Route::get('/permohonan/{permohonan}/reply-files/{file}/view', [UserPermohonanController::class, 'viewReplyFile'])
+            ->name('permohonan.reply-files.view');
+
         // user uploaded single file download (user can only access own)
         Route::get('/permohonan/{permohonan}/files/{file}', [UserPermohonanController::class, 'downloadFile'])
             ->name('permohonan.files.download');

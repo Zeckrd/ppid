@@ -195,10 +195,29 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="flex-shrink-0">
+                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                            {{-- Lihat (PDF only) --}}
+                                            @if($file->isPdf())
+                                                <a href="{{ route('user.permohonan.files.view', [$permohonan->id, $file->id]) }}"
+                                                target="_blank"
+                                                class="btn btn-sm btn-outline-secondary text-nowrap"
+                                                title="Lihat (buka di tab baru)">
+                                                    <i class="ri-eye-line"></i> Lihat
+                                                </a>
+                                            @else
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
+                                                        title="Hanya dapat dilihat untuk file PDF"
+                                                        aria-disabled="true">
+                                                    <i class="ri-eye-off-line"></i> Lihat
+                                                </button>
+                                            @endif
+
+                                            {{-- Download (all types) --}}
                                             <a href="{{ route('user.permohonan.files.download', [$permohonan->id, $file->id]) }}"
                                             class="btn btn-sm btn-outline-primary text-nowrap"
-                                            target="_blank">
+                                            target="_blank"
+                                            title="Download">
                                                 <i class="ri-download-line me-1"></i> Download
                                             </a>
                                         </div>
@@ -213,6 +232,7 @@
                         </div>
                     @endif
                 </div>
+
 
                 {{-- File Balasan dari Admin --}}
                 <div class="mb-4">
@@ -236,10 +256,29 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="flex-shrink-0">
+                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                            {{-- Lihat (PDF only) --}}
+                                            @if($file->isPdf())
+                                                <a href="{{ route('user.permohonan.reply-files.view', [$permohonan->id, $file->id]) }}"
+                                                target="_blank"
+                                                class="btn btn-sm btn-outline-secondary text-nowrap"
+                                                title="Lihat (buka di tab baru)">
+                                                    <i class="ri-eye-line"></i> Lihat
+                                                </a>
+                                            @else
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
+                                                        title="Hanya dapat dilihat untuk file PDF"
+                                                        aria-disabled="true">
+                                                    <i class="ri-eye-off-line"></i> Lihat
+                                                </button>
+                                            @endif
+
+                                            {{-- Download (all types) --}}
                                             <a href="{{ route('user.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
                                             class="btn btn-sm btn-outline-success text-nowrap"
-                                            target="_blank">
+                                            target="_blank"
+                                            title="Download">
                                                 <i class="ri-download-line me-1"></i> Download
                                             </a>
                                         </div>
@@ -255,9 +294,6 @@
                     @endif
                 </div>
 
-
-            </div>
-        </div>
 
         <!-- Keberatan Section -->
         <div class="card shadow-sm border-0 mt-4">
@@ -400,6 +436,9 @@
     </div>
     @push('styles')
         <link rel="stylesheet" href="{{ asset('css/pages/permohonan-show.css') }}">
+    @endpush
+    @push('scripts')
+        <script src="{{ asset('js/permohonan-files.js') }}"></script>
     @endpush
 
 </x-layout>

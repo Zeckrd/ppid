@@ -178,6 +178,29 @@ class PermohonanController extends Controller
             ->with('success', 'Permohonan berhasil diperbarui.');
     }
 
+    public function viewFile(Permohonan $permohonan, PermohonanFile $file)
+    {
+        if ($file->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404);
+        }
+
+        // (failsafe) if not PDF, just send them to the download route
+        if (! $file->isPdf()) {
+            return redirect()->route('user.permohonan.files.download', [$permohonan->id, $file->id]);
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        // stream inline so browser opens PDF viewer
+        return response()->file($absolutePath, [
+            'Content-Disposition' => 'inline; filename="' . $file->original_name . '"',
+        ]);
+    }
+
     public function downloadFile(Permohonan $permohonan, PermohonanFile $file)
     {
         // Ensure file belongs to this permohonan

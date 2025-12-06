@@ -107,48 +107,66 @@
                     </div>
 
                     <hr class="my-4">
+                        <!-- File Upload -->
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="ri-file-text-line text-primary me-2"></i>
+                                <h6 class="mb-0 fw-bold">Dokumen Permohonan</h6>
+                            </div>
 
-                    <!-- File Section -->
-                    <div class="mb-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="ri-file-text-line text-primary me-2"></i>
-                            <h6 class="mb-0 fw-bold">Dokumen Permohonan</h6>
-                        </div>
+                            <!-- Info Alert -->
+                            <div class="alert alert-info border-0 d-flex align-items-start mb-3">
+                                <i class="ri-information-line me-3 mt-1" style="font-size: 1.5rem;"></i>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold mb-2">Unduh format formulir terlebih dahulu</div>
+                                    <p class="small mb-2">Isi dan unggah formulir sesuai format berikut:</p>
+                                    <a href="https://drive.google.com/file/d/1w2YJRxdMBdEyeeiB06He_R9oSqakNyxj/" 
+                                    target="_blank" 
+                                    class="btn btn-sm btn-outline-info">
+                                        <i class="ri-download-cloud-line me-1"></i> Download Format Formulir
+                                    </a>
+                                </div>
+                            </div>
 
-                        <!-- Info Alert -->
-                        <div class="alert alert-info border-0 d-flex align-items-start mb-3">
-                            <i class="ri-information-line me-3 mt-1" style="font-size: 1.5rem;"></i>
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold mb-2">Unduh format formulir terlebih dahulu</div>
-                                <p class="small mb-2">Isi dan unggah formulir sesuai format berikut:</p>
-                                <a href="https://drive.google.com/file/d/1w2YJRxdMBdEyeeiB06He_R9oSqakNyxj/" 
-                                target="_blank" 
-                                class="btn btn-sm btn-outline-info">
-                                    <i class="ri-download-cloud-line me-1"></i> Download Format Formulir
-                                </a>
+                            <!-- File Upload -->
+                            <label for="permohonan_files" class="form-label">
+                                <i class="ri-upload-cloud-line me-1"></i>
+                                <span class="fw-bold">Upload File Permohonan</span>
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="file"
+                                class="form-control
+                                    @error('permohonan_files') is-invalid @enderror
+                                    @error('permohonan_files.*') is-invalid @enderror"
+                                id="permohonan_files"
+                                name="permohonan_files[]"
+                                accept=".pdf,.doc,.docx"
+                                multiple>
+
+                            {{-- Server-side validation errors --}}
+                            <x-form-error name="permohonan_files"></x-form-error>
+                            <x-form-error name="permohonan_files.*"></x-form-error>
+
+                            {{-- JS validation error box --}}
+                            <div id="permohonan_files_error" class="invalid-feedback d-none"></div>
+
+                            <div class="form-text small text-muted">
+                                <i class="ri-information-line"></i>
+                                Format yang diterima: PDF, DOC, DOCX. Maksimal 10 file, masing-masing 2 MB.
+                            </div>
+
+                            {{-- Preview files that are about to be uploaded --}}
+                            <div id="permohonan_files_preview" class="mt-2 d-none">
+                                <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
+                                    <span class="mt-1">
+                                        <i class="ri-upload-2-line me-1"></i>
+                                        File yang akan diunggah:
+                                    </span>
+                                    <div id="permohonan_files_preview_chips"
+                                        class="d-flex flex-wrap gap-1"></div>
+                                </div>
                             </div>
                         </div>
-
-                        <!-- File Upload -->
-                        <label for="permohonan_files" class="form-label">
-                            <i class="ri-upload-cloud-line me-1"></i>
-                            <span class="fw-bold">Upload File Permohonan</span>
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input type="file"
-                            class="form-control @error('permohonan_files') is-invalid @enderror"
-                            id="permohonan_files"
-                            name="permohonan_files[]"
-                            accept=".pdf,.doc,.docx"
-                            multiple>
-                        <x-form-error name="permohonan_files"></x-form-error>
-                        <div id="permohonan_files_error" class="text-danger small mt-1 d-none"></div>
-                        <div class="form-text small text-muted">
-                            <i class="ri-information-line"></i>
-                            Format yang diterima: PDF, DOC, DOCX. Maksimal 10 file, masing-masing 2 MB.
-                        </div>
-
-
                     <hr class="my-4">
 
                     <!-- Action Buttons -->
