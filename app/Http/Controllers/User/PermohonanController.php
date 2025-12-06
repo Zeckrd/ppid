@@ -25,7 +25,7 @@ class PermohonanController extends Controller
             'reply_type'      => 'required|in:softcopy,hardcopy',
 
             'permohonan_files'   => 'required|array|min:1|max:10',
-            'permohonan_files.*' => 'file|mimes:pdf,doc,docx|max:2048',
+            'permohonan_files.*' => 'file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         // create permohonan
@@ -89,7 +89,7 @@ class PermohonanController extends Controller
 
         if ($canEditFiles) {
             $rules['permohonan_files']   = 'nullable|array|max:10';
-            $rules['permohonan_files.*'] = 'file|mimes:pdf,doc,docx|max:2048';
+            $rules['permohonan_files.*'] = 'file|mimes:pdf,doc,docx|max:5120';
 
             $rules['delete_file_ids']   = 'nullable|array';
             $rules['delete_file_ids.*'] = 'integer|exists:permohonan_files,id';

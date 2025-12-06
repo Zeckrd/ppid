@@ -50,7 +50,7 @@ class PermohonanController extends Controller
 
             // reply files (admin uploads)
             'reply_files'   => 'nullable|array|max:10',
-            'reply_files.*' => 'file|mimes:pdf,doc,docx|max:2048',
+            'reply_files.*' => 'file|mimes:pdf,doc,docx|max:5120',
 
             // for delete admins reply files
             'delete_reply_file_ids'   => 'nullable|array',

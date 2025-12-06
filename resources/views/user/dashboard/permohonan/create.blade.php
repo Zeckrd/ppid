@@ -152,7 +152,7 @@
 
                             <div class="form-text small text-muted">
                                 <i class="ri-information-line"></i>
-                                Format yang diterima: PDF, DOC, DOCX. Maksimal 10 file, masing-masing 2 MB.
+                                Format yang diterima: PDF, DOC, DOCX. Maksimal 10 file, masing-masing 5 MB.
                             </div>
 
                             {{-- Preview files that are about to be uploaded --}}

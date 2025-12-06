@@ -272,11 +272,10 @@
                                 multiple>
                             <x-form-error name="permohonan_files"></x-form-error>
                             <x-form-error name="permohonan_files.*"></x-form-error>
-                            <x-form-error name="permohonan_files"></x-form-error>
                             <div id="permohonan_files_error" class="invalid-feedback"></div>
                             <div class="form-text small text-muted">
                                 <i class="ri-information-line"></i>
-                                Anda dapat menambah file baru. Total maksimal 10 file, masing-masing 2 MB.
+                                Anda dapat menambah file baru. Total maksimal 10 file, masing-masing 5 MB.
                             </div>
 
                             {{-- Preview files that are about to be uploaded --}}

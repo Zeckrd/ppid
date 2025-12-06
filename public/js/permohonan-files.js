@@ -1,6 +1,6 @@
 // Validation and return error
 document.addEventListener('DOMContentLoaded', function () {
-    const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
+    const MAX_SIZE = 5 * 1024 * 1024; // 2 MB
     const ALLOWED_EXT = ['pdf', 'doc', 'docx'];
 
     function setupFileValidation(inputId, errorId, maxFiles = 10) {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (file.size > MAX_SIZE) {
-                    showError('Ukuran tiap file maksimal 2 MB. Periksa kembali file: ' + name);
+                    showError('Ukuran tiap file maksimal 5 MB. Periksa kembali file: ' + name);
                     return false;
                 }
             }

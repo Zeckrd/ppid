@@ -15,7 +15,7 @@ class KeberatanController extends Controller
             'status'             => 'required|in:Pending,Diproses,Diterima,Ditolak',
             'keterangan_petugas' => 'nullable|string|max:1000',
             // ADMIN reply file
-            'keberatan_file'     => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'keberatan_file'     => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         // Handle reply file upload

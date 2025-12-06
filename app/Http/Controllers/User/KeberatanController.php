@@ -39,7 +39,7 @@ class KeberatanController extends Controller
     {
         $request->validate([
             'keterangan_user' => 'required|string|max:1000',
-            'keberatan_file'  => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'keberatan_file'  => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         $filePath = null;

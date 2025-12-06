@@ -375,7 +375,7 @@
                                 <div id="reply_files_error" class="invalid-feedback"></div>
                                 <div class="form-text small text-muted">
                                     <i class="ri-information-line"></i>
-                                    Upload satu atau beberapa dokumen balasan (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 2 MB.
+                                    Upload satu atau beberapa dokumen balasan (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 5 MB.
                                 </div>
 
                                 {{-- Preview files that are about to be uploaded --}}
