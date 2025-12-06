@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
     const ALLOWED_EXT = ['pdf', 'doc', 'docx'];
+    const MAX_FILES = 10;
 
     function setupFileValidation(inputId, errorId, maxFiles = 10) {
         const fileInput = document.getElementById(inputId);

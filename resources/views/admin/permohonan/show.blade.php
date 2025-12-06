@@ -368,6 +368,11 @@
                                     class="form-control @error('reply_files') is-invalid @enderror"
                                     accept=".pdf,.doc,.docx"
                                     multiple>
+                                    name="reply_files[]"
+                                    id="reply_files"
+                                    class="form-control @error('reply_files') is-invalid @enderror"
+                                    accept=".pdf,.doc,.docx"
+                                    multiple>
                                 <x-form-error name="reply_files"></x-form-error>
                                 <div id="reply_files_error" class="invalid-feedback"></div>
                                 <div class="form-text small text-muted">
