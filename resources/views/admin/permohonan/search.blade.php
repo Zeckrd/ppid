@@ -94,7 +94,7 @@
 
                         {{-- Reset Filter Button --}}
                         <div class="mt-4 pt-3 border-top">
-                            <button type="button" class="btn btn-outline-danger w-100 rounded-pill" id="resetFilters">
+                            <button type="button" class="btn btn-danger w-100 rounded-pill" id="resetFilters">
                                 <i class="ri-refresh-line me-1"></i> Reset Semua Filter
                             </button>
                         </div>
