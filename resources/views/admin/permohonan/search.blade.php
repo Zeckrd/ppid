@@ -46,7 +46,7 @@
                         
                         {{-- Date Range --}}
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Tanggal Permohonan</label>
+                            <label class="form-label fw-semibold">Tanggal Pembuatan Permohonan</label>
                             <div class="row g-2">
                                 <div class="col-md-6">
                                     <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control shadow-sm">

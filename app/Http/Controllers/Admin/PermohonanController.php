@@ -40,28 +40,39 @@ class PermohonanController extends Controller
     }
 
     /**
-     * Update permohonan (status, petugas notes, reply file).
+     * Update permohonan + keberatan + notif (status, petugas notes, reply file).
      */
     public function update(Request $request, Permohonan $permohonan, WablasService $wablas)
     {
         $validated = $request->validate([
+            // PERMOHONAN
             'status'             => 'required|string',
             'keterangan_petugas' => 'nullable|string',
 
-            // reply files (admin uploads)
+            // Permohonan reply files
             'reply_files'   => 'nullable|array|max:10',
             'reply_files.*' => 'file|mimes:pdf,doc,docx|max:5120',
 
-            // for delete admins reply files
             'delete_reply_file_ids'   => 'nullable|array',
             'delete_reply_file_ids.*' => 'integer|exists:permohonan_reply_files,id',
-            
+
+            // KEBERATAN
+            'keberatan_status'             => 'nullable|string|in:Pending,Diproses,Diterima,Ditolak',
+            'keberatan_keterangan_petugas' => 'nullable|string',
+
+            'keberatan_reply_files'   => 'nullable|array|max:10',
+            'keberatan_reply_files.*' => 'file|mimes:pdf,doc,docx|max:5120',
+
+            'delete_keberatan_reply_file_ids'   => 'nullable|array',
+            'delete_keberatan_reply_file_ids.*' => 'integer|exists:keberatan_reply_files,id',
+
             // notification
             'notify_whatsapp' => 'nullable|boolean',
             'notify_email'    => 'nullable|boolean',
         ]);
 
-        // DELETE: admin reply files
+
+        // PERMOHONAN: delete reply files
         $deleteReplyFileIds = $validated['delete_reply_file_ids'] ?? [];
 
         if (! empty($deleteReplyFileIds)) {
@@ -77,7 +88,7 @@ class PermohonanController extends Controller
             }
         }
 
-        // ADD: new reply files
+        // PERMOHONAN: add new reply files
         $replyFiles = $request->file('reply_files', []);
 
         if (! empty($replyFiles)) {
@@ -105,20 +116,88 @@ class PermohonanController extends Controller
             }
         }
 
-        // Update permohonan fields
+        // KEBERATAN: update + files (only if keberatan exists)
+        $keberatan = $permohonan->keberatan;
+
+        if ($keberatan) {
+            // DELETE keberatan reply files
+            $deleteKbReplyFileIds = $validated['delete_keberatan_reply_file_ids'] ?? [];
+
+            if (! empty($deleteKbReplyFileIds)) {
+                $kbFilesToDelete = $keberatan->replyFiles()
+                    ->whereIn('id', $deleteKbReplyFileIds)
+                    ->get();
+
+                foreach ($kbFilesToDelete as $file) {
+                    if (Storage::disk('local')->exists($file->path)) {
+                        Storage::disk('local')->delete($file->path);
+                    }
+                    $file->delete();
+                }
+            }
+
+            // ADD keberatan reply files
+            $kbReplyFiles = $request->file('keberatan_reply_files', []);
+
+            if (! empty($kbReplyFiles)) {
+                $existingKbCount = $keberatan->replyFiles()->count();
+                $newKbCount      = count($kbReplyFiles);
+                $totalKbAfter    = $existingKbCount + $newKbCount;
+
+                if ($totalKbAfter > 10) {
+                    return back()
+                        ->withErrors([
+                            'keberatan_reply_files' => 'Jumlah file balasan keberatan tidak boleh lebih dari 10.',
+                        ])
+                        ->withInput();
+                }
+
+                foreach ($kbReplyFiles as $uploadedFile) {
+                    $path = $uploadedFile->store('keberatan_reply', 'local');
+
+                    $keberatan->replyFiles()->create([
+                        'path'          => $path,
+                        'original_name' => $uploadedFile->getClientOriginalName(),
+                        'size'          => $uploadedFile->getSize(),
+                        'mime_type'     => $uploadedFile->getClientMimeType(),
+                    ]);
+                }
+            }
+
+            // UPDATE keberatan status + keterangan_petugas
+            $kbUpdateData = [];
+
+            if (! empty($validated['keberatan_status'])) {
+                $kbUpdateData['status'] = $validated['keberatan_status'];
+            }
+
+            if (array_key_exists('keberatan_keterangan_petugas', $validated)) {
+                $kbUpdateData['keterangan_petugas'] = $validated['keberatan_keterangan_petugas'];
+            }
+
+            if (! empty($kbUpdateData)) {
+                $keberatan->update($kbUpdateData);
+            }
+        }
+
+        //PERMOHONAN: update fields
         $permohonan->update(
             Arr::only($validated, ['status', 'keterangan_petugas'])
         );
 
-        // Build message
+        // Build notification message
         $message = "Status Permohonan Anda telah diperbarui menjadi: *{$permohonan->status}*.\n";
 
-        if ($permohonan->keberatan) {
-            $message .= "Status Keberatan: {$permohonan->keberatan->status}\n";
+        if ($keberatan) {
+            $message .= "Status Keberatan: {$keberatan->status}\n";
+
+            if ($keberatan->keterangan_petugas) {
+                $message .= "Keterangan Petugas (Keberatan): {$keberatan->keterangan_petugas}\n";
+            }
         }
 
         if ($permohonan->keterangan_petugas) {
-            $message .= "Keterangan Petugas: {$permohonan->keterangan_petugas}\n";
+            $message .= "Keterangan Petugas (Permohonan): {$permohonan->keterangan_petugas}\n";
         }
 
         $message .= "\nTerima kasih telah menggunakan layanan kami.";
@@ -137,6 +216,7 @@ class PermohonanController extends Controller
             ->route('admin.permohonan.show', $permohonan->id)
             ->with('success', 'Permohonan berhasil diperbarui.');
     }
+
 
     public function search(Request $request)
     {

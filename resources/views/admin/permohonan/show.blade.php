@@ -34,7 +34,7 @@
         @endif
 
         <div class="row g-4">
-            <!-- left: Permohonan Info -->
+            <!-- LEFT: Permohonan Info + Keberatan Summary -->
             <div class="col-lg-7">
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body p-4">
@@ -159,7 +159,8 @@
                                             <div class="d-flex justify-content-between align-items-center gap-3">
                                                 <div class="flex-grow-1 min-width-0">
                                                     <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
-                                                        <i class="ri-file-line me-1"></i>
+                                                        {{-- BLUE icon here --}}
+                                                        <i class="ri-file-line me-1 text-primary"></i>
                                                         {{ $file->original_name }}
                                                     </div>
                                                     @if($file->size)
@@ -170,16 +171,15 @@
                                                 </div>
 
                                                 <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                    {{-- eye icon stays grey (no extra color) --}}
                                                     @if ($file->isPdf())
-                                                        {{-- View (PDF only) --}}
                                                         <a href="{{ route('admin.permohonan.files.view', [$permohonan->id, $file->id]) }}"
-                                                           target="_blank"
-                                                           class="btn btn-sm btn-outline-secondary"
-                                                           title="Lihat (buka di tab baru)">
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        title="Lihat (buka di tab baru)">
                                                             <i class="ri-eye-line"></i>
                                                         </a>
                                                     @else
-                                                        {{-- Disabled view for non-PDF --}}
                                                         <button type="button"
                                                                 class="btn btn-sm btn-outline-secondary opacity-50"
                                                                 title="Hanya dapat dilihat untuk file PDF"
@@ -188,10 +188,9 @@
                                                         </button>
                                                     @endif
 
-                                                    {{-- Download (all types) --}}
                                                     <a href="{{ route('admin.permohonan.files.download', [$permohonan->id, $file->id]) }}"
-                                                       class="btn btn-sm btn-outline-primary"
-                                                       title="Download">
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    title="Download">
                                                         <i class="ri-download-line"></i>
                                                     </a>
                                                 </div>
@@ -266,7 +265,7 @@
                                     {{-- Keterangan user --}}
                                     <div class="mb-3">
                                         <div class="d-flex align-items-center mb-2">
-                                            <i class="ri-message-3-line text-primary me-2"></i>
+                                            <i class="ri-message-3-line text-danger me-2"></i>
                                             <span class="small text-muted fw-bold">Keterangan User</span>
                                         </div>
                                         <div class="p-3 rounded bg-light border">
@@ -274,26 +273,14 @@
                                         </div>
                                     </div>
 
-                                    {{-- Keterangan petugas keberatan --}}
-                                    @if($permohonan->keberatan->keterangan_petugas)
-                                        <div class="mb-3">
-                                            <div class="d-flex align-items-center mb-2">
-                                                <i class="ri-message-2-line text-primary me-2"></i>
-                                                <span class="small text-muted fw-bold">Keterangan Petugas (Keberatan)</span>
-                                            </div>
-                                            <div class="p-3 rounded border" style="background-color: #e7f3ff;">
-                                                <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_petugas }}</p>
-                                            </div>
-                                        </div>
-                                    @endif
-
                                     <hr class="my-3">
 
-                                    {{-- File Keberatan (USER ONLY, like Lampiran) --}}
+                                    {{-- Lampiran Keberatan (USER ONLY, like Lampiran) --}}
                                     <div class="mb-2">
                                         <div class="d-flex align-items-center mb-3">
-                                            <i class="ri-file-text-line text-primary me-2"></i>
-                                            <h6 class="mb-0 fw-bold">Lampiran</h6>
+                                            {{-- RED icon & standardized "Lampiran" --}}
+                                            <i class="ri-file-text-line text-danger me-2"></i>
+                                            <h6 class="mb-0 small text-muted fw-bold">Lampiran</h6>
                                         </div>
 
                                         @if($permohonan->keberatan->files->count())
@@ -302,8 +289,9 @@
                                                     <li class="list-group-item">
                                                         <div class="d-flex justify-content-between align-items-center gap-3">
                                                             <div class="flex-grow-1 min-width-0">
-                                                                <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
-                                                                    <i class="ri-file-line me-1"></i>
+                                                                <div class="fw-medium text-truncate kb-file-name" title="{{ $file->original_name }}">
+                                                                    {{-- RED file icon --}}
+                                                                    <i class="ri-file-line me-1 text-danger"></i>
                                                                     {{ $file->original_name }}
                                                                 </div>
                                                                 @if($file->size)
@@ -314,11 +302,12 @@
                                                             </div>
 
                                                             <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                                {{-- eye icons grey (no color class) --}}
                                                                 @if($file->isPdf())
                                                                     <a href="{{ route('admin.keberatan.files.view', [$permohonan, $permohonan->keberatan, $file]) }}"
-                                                                       target="_blank"
-                                                                       class="btn btn-sm btn-outline-secondary"
-                                                                       title="Lihat (buka di tab baru)">
+                                                                    target="_blank"
+                                                                    class="btn btn-sm btn-outline-secondary"
+                                                                    title="Lihat (buka di tab baru)">
                                                                         <i class="ri-eye-line"></i>
                                                                     </a>
                                                                 @else
@@ -331,8 +320,8 @@
                                                                 @endif
 
                                                                 <a href="{{ route('admin.keberatan.files.download', [$permohonan, $permohonan->keberatan, $file]) }}"
-                                                                   class="btn btn-sm btn-outline-primary"
-                                                                   title="Download">
+                                                                class="btn btn-sm btn-outline-primary"
+                                                                title="Download">
                                                                     <i class="ri-download-line"></i>
                                                                 </a>
                                                             </div>
@@ -359,269 +348,244 @@
                 </div>
             </div>
 
-            <!-- RIGHT: Admin Actions -->
+            {{-- RIGHT: Single Admin Actions Form --}}
             <div class="col-lg-5">
                 <div class="card shadow-sm border-0 position-sticky" style="top: 2rem;">
                     <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-4">
+                        <div class="d-flex align-items-center mb-3">
                             <i class="ri-settings-3-line text-primary me-2" style="font-size: 1.25rem;"></i>
                             <h5 class="mb-0 fw-bold">Aksi Admin</h5>
                         </div>
 
-                        {{-- FORM 1: Update Permohonan --}}
+                        {{-- Single form for Permohonan + Keberatan + Notifikasi --}}
                         <form action="{{ route('admin.permohonan.update', $permohonan->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
-                            <!-- Status -->
+                            {{-- SECTION: Permohonan --}}
                             <div class="mb-4">
-                                <label for="status" class="form-label fw-bold">
-                                    <i class="ri-flag-line me-1"></i> Update Status
-                                </label>
-                                <select name="status" id="status" class="form-select">
-                                    <option value="Menunggu Verifikasi Berkas Dari Petugas" @selected($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')>Menunggu Verifikasi</option>
-                                    <option value="Sedang Diverifikasi petugas" @selected($permohonan->status == 'Sedang Diverifikasi petugas')>Sedang Diverifikasi</option>
-                                    <option value="Perlu Diperbaiki" @selected($permohonan->status == 'Perlu Diperbaiki')>Perlu Diperbaiki</option>
-                                    <option value="Diproses" @selected($permohonan->status == 'Diproses')>Diproses</option>
-                                    <option value="Diterima" @selected($permohonan->status == 'Diterima')>Diterima</option>
-                                    <option value="Ditolak" @selected($permohonan->status == 'Ditolak')>Ditolak</option>
-                                </select>
-                                <div class="form-text small text-muted mt-1">
-                                    <i class="ri-information-line"></i> Notifikasi akan mengirimkan perubahan status ke pengguna
-                                </div>
-                            </div>
-
-                            <!-- Notify User -->
-                            <div class="mb-4">
-                                <label class="form-label fw-bold">
-                                    <i class="ri-notification-line me-1"></i> Kirim Notifikasi ke Pengguna
-                                </label>
-                                <div class="ps-2">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" id="notify_whatsapp" name="notify_whatsapp" value="1">
-                                        <label class="form-check-label" for="notify_whatsapp">
-                                            Kirim melalui WhatsApp
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="notify_email" name="notify_email" value="1">
-                                        <label class="form-check-label" for="notify_email">
-                                            Kirim melalui Email
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Keterangan Petugas -->
-                            <div class="mb-4">
-                                <label for="keterangan_petugas" class="form-label fw-bold">
-                                    <i class="ri-message-2-line me-1"></i> Keterangan Petugas
-                                </label>
-                                <textarea name="keterangan_petugas" id="keterangan_petugas" rows="4" class="form-control" placeholder="Berikan keterangan...">{{ old('keterangan_petugas', $permohonan->keterangan_petugas) }}</textarea>
-                                <div class="form-text small text-muted">
-                                    <i class="ri-information-line"></i> Keterangan ini akan ditampilkan kepada pengguna.
-                                </div>
-                            </div>
-
-                            <!-- Upload File Balasan -->
-                            @php
-                                $replyFiles = $permohonan->replyFiles;
-                            @endphp
-
-                            <div class="mb-4">
-                                <label for="reply_files" class="form-label fw-bold">
-                                    <i class="ri-file-upload-line me-1"></i> Upload File Balasan
-                                </label>
-                                <input type="file"
-                                    name="reply_files[]"
-                                    id="reply_files"
-                                    class="form-control
-                                        @error('reply_files') is-invalid @enderror
-                                        @error('reply_files.*') is-invalid @enderror"
-                                    accept=".pdf,.doc,.docx"
-                                    multiple>
-                                <x-form-error name="reply_files"></x-form-error>
-                                <x-form-error name="reply_files.*"></x-form-error>
-                                <div id="reply_files_error" class="invalid-feedback"></div>
-                                <div class="form-text small text-muted">
-                                    <i class="ri-information-line"></i>
-                                    Upload satu atau beberapa dokumen balasan (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 5 MB.
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class="badge rounded-pill bg-primary text-white d-inline-flex align-items-center gap-1 px-3 py-2">
+                                        <i class="ri-file-list-3-line"></i>
+                                        <span>Permohonan</span>
+                                    </span>
                                 </div>
 
-                                {{-- Preview files that are about to be uploaded --}}
-                                <div id="reply_files_preview" class="mt-2 d-none">
-                                    <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
-                                        <span class="mt-1">
-                                            <i class="ri-upload-2-line me-1"></i>
-                                            File yang akan diunggah:
-                                        </span>
-                                        <div id="reply_files_preview_chips" class="d-flex flex-wrap gap-1"></div>
-                                    </div>
+                                <!-- Status -->
+                                <div class="mb-3">
+                                    <label for="status" class="form-label fw-bold">
+                                        <i class="ri-flag-line me-1 text-primary"></i> Update Status
+                                    </label>
+                                    <select name="status" id="status" class="form-select">
+                                        <option value="Menunggu Verifikasi Berkas Dari Petugas" @selected($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')>Menunggu Verifikasi</option>
+                                        <option value="Sedang Diverifikasi petugas" @selected($permohonan->status == 'Sedang Diverifikasi petugas')>Sedang Diverifikasi</option>
+                                        <option value="Perlu Diperbaiki" @selected($permohonan->status == 'Perlu Diperbaiki')>Perlu Diperbaiki</option>
+                                        <option value="Diproses" @selected($permohonan->status == 'Diproses')>Diproses</option>
+                                        <option value="Diterima" @selected($permohonan->status == 'Diterima')>Diterima</option>
+                                        <option value="Ditolak" @selected($permohonan->status == 'Ditolak')>Ditolak</option>
+                                    </select>
                                 </div>
-                            </div>
 
-                            @if($replyFiles->count())
-                                <div class="mt-3">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="small text-muted">
-                                            <i class="ri-file-check-line me-1"></i>
-                                            {{ $replyFiles->count() }} file balasan
-                                        </span>
+                                <!-- Keterangan Petugas (Permohonan) -->
+                                <div class="mb-3">
+                                    <label for="keterangan_petugas" class="form-label fw-bold">
+                                        <i class="ri-message-2-line me-1 text-primary"></i> Keterangan Petugas
+                                    </label>
+                                    <textarea name="keterangan_petugas"
+                                            id="keterangan_petugas"
+                                            rows="4"
+                                            class="form-control"
+                                            placeholder="Berikan keterangan...">{{ old('keterangan_petugas', $permohonan->keterangan_petugas) }}</textarea>
+                                </div>
+
+                                @php
+                                    $replyFiles = $permohonan->replyFiles;
+                                @endphp
+
+                                <!-- Upload File Balasan (Permohonan) -->
+                                <div class="mb-3">
+                                    <label for="reply_files" class="form-label fw-bold">
+                                        <i class="ri-file-upload-line me-1 text-primary"></i> Upload File Balasan
+                                    </label>
+                                    <input type="file"
+                                        name="reply_files[]"
+                                        id="reply_files"
+                                        class="form-control
+                                            @error('reply_files') is-invalid @enderror
+                                            @error('reply_files.*') is-invalid @enderror"
+                                        accept=".pdf,.doc,.docx"
+                                        multiple>
+                                    <x-form-error name="reply_files"></x-form-error>
+                                    <x-form-error name="reply_files.*"></x-form-error>
+                                    <div id="reply_files_error" class="invalid-feedback"></div>
+                                    <div class="form-text small text-muted">
+                                        <i class="ri-information-line text-primary"></i>
+                                        (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 5 MB.
                                     </div>
 
-                                    <ul class="list-group list-group-flush rounded border">
-                                        @foreach($replyFiles as $file)
-                                            @php
-                                                $isMarked = is_array(old('delete_reply_file_ids')) && in_array($file->id, old('delete_reply_file_ids'));
-                                            @endphp
+                                    {{-- Preview files that are about to be uploaded --}}
+                                    <div id="reply_files_preview" class="mt-2 d-none">
+                                        <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
+                                            <span class="mt-1">
+                                                <i class="ri-upload-2-line me-1 text-primary"></i>
+                                                File yang akan diunggah:
+                                            </span>
+                                            <div id="reply_files_preview_chips" class="d-flex flex-wrap gap-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                            <li class="list-group-item reply-file-item {{ $isMarked ? 'reply-file-marked-for-deletion' : '' }}">
-                                                <div class="d-flex justify-content-between align-items-center gap-3">
-                                                    <div class="flex-grow-1 min-width-0">
-                                                        <div class="fw-medium text-truncate reply-file-name" title="{{ $file->original_name }}">
-                                                            <i class="ri-file-line me-1"></i>
-                                                            {{ $file->original_name }}
+                                {{-- Existing reply files + delete toggle --}}
+                                @if($replyFiles->count())
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="small text-muted">
+                                                <i class="ri-file-check-line me-1 text-primary"></i>
+                                                {{ $replyFiles->count() }} file balasan
+                                            </span>
+                                        </div>
+
+                                        <ul class="list-group list-group-flush rounded border">
+                                            @foreach($replyFiles as $file)
+                                                @php
+                                                    $isMarked = is_array(old('delete_reply_file_ids')) && in_array($file->id, old('delete_reply_file_ids'));
+                                                @endphp
+
+                                                <li class="list-group-item reply-file-item {{ $isMarked ? 'reply-file-marked-for-deletion' : '' }}">
+                                                    <div class="d-flex justify-content-between align-items-center gap-3">
+                                                        <div class="flex-grow-1 min-width-0">
+                                                            <div class="fw-medium text-truncate reply-file-name" title="{{ $file->original_name }}">
+                                                                {{-- BLUE file icon --}}
+                                                                <i class="ri-file-line me-1 text-primary"></i>
+                                                                {{ $file->original_name }}
+                                                            </div>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                @if($file->size)
+                                                                    <div class="small text-muted">
+                                                                        {{ number_format($file->size / 1024, 1) }} KB
+                                                                    </div>
+                                                                @endif
+                                                                <span class="badge rounded-pill bg-danger-subtle text-danger small delete-badge"
+                                                                    style="{{ $isMarked ? '' : 'display:none;' }}">
+                                                                    Akan dihapus
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            @if($file->size)
-                                                                <div class="small text-muted">
-                                                                    {{ number_format($file->size / 1024, 1) }} KB
-                                                                </div>
+
+                                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                            {{-- View (grey) --}}
+                                                            @if($file->isPdf())
+                                                                <a href="{{ route('admin.permohonan.reply-files.view', [$permohonan->id, $file->id]) }}"
+                                                                target="_blank"
+                                                                class="btn btn-sm btn-outline-secondary"
+                                                                title="Lihat (buka di tab baru)">
+                                                                    <i class="ri-eye-line"></i>
+                                                                </a>
+                                                            @else
+                                                                <button type="button"
+                                                                        class="btn btn-sm btn-outline-secondary opacity-50"
+                                                                        title="Hanya dapat dilihat untuk file PDF"
+                                                                        aria-disabled="true">
+                                                                    <i class="ri-eye-off-line"></i>
+                                                                </button>
                                                             @endif
-                                                            <span class="badge rounded-pill bg-danger-subtle text-danger small delete-badge"
-                                                                  style="{{ $isMarked ? '' : 'display:none;' }}">
-                                                                Akan dihapus
-                                                            </span>
+
+                                                            {{-- Download --}}
+                                                            <a href="{{ route('admin.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
+                                                            class="btn btn-sm btn-outline-primary"
+                                                            title="Download">
+                                                                <i class="ri-download-line"></i>
+                                                            </a>
+
+                                                            {{-- Delete toggle --}}
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-outline-danger reply-file-delete-toggle"
+                                                                    data-file-id="{{ $file->id }}"
+                                                                    title="{{ $isMarked ? 'Batal tandai hapus' : 'Tandai untuk dihapus' }}">
+                                                                <i class="{{ $isMarked ? 'ri-delete-bin-fill' : 'ri-delete-bin-line' }}"></i>
+                                                            </button>
+
+                                                            <input type="checkbox"
+                                                                name="delete_reply_file_ids[]"
+                                                                value="{{ $file->id }}"
+                                                                id="delete_reply_file_{{ $file->id }}"
+                                                                class="reply-file-delete-checkbox d-none"
+                                                                {{ $isMarked ? 'checked' : '' }}>
                                                         </div>
                                                     </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
 
-                                                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                                        {{-- View --}}
-                                                        @if($file->isPdf())
-                                                            <a href="{{ route('admin.permohonan.reply-files.view', [$permohonan->id, $file->id]) }}"
-                                                               target="_blank"
-                                                               class="btn btn-sm btn-outline-secondary"
-                                                               title="Lihat (buka di tab baru)">
-                                                                <i class="ri-eye-line"></i>
-                                                            </a>
-                                                        @else
-                                                            <button type="button"
-                                                                    class="btn btn-sm btn-outline-secondary opacity-50"
-                                                                    title="Hanya dapat dilihat untuk file PDF"
-                                                                    aria-disabled="true">
-                                                                <i class="ri-eye-off-line"></i>
-                                                            </button>
-                                                        @endif
+                            </div>
 
-                                                        {{-- Download --}}
-                                                        <a href="{{ route('admin.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
-                                                           class="btn btn-sm btn-outline-primary"
-                                                           title="Download">
-                                                            <i class="ri-download-line"></i>
-                                                        </a>
-
-                                                        {{-- Delete toggle (mark then save) --}}
-                                                        <button type="button"
-                                                                class="btn btn-sm btn-outline-danger reply-file-delete-toggle"
-                                                                data-file-id="{{ $file->id }}"
-                                                                title="{{ $isMarked ? 'Batal tandai hapus' : 'Tandai untuk dihapus' }}">
-                                                            <i class="{{ $isMarked ? 'ri-delete-bin-fill' : 'ri-delete-bin-line' }}"></i>
-                                                        </button>
-
-                                                        {{-- Hidden checkbox sent to backend --}}
-                                                        <input type="checkbox"
-                                                               name="delete_reply_file_ids[]"
-                                                               value="{{ $file->id }}"
-                                                               id="delete_reply_file_{{ $file->id }}"
-                                                               class="reply-file-delete-checkbox d-none"
-                                                               {{ $isMarked ? 'checked' : '' }}>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <button type="submit" class="btn btn-primary w-100 mt-4">
-                                <i class="ri-save-line me-1"></i> Simpan Perubahan Permohonan
-                            </button>
-                        </form>
-
-                        {{-- FORM 2: Update Keberatan --}}
-                        @if($permohonan->keberatan)
-                            <hr class="my-4">
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="ri-alert-line text-danger me-2"></i>
-                                    <h6 class="mb-0 fw-bold">Status & Balasan Keberatan</h6>
-                                </div>
-
-                                <form action="{{ route('admin.keberatan.update', $permohonan->keberatan->id) }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    @method('PUT')
+                            {{-- SECTION: Keberatan (only if exists) --}}
+                            @if($permohonan->keberatan)
+                                <div class="mb-4 border-top pt-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="badge rounded-pill bg-danger text-white d-inline-flex align-items-center gap-1 px-3 py-2">
+                                            <i class="ri-alert-line"></i>
+                                            <span>Keberatan</span>
+                                        </span>
+                                    </div>
 
                                     <!-- Status Keberatan -->
                                     <div class="mb-3">
-                                        <label for="keberatan_status" class="form-label">
-                                            <i class="ri-flag-2-line me-1"></i> Ubah Status Keberatan
+                                        <label for="keberatan_status" class="form-label fw-bold">
+                                            <i class="ri-flag-2-line me-1 text-danger"></i> Update Status
                                         </label>
-                                        <select name="status" id="keberatan_status" class="form-select">
+                                        <select name="keberatan_status" id="keberatan_status" class="form-select">
                                             <option value="Pending"  @selected($permohonan->keberatan->status == 'Pending')>Pending</option>
                                             <option value="Diproses" @selected($permohonan->keberatan->status == 'Diproses')>Diproses</option>
                                             <option value="Diterima" @selected($permohonan->keberatan->status == 'Diterima')>Diterima</option>
                                             <option value="Ditolak"  @selected($permohonan->keberatan->status == 'Ditolak')>Ditolak</option>
                                         </select>
-                                        <div class="form-text small text-muted">
-                                            <i class="ri-information-line"></i> Gunakan ini untuk memperbarui progres keberatan.
-                                        </div>
                                     </div>
 
                                     <!-- Keterangan Petugas (Keberatan) -->
                                     <div class="mb-3">
                                         <label for="keberatan_keterangan_petugas" class="form-label fw-bold">
-                                            <i class="ri-message-2-line me-1"></i> Keterangan Petugas (Keberatan)
+                                            <i class="ri-message-2-line me-1 text-danger"></i> Keterangan Petugas
                                         </label>
-                                        <textarea name="keterangan_petugas"
+                                        <textarea name="keberatan_keterangan_petugas"
                                                 id="keberatan_keterangan_petugas"
                                                 rows="4"
                                                 class="form-control"
-                                                placeholder="Masukkan keterangan petugas...">{{ old('keterangan_petugas', $permohonan->keberatan->keterangan_petugas) }}</textarea>
-                                        <div class="form-text small text-muted">
-                                            <i class="ri-information-line"></i> Keterangan ini akan ditampilkan kepada pemohon.
-                                        </div>
+                                                placeholder="Masukkan keterangan petugas...">{{ old('keberatan_keterangan_petugas', $permohonan->keberatan->keterangan_petugas) }}</textarea>
                                     </div>
 
-                                    <!-- Upload File Balasan Keberatan -->
                                     @php
                                         $kbReplyFiles = $permohonan->keberatan->replyFiles;
                                     @endphp
 
-                                    <div class="mb-4">
+                                    <!-- Upload File Balasan Keberatan -->
+                                    <div class="mb-3">
                                         <label for="keberatan_reply_files" class="form-label fw-bold">
-                                            <i class="ri-file-upload-line me-1"></i> Upload File Balasan Keberatan
+                                            <i class="ri-file-upload-line me-1 text-danger"></i> Upload File Balasan
                                         </label>
                                         <input type="file"
                                             name="keberatan_reply_files[]"
                                             id="keberatan_reply_files"
                                             class="form-control
-                                                    @error('keberatan_reply_files') is-invalid @enderror
-                                                    @error('keberatan_reply_files.*') is-invalid @enderror"
+                                                @error('keberatan_reply_files') is-invalid @enderror
+                                                @error('keberatan_reply_files.*') is-invalid @enderror"
                                             accept=".pdf,.doc,.docx"
                                             multiple>
                                         <x-form-error name="keberatan_reply_files"></x-form-error>
                                         <x-form-error name="keberatan_reply_files.*"></x-form-error>
                                         <div id="keberatan_reply_files_error" class="invalid-feedback d-none"></div>
                                         <div class="form-text small text-muted">
-                                            <i class="ri-information-line"></i>
-                                            Upload satu atau beberapa dokumen balasan (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 5 MB.
+                                            <i class="ri-information-line text-danger"></i>
+                                            (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 5 MB.
                                         </div>
 
                                         {{-- Preview files that are about to be uploaded --}}
                                         <div id="keberatan_reply_files_preview" class="mt-2 d-none">
                                             <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
                                                 <span class="mt-1">
-                                                    <i class="ri-upload-2-line me-1"></i>
+                                                    <i class="ri-upload-2-line me-1 text-danger"></i>
                                                     File yang akan diunggah:
                                                 </span>
                                                 <div id="keberatan_reply_files_preview_chips"
@@ -635,7 +599,7 @@
                                         <div class="mt-3">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <span class="small text-muted">
-                                                    <i class="ri-file-check-line me-1"></i>
+                                                    <i class="ri-file-check-line me-1 text-danger"></i>
                                                     {{ $kbReplyFiles->count() }} file balasan keberatan
                                                 </span>
                                             </div>
@@ -651,7 +615,8 @@
                                                         <div class="d-flex justify-content-between align-items-center gap-3">
                                                             <div class="flex-grow-1 min-width-0">
                                                                 <div class="fw-medium text-truncate kb-reply-file-name" title="{{ $file->original_name }}">
-                                                                    <i class="ri-file-line me-1"></i>
+                                                                    {{-- RED file icon --}}
+                                                                    <i class="ri-file-line me-1 text-danger"></i>
                                                                     {{ $file->original_name }}
                                                                 </div>
                                                                 <div class="d-flex align-items-center gap-2">
@@ -668,7 +633,7 @@
                                                             </div>
 
                                                             <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                                                {{-- View --}}
+                                                                {{-- View (grey) --}}
                                                                 @if($file->isPdf())
                                                                     <a href="{{ route('admin.keberatan.reply_files.view', [$permohonan, $permohonan->keberatan, $file]) }}"
                                                                     target="_blank"
@@ -691,6 +656,7 @@
                                                                 title="Download">
                                                                     <i class="ri-download-line"></i>
                                                                 </a>
+
                                                                 {{-- Trash toggle --}}
                                                                 <button type="button"
                                                                         class="btn btn-sm btn-outline-danger kb-reply-file-delete-toggle"
@@ -698,7 +664,6 @@
                                                                     <i class="{{ $kbMarked ? 'ri-delete-bin-fill' : 'ri-delete-bin-line' }}"></i>
                                                                 </button>
 
-                                                                {{-- Hidden checkbox sent to backend --}}
                                                                 <input type="checkbox"
                                                                     name="delete_keberatan_reply_file_ids[]"
                                                                     value="{{ $file->id }}"
@@ -712,17 +677,43 @@
                                         </div>
                                     @endif
 
-                                    <button type="submit" class="btn btn-danger w-100 mt-4">
-                                        <i class="ri-save-3-line me-1"></i> Update Keberatan
-                                    </button>
-                                </form>
+                                </div>
+                            @endif
+
+                            {{-- SECTION: Notifikasi --}}
+                            <div class="border-top pt-3 mt-2">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="ri-notification-line text-primary me-2"></i>
+                                    <h6 class="mb-0 fw-bold">Notifikasi ke Pemohon</h6>
+                                </div>
+                                <p class="small text-muted mb-2">
+                                    Pilih cara mengirimkan informasi perubahan status kepada pemohon.
+                                </p>
+
+                                <div class="mb-3 ps-1">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="notify_whatsapp" name="notify_whatsapp" value="1">
+                                        <label class="form-check-label" for="notify_whatsapp">
+                                            Kirim melalui WhatsApp
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="notify_email" name="notify_email" value="1">
+                                        <label class="form-check-label" for="notify_email">
+                                            Kirim melalui Email
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 mt-2">
+                                    <i class="ri-save-line me-1"></i> Simpan Semua Perubahan
+                                </button>
                             </div>
-                        @endif
-
-
+                        </form>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
