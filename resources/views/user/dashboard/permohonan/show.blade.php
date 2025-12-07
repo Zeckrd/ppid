@@ -175,7 +175,7 @@
 
                 {{-- File Permohonan --}}
                 <div class="row g-4 mb-4">
-                    {{-- File Permohonan (User uploads) --}}
+                    {{-- File Permohonan (User upload) --}}
                     <div class="col-md-6">
                         <div class="mb-4">
                             <div class="d-flex align-items-center mb-3">
@@ -311,7 +311,7 @@
                 </div>
 
                 @if($permohonan->keberatan)
-                    {{-- Meta info (date + status) --}}
+                    {{-- Meta info --}}
                     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
                         <div class="d-flex align-items-center mb-2 mb-md-0">
                             <i class="ri-calendar-event-line text-muted me-2"></i>
@@ -356,9 +356,7 @@
                                 <h6 class="mb-0 fw-bold">Keterangan Petugas</h6>
                             </div>
                             <div class="p-3 rounded border" style="background-color: #e7f3ff;">
-                                <p class="mb-0" style="white-space: pre-wrap;">
-                                    {{ $permohonan->keberatan->keterangan_petugas }}
-                                </p>
+                                <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_petugas }}</p>
                             </div>
                         </div>
                     @endif
@@ -367,7 +365,7 @@
 
                 {{-- Files Section --}}
                 <div class="row g-4 mb-4">
-                    {{-- File Keberatan (user uploads) --}}
+                    {{-- File Keberatan (user upload) --}}
                     <div class="col-md-6">
                         <div class="mb-4">
                             <div class="d-flex align-items-center mb-3">
