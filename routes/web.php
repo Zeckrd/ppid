@@ -7,8 +7,8 @@ use App\Models\PermohonanFile;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\PermohonanController as UserPermohonanController;
 use App\Http\Controllers\User\KeberatanController;
-use App\Http\Controllers\UserSetupController as UserSetupController;
-use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\Auth\UserSetupController as UserSetupController;
+use App\Http\Controllers\User\Profile\UserProfileController;
 use App\Http\Controllers\User\Profile\EmailChangeController;
 
 // Admin controllers
@@ -17,9 +17,9 @@ use App\Http\Controllers\Admin\PermohonanController as AdminPermohonanController
 use App\Http\Controllers\Admin\KeberatanController as AdminKeberatanController;
 
 // Auth & system controllers
-use App\Http\Controllers\RegisterUserController;
-use App\Http\Controllers\SessionController;
-use App\Http\Controllers\PhoneVerificationController;
+use App\Http\Controllers\Auth\RegisterUserController;
+use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\Auth\PhoneVerificationController;
 use App\Http\Controllers\Auth\PasswordResetController;
 
 // Public Routes
@@ -94,7 +94,7 @@ Route::middleware(['auth', 'phone.verified'])
         Route::get('/permohonan/{permohonan}/reply-files/{file}/view', [UserPermohonanController::class, 'viewReplyFile'])
             ->name('permohonan.reply-files.view');
 
-        // user uploaded single file download (user can only access own)
+        // user uploaded download
         Route::get('/permohonan/{permohonan}/files/{file}', [UserPermohonanController::class, 'downloadFile'])
             ->name('permohonan.files.download');
         
@@ -112,8 +112,19 @@ Route::middleware(['auth', 'phone.verified'])
         Route::post('/permohonan/{permohonan}/keberatan', [KeberatanController::class, 'store'])
             ->name('keberatan.store');
 
-        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-file', [KeberatanController::class, 'downloadReplyFile'])
-            ->name('keberatan.reply-file.download');
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/files/{file}', [KeberatanController::class, 'downloadFile'])
+            ->name('keberatan.files.download');
+
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}', [KeberatanController::class, 'downloadReplyFile'])
+            ->name('keberatan.reply_files.download');
+
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/files/{file}/view',
+            [KeberatanController::class, 'viewFile'])
+            ->name('keberatan.files.view');
+
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}/view',
+            [KeberatanController::class, 'viewReplyFile'])
+            ->name('keberatan.reply_files.view');
     });
 
 
@@ -154,13 +165,27 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
             ->name('permohonan.reply-files.view');
 
         // Keberatan
-        Route::put('/keberatan/{id}', [AdminKeberatanController::class, 'update'])->name('keberatan.update');
+        // Keberatan update
+        Route::put('/keberatan/{keberatan}', [AdminKeberatanController::class, 'update'])
+            ->name('keberatan.update');
 
-        // Reply file download for Keberatan
-        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-file', [AdminKeberatanController::class, 'downloadReplyFile'])
-            ->name('keberatan.reply-file.download');
+        // User keberatan files (admin side)
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/files/{file}',
+            [AdminKeberatanController::class, 'downloadFile']
+        )->name('keberatan.files.download');
 
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/files/{file}/view',
+            [AdminKeberatanController::class, 'viewFile']
+        )->name('keberatan.files.view');
 
+        // Reply files (admin balasan keberatan)
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}',
+            [AdminKeberatanController::class, 'downloadReplyFile']
+        )->name('keberatan.reply_files.download');
+
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}/view',
+            [AdminKeberatanController::class, 'viewReplyFile']
+        )->name('keberatan.reply_files.view');
     });
 
 

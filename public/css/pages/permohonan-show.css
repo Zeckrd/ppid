@@ -61,15 +61,19 @@
 
         /* Mark for delete */
         .user-file-item.user-file-marked-for-deletion,
-        .reply-file-item.reply-file-marked-for-deletion {
+        .reply-file-item.reply-file-marked-for-deletion,
+        .kb-reply-file-marked-for-deletion {
             background-color: var(--bs-danger-bg-subtle, #f8d7da);
         }
 
         /* strikethrough for delete */
         .user-file-item.user-file-marked-for-deletion .user-file-name,
-        .reply-file-item.reply-file-marked-for-deletion .reply-file-name {
+        .reply-file-item.reply-file-marked-for-deletion .reply-file-name,
+        .kb-reply-file-marked-for-deletion .kb-reply-file-name {
             text-decoration: line-through;
             color: #dc3545;
         }
+
+
 
 

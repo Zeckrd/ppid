@@ -1,6 +1,8 @@
-// Validation and return error
 document.addEventListener('DOMContentLoaded', function () {
-    const MAX_SIZE = 5 * 1024 * 1024; // 2 MB
+    // ==========================
+    // VALIDATION
+    // ==========================
+    const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
     const ALLOWED_EXT = ['pdf', 'doc', 'docx'];
 
     function setupFileValidation(inputId, errorId, maxFiles = 10) {
@@ -57,9 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return true;
         }
 
-        fileInput.addEventListener('change', function () {
-            validateFiles();
-        });
+        fileInput.addEventListener('change', validateFiles);
 
         if (form) {
             form.addEventListener('submit', function (e) {
@@ -71,17 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Attach to both ADMIN AND USER
-    setupFileValidation('permohonan_files', 'permohonan_files_error', 10);
-    setupFileValidation('reply_files', 'reply_files_error', 10);
-});
+    setupFileValidation('permohonan_files', 'permohonan_files_error', 10);           // user permohonan
+    setupFileValidation('reply_files', 'reply_files_error', 10);                     // admin permohonan balasan
+    setupFileValidation('keberatan_reply_files', 'keberatan_reply_files_error', 10); // admin keberatan balasan
 
 
 
-
-
-// Files to upload preview
-document.addEventListener('DOMContentLoaded', function () {
+    // ==========================
+    // PREVIEW CHIPS
+    // ==========================
     function setupFilePreview(inputId, previewId, chipsId) {
         const input   = document.getElementById(inputId);
         const preview = document.getElementById(previewId);
@@ -128,91 +126,97 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Admin reply files
-    setupFilePreview('reply_files', 'reply_files_preview', 'reply_files_preview_chips');
+    setupFilePreview('reply_files', 'reply_files_preview', 'reply_files_preview_chips');                       // admin permohonan
+    setupFilePreview('permohonan_files', 'permohonan_files_preview', 'permohonan_files_preview_chips');       // user permohonan
+    setupFilePreview('keberatan_reply_files', 'keberatan_reply_files_preview', 'keberatan_reply_files_preview_chips'); // admin keberatan
+
+
+
+    // ==========================
+    // DELETE TOGGLE
+    // ==========================
+    /**
+     * General helper for any "trash icon -> mark for deletion" pattern.
+     *
+     * @param {Object} opts
+     * @param {string} opts.rowSelector        - selector for each row (li)
+     * @param {string} opts.checkboxSelector   - selector for hidden checkbox inside row
+     * @param {string} opts.buttonSelector     - selector for trash button inside row
+     * @param {string} [opts.badgeSelector]    - selector for "Akan dihapus" badge
+     * @param {string} [opts.markedClass]      - class added to row when marked
+     */
+    function setupDeleteToggle(opts) {
+        const {
+            rowSelector,
+            checkboxSelector,
+            buttonSelector,
+            badgeSelector,
+            markedClass
+        } = opts;
+
+        document.querySelectorAll(rowSelector).forEach(function (row) {
+            const checkbox = row.querySelector(checkboxSelector);
+            const button   = row.querySelector(buttonSelector);
+            const badge    = badgeSelector ? row.querySelector(badgeSelector) : null;
+            const icon     = button ? button.querySelector('i') : null;
+
+            if (!button || !checkbox) return;
+
+            function syncVisual() {
+                const marked = checkbox.checked;
+
+                if (markedClass) {
+                    row.classList.toggle(markedClass, marked);
+                }
+
+                if (badge) {
+                    badge.style.display = marked ? 'inline-flex' : 'none';
+                }
+
+                if (icon) {
+                    icon.classList.toggle('ri-delete-bin-line', !marked);
+                    icon.classList.toggle('ri-delete-bin-fill', marked);
+                }
+
+                button.title = marked ? 'Batal tandai hapus' : 'Tandai untuk dihapus';
+            }
+
+            button.addEventListener('click', function () {
+                checkbox.checked = !checkbox.checked;
+                syncVisual();
+            });
+
+            // Initialize on page load
+            if (checkbox.checked) {
+                syncVisual();
+            }
+        });
+    }
+
+    // Admin permohonan reply files
+    setupDeleteToggle({
+        rowSelector:      '.reply-file-item',
+        checkboxSelector: '.reply-file-delete-checkbox',
+        buttonSelector:   '.reply-file-delete-toggle',
+        badgeSelector:    '.delete-badge',
+        markedClass:      'reply-file-marked-for-deletion'
+    });
 
     // User permohonan files
-    setupFilePreview('permohonan_files', 'permohonan_files_preview', 'permohonan_files_preview_chips');
-});
+    setupDeleteToggle({
+        rowSelector:      '.user-file-item',
+        checkboxSelector: '.user-file-delete-checkbox',
+        buttonSelector:   '.user-file-delete-toggle',
+        badgeSelector:    '.delete-badge',
+        markedClass:      'user-file-marked-for-deletion'
+    });
 
-
-// FOR DELETE BUTTON (admin)
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.reply-file-item').forEach(function (row) {
-        const checkbox = row.querySelector('.reply-file-delete-checkbox');
-        const badge = row.querySelector('.delete-badge');
-        const button = row.querySelector('.reply-file-delete-toggle');
-        const icon = button ? button.querySelector('i') : null;
-
-        if (!button || !checkbox) {
-            return;
-        }
-
-        function syncVisual() {
-            const marked = checkbox.checked;
-
-            row.classList.toggle('reply-file-marked-for-deletion', marked);
-
-            if (badge) {
-                badge.style.display = marked ? 'inline-flex' : 'none';
-            }
-
-            if (icon) {
-                icon.classList.toggle('ri-delete-bin-line', !marked);
-                icon.classList.toggle('ri-delete-bin-fill', marked);
-            }
-
-            button.title = marked ? 'Batal tandai hapus' : 'Tandai untuk dihapus';
-        }
-
-        // when clicking trash icon
-        button.addEventListener('click', function () {
-            checkbox.checked = !checkbox.checked;
-            syncVisual();
-        });
-
-        // initialize on page load
-        if (checkbox.checked) {
-            syncVisual();
-        }
+    // Admin keberatan reply files
+    setupDeleteToggle({
+        rowSelector:      '.kb-reply-file-item',
+        checkboxSelector: '.kb-reply-file-delete-checkbox',
+        buttonSelector:   '.kb-reply-file-delete-toggle',
+        badgeSelector:    '.kb-delete-badge',
+        markedClass:      'kb-reply-file-marked-for-deletion'
     });
 });
-
-// FOR DELETE BUTTON (user permohonan files)
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.user-file-item').forEach(function (row) {
-        const checkbox = row.querySelector('.user-file-delete-checkbox');
-        const badge = row.querySelector('.delete-badge');
-        const button = row.querySelector('.user-file-delete-toggle');
-        const icon = button ? button.querySelector('i') : null;
-
-        if (!button || !checkbox) return;
-
-        function syncVisual() {
-            const marked = checkbox.checked;
-
-            row.classList.toggle('user-file-marked-for-deletion', marked);
-
-            if (badge) {
-                badge.style.display = marked ? 'inline-flex' : 'none';
-            }
-
-            if (icon) {
-                icon.classList.toggle('ri-delete-bin-line', !marked);
-                icon.classList.toggle('ri-delete-bin-fill', marked);
-            }
-
-            button.title = marked ? 'Batal tandai hapus' : 'Tandai untuk dihapus';
-        }
-
-        button.addEventListener('click', function () {
-            checkbox.checked = !checkbox.checked;
-            syncVisual();
-        });
-
-        if (checkbox.checked) {
-            syncVisual();
-        }
-    });
-});
-

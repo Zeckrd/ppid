@@ -174,126 +174,133 @@
                 <hr class="my-4">
 
                 {{-- File Permohonan --}}
-                <div class="mb-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="ri-file-text-line text-primary me-2"></i>
-                        <h6 class="mb-0 fw-bold">File Permohonan</h6>
-                    </div>
-                    @if($permohonan->files->count())
-                        <ul class="list-group mb-3">
-                            @foreach($permohonan->files as $file)
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center gap-3">
-                                        <div class="flex-grow-1 min-width-0">
-                                            <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
-                                                <i class="ri-file-line me-1"></i>
-                                                {{ $file->original_name }}
-                                            </div>
-                                            @if($file->size)
-                                                <div class="small text-muted">
-                                                    {{ number_format($file->size / 1024, 1) }} KB
+                <div class="row g-4 mb-4">
+                    {{-- File Permohonan (User uploads) --}}
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="ri-file-text-line text-primary me-2"></i>
+                                <h6 class="mb-0 fw-bold">File Permohonan</h6>
+                            </div>
+                            @if($permohonan->files->count())
+                                <ul class="list-group mb-3">
+                                    @foreach($permohonan->files as $file)
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                                <div class="flex-grow-1 min-width-0">
+                                                    <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                        <i class="ri-file-line me-1"></i>
+                                                        {{ $file->original_name }}
+                                                    </div>
+                                                    @if($file->size)
+                                                        <div class="small text-muted">
+                                                            {{ number_format($file->size / 1024, 1) }} KB
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            @endif
-                                        </div>
-                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                            {{-- Lihat (PDF only) --}}
-                                            @if($file->isPdf())
-                                                <a href="{{ route('user.permohonan.files.view', [$permohonan->id, $file->id]) }}"
-                                                target="_blank"
-                                                class="btn btn-sm btn-outline-secondary text-nowrap"
-                                                title="Lihat (buka di tab baru)">
-                                                    <i class="ri-eye-line"></i> Lihat
-                                                </a>
-                                            @else
-                                                <button type="button"
-                                                        class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
-                                                        title="Hanya dapat dilihat untuk file PDF"
-                                                        aria-disabled="true">
-                                                    <i class="ri-eye-off-line"></i> Lihat
-                                                </button>
-                                            @endif
+                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                    {{-- Lihat (PDF only) --}}
+                                                    @if($file->isPdf())
+                                                        <a href="{{ route('user.permohonan.files.view', [$permohonan->id, $file->id]) }}"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary text-nowrap"
+                                                        title="Lihat (buka di tab baru)">
+                                                            <i class="ri-eye-line"></i> Lihat
+                                                        </a>
+                                                    @else
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
+                                                                title="Hanya dapat dilihat untuk file PDF"
+                                                                aria-disabled="true">
+                                                            <i class="ri-eye-off-line"></i> Lihat
+                                                        </button>
+                                                    @endif
 
-                                            {{-- Download (all types) --}}
-                                            <a href="{{ route('user.permohonan.files.download', [$permohonan->id, $file->id]) }}"
-                                            class="btn btn-sm btn-outline-primary text-nowrap"
-                                            target="_blank"
-                                            title="Download">
-                                                <i class="ri-download-line me-1"></i> Download
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="text-center py-3 text-muted border rounded">
-                            <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
-                            <p class="small mb-0 mt-2">Tidak ada file</p>
-                        </div>
-                    @endif
-                </div>
-
-
-                {{-- File Balasan dari Admin --}}
-                <div class="mb-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="ri-mail-check-line text-success me-2"></i>
-                        <h6 class="mb-0 fw-bold">File Balasan</h6>
-                    </div>
-                    @if($permohonan->replyFiles->count())
-                        <ul class="list-group mb-3">
-                            @foreach($permohonan->replyFiles as $file)
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center gap-3">
-                                        <div class="flex-grow-1 min-width-0">
-                                            <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
-                                                <i class="ri-file-line me-1"></i>
-                                                {{ $file->original_name }}
-                                            </div>
-                                            @if($file->size)
-                                                <div class="small text-muted">
-                                                    {{ number_format($file->size / 1024, 1) }} KB
+                                                    {{-- Download (all types) --}}
+                                                    <a href="{{ route('user.permohonan.files.download', [$permohonan->id, $file->id]) }}"
+                                                    class="btn btn-sm btn-outline-primary text-nowrap"
+                                                    target="_blank"
+                                                    title="Download">
+                                                        <i class="ri-download-line me-1"></i> Download
+                                                    </a>
                                                 </div>
-                                            @endif
-                                        </div>
-                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                            {{-- Lihat (PDF only) --}}
-                                            @if($file->isPdf())
-                                                <a href="{{ route('user.permohonan.reply-files.view', [$permohonan->id, $file->id]) }}"
-                                                target="_blank"
-                                                class="btn btn-sm btn-outline-secondary text-nowrap"
-                                                title="Lihat (buka di tab baru)">
-                                                    <i class="ri-eye-line"></i> Lihat
-                                                </a>
-                                            @else
-                                                <button type="button"
-                                                        class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
-                                                        title="Hanya dapat dilihat untuk file PDF"
-                                                        aria-disabled="true">
-                                                    <i class="ri-eye-off-line"></i> Lihat
-                                                </button>
-                                            @endif
-
-                                            {{-- Download (all types) --}}
-                                            <a href="{{ route('user.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
-                                            class="btn btn-sm btn-outline-success text-nowrap"
-                                            target="_blank"
-                                            title="Download">
-                                                <i class="ri-download-line me-1"></i> Download
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="text-center py-3 text-muted border rounded">
-                            <i class="ri-information-line" style="font-size: 2rem; opacity: 0.3;"></i>
-                            <p class="small mb-0 mt-2">Belum ada file balasan dari admin.</p>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <div class="text-center py-3 text-muted border rounded">
+                                    <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                    <p class="small mb-0 mt-2">Tidak ada file</p>
+                                </div>
+                            @endif
                         </div>
-                    @endif
-                </div>
+                    </div>
 
+                    {{-- File Balasan dari Admin --}}
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="ri-mail-check-line text-success me-2"></i>
+                                <h6 class="mb-0 fw-bold">File Balasan</h6>
+                            </div>
+                            @if($permohonan->replyFiles->count())
+                                <ul class="list-group mb-3">
+                                    @foreach($permohonan->replyFiles as $file)
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                                <div class="flex-grow-1 min-width-0">
+                                                    <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                        <i class="ri-file-line me-1"></i>
+                                                        {{ $file->original_name }}
+                                                    </div>
+                                                    @if($file->size)
+                                                        <div class="small text-muted">
+                                                            {{ number_format($file->size / 1024, 1) }} KB
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                    {{-- Lihat (PDF only) --}}
+                                                    @if($file->isPdf())
+                                                        <a href="{{ route('user.permohonan.reply-files.view', [$permohonan->id, $file->id]) }}"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary text-nowrap"
+                                                        title="Lihat (buka di tab baru)">
+                                                            <i class="ri-eye-line"></i> Lihat
+                                                        </a>
+                                                    @else
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
+                                                                title="Hanya dapat dilihat untuk file PDF"
+                                                                aria-disabled="true">
+                                                            <i class="ri-eye-off-line"></i> Lihat
+                                                        </button>
+                                                    @endif
+
+                                                    {{-- Download (all types) --}}
+                                                    <a href="{{ route('user.permohonan.reply-files.download', [$permohonan->id, $file->id]) }}"
+                                                    class="btn btn-sm btn-outline-success text-nowrap"
+                                                    target="_blank"
+                                                    title="Download">
+                                                        <i class="ri-download-line me-1"></i> Download
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <div class="text-center py-3 text-muted border rounded">
+                                    <i class="ri-information-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                    <p class="small mb-0 mt-2">Belum ada file balasan dari admin.</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Keberatan Section -->
         <div class="card shadow-sm border-0 mt-4">
@@ -330,83 +337,162 @@
 
                     <hr class="my-3">
 
-                {{-- Keterangan User --}}
-                <div class="mb-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="ri-message-3-line text-primary me-2"></i>
-                        <h6 class="mb-0 fw-bold">Keterangan User</h6>
-                    </div>
-                    <div class="p-3 rounded bg-light border">
-                        <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_user }}</p>
-                    </div>
-                </div>
-
-                {{-- Keterangan Petugas --}}
-                @if($permohonan->keterangan_petugas)
+                    {{-- Keterangan User --}}
                     <div class="mb-4">
                         <div class="d-flex align-items-center mb-3">
-                            <i class="ri-admin-line text-info me-2"></i>
-                            <h6 class="mb-0 fw-bold">Keterangan Petugas</h6>
+                            <i class="ri-message-3-line text-primary me-2"></i>
+                            <h6 class="mb-0 fw-bold">Keterangan User</h6>
                         </div>
-                        <div class="p-3 rounded border" style="background-color: #e7f3ff;">
-                            <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_petugas }}</p>
+                        <div class="p-3 rounded bg-light border">
+                            <p class="mb-0" style="white-space: pre-wrap;">{{ $permohonan->keberatan->keterangan_user }}</p>
                         </div>
                     </div>
-                @endif
+
+                    {{-- Keterangan Petugas (Keberatan) --}}
+                    @if($permohonan->keberatan->keterangan_petugas)
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="ri-admin-line text-info me-2"></i>
+                                <h6 class="mb-0 fw-bold">Keterangan Petugas</h6>
+                            </div>
+                            <div class="p-3 rounded border" style="background-color: #e7f3ff;">
+                                <p class="mb-0" style="white-space: pre-wrap;">
+                                    {{ $permohonan->keberatan->keterangan_petugas }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
 
                     <hr class="my-4">
 
-                    {{-- Files Section --}}
-                    <div class="row g-4">
-                        {{-- File Keberatan (user upload) --}}
-                        <div class="col-md-6">
-                            <div class="card h-100 border">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="ri-file-text-line text-primary me-2" style="font-size: 1.25rem;"></i>
-                                        <h6 class="mb-0 fw-bold">File Keberatan</h6>
-                                    </div>
-
-                                    @if($permohonan->keberatan->keberatan_file)
-                                        <a href="{{ Storage::url($permohonan->keberatan->keberatan_file) }}" 
-                                        class="btn btn-outline-primary w-100"
-                                        target="_blank">
-                                            <i class="ri-download-line me-1"></i> Download File Keberatan
-                                        </a>
-                                    @else
-                                        <div class="text-center py-3 text-muted">
-                                            <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
-                                            <p class="small mb-0 mt-2">Tidak ada file</p>
-                                        </div>
-                                    @endif
-                                </div>
+                {{-- Files Section --}}
+                <div class="row g-4 mb-4">
+                    {{-- File Keberatan (user uploads) --}}
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="ri-file-text-line text-primary me-2"></i>
+                                <h6 class="mb-0 fw-bold">File Keberatan</h6>
                             </div>
-                        </div>
-                        {{-- File Balasan Keberatan (admin) --}}
-                        <div class="col-md-6">
-                            <div class="card h-100 border">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="ri-file-text-line text-success me-2" style="font-size: 1.25rem;"></i>
-                                        <h6 class="mb-0 fw-bold">File Balasan Keberatan</h6>
-                                    </div>
+                            @if($permohonan->keberatan->files->count())
+                                <ul class="list-group mb-3">
+                                    @foreach($permohonan->keberatan->files as $file)
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                                <div class="flex-grow-1 min-width-0">
+                                                    <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                        <i class="ri-file-line me-1"></i>
+                                                        {{ $file->original_name }}
+                                                    </div>
+                                                    @if($file->size)
+                                                        <div class="small text-muted">
+                                                            {{ number_format($file->size / 1024, 1) }} KB
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                    {{-- Lihat (PDF only) --}}
+                                                    @if($file->isPdf())
+                                                        <a href="{{ route('user.keberatan.files.view', [$permohonan, $permohonan->keberatan, $file]) }}"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary text-nowrap"
+                                                        title="Lihat (buka di tab baru)">
+                                                            <i class="ri-eye-line"></i> Lihat
+                                                        </a>
+                                                    @else
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
+                                                                title="Hanya dapat dilihat untuk file PDF"
+                                                                aria-disabled="true">
+                                                            <i class="ri-eye-off-line"></i> Lihat
+                                                        </button>
+                                                    @endif
 
-                                    @if($permohonan->keberatan->reply_file)
-                                        <a href="{{ route('user.keberatan.reply-file.download', [$permohonan->id, $permohonan->keberatan->id]) }}" 
-                                        class="btn btn-outline-success w-100"
-                                        target="_blank">
-                                            <i class="ri-download-line me-1"></i> Download File Balasan Keberatan
-                                        </a>
-                                    @else
-                                        <div class="text-center py-3 text-muted">
-                                            <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
-                                            <p class="small mb-0 mt-2">Belum tersedia</p>
-                                        </div>
-                                    @endif
+                                                    {{-- Download (all types) --}}
+                                                    <a href="{{ route('user.keberatan.files.download', [$permohonan, $permohonan->keberatan, $file]) }}"
+                                                    class="btn btn-sm btn-outline-primary text-nowrap"
+                                                    target="_blank"
+                                                    title="Download">
+                                                        <i class="ri-download-line me-1"></i> Download
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <div class="text-center py-3 text-muted border rounded">
+                                    <i class="ri-file-forbid-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                    <p class="small mb-0 mt-2">Belum ada file keberatan diunggah</p>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
+
+                    {{-- File Balasan Keberatan (admin reply) --}}
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="ri-mail-check-line text-success me-2"></i>
+                                <h6 class="mb-0 fw-bold">File Balasan Keberatan</h6>
+                            </div>
+
+                            @if($permohonan->keberatan->replyFiles->count())
+                                <ul class="list-group mb-3">
+                                    @foreach($permohonan->keberatan->replyFiles as $file)
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center gap-3">
+                                                <div class="flex-grow-1 min-width-0">
+                                                    <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
+                                                        <i class="ri-file-line me-1"></i>
+                                                        {{ $file->original_name }}
+                                                    </div>
+                                                    @if($file->size)
+                                                        <div class="small text-muted">
+                                                            {{ number_format($file->size / 1024, 1) }} KB
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                    {{-- Lihat (PDF only) --}}
+                                                    @if($file->isPdf())
+                                                        <a href="{{ route('user.keberatan.reply_files.view', [$permohonan, $permohonan->keberatan, $file]) }}"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary text-nowrap"
+                                                        title="Lihat (buka di tab baru)">
+                                                            <i class="ri-eye-line"></i> Lihat
+                                                        </a>
+                                                    @else
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-secondary opacity-50 text-nowrap"
+                                                                title="Hanya dapat dilihat untuk file PDF"
+                                                                aria-disabled="true">
+                                                            <i class="ri-eye-off-line"></i> Lihat
+                                                        </button>
+                                                    @endif
+
+                                                    {{-- Download (all types) --}}
+                                                    <a href="{{ route('user.keberatan.reply_files.download', [$permohonan, $permohonan->keberatan, $file]) }}"
+                                                    class="btn btn-sm btn-outline-success text-nowrap"
+                                                    target="_blank"
+                                                    title="Download">
+                                                        <i class="ri-download-line me-1"></i> Download
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <div class="text-center py-3 text-muted border rounded">
+                                    <i class="ri-information-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                    <p class="small mb-0 mt-2">Belum ada file balasan keberatan.</p>
+                                </div>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
                 @else
                     @if(in_array($permohonan->status, ['Perlu Diperbaiki', 'Diterima', 'Ditolak']))
                         <div class="alert alert-info border-0 d-flex flex-wrap align-items-center justify-content-between py-3 px-4 mb-0">
@@ -419,8 +505,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ route('user.keberatan.create', $permohonan->id) }}" 
-                            class="btn btn-danger ms-md-3 mt-2 mt-md-0">
+                            <a href="{{ route('user.keberatan.create', $permohonan->id) }}"
+                               class="btn btn-danger ms-md-3 mt-2 mt-md-0">
                                 <i class="ri-add-line me-1"></i> Buat Keberatan
                             </a>
                         </div>
@@ -434,11 +520,11 @@
             </div>
         </div>
     </div>
+
     @push('styles')
         <link rel="stylesheet" href="{{ asset('css/pages/permohonan-show.css') }}">
     @endpush
     @push('scripts')
         <script src="{{ asset('js/permohonan-files.js') }}"></script>
     @endpush
-
 </x-layout>

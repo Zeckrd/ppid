@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Permohonan;
 use App\Models\Keberatan;
+use App\Models\KeberatanFile;
+use App\Models\KeberatanReplyFile;
 use Illuminate\Support\Facades\Storage;
 
 class KeberatanController extends Controller
@@ -14,22 +17,42 @@ class KeberatanController extends Controller
         $validated = $request->validate([
             'status'             => 'required|in:Pending,Diproses,Diterima,Ditolak',
             'keterangan_petugas' => 'nullable|string|max:1000',
-            // ADMIN reply file
-            'keberatan_file'     => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+
+            'keberatan_reply_files'   => 'nullable|array|max:10',
+            'keberatan_reply_files.*' => 'file|mimes:pdf,doc,docx|max:5120',
+
+            'delete_keberatan_reply_file_ids'   => 'nullable|array',
+            'delete_keberatan_reply_file_ids.*' => 'integer|exists:keberatan_reply_files,id',
         ]);
 
-        // Handle reply file upload
-        if ($request->hasFile('keberatan_file')) {
-            // Delete old file (from local disk)
-            if ($keberatan->reply_file && Storage::disk('local')->exists($keberatan->reply_file)) {
-                Storage::disk('local')->delete($keberatan->reply_file);
+        // handle new reply files
+        /** @var \Illuminate\Http\UploadedFile[] $uploadedReplyFiles */
+        $uploadedReplyFiles = $request->file('keberatan_reply_files', []);
+
+        foreach ($uploadedReplyFiles as $uploadedFile) {
+            $path = $uploadedFile->store('private/keberatan_reply', 'local');
+
+            $keberatan->replyFiles()->create([
+                'path'          => $path,
+                'original_name' => $uploadedFile->getClientOriginalName(),
+                'size'          => $uploadedFile->getSize(),
+                'mime_type'     => $uploadedFile->getClientMimeType(),
+            ]);
+        }
+
+        // handle delete selected reply files
+        $deleteIds = $validated['delete_keberatan_reply_file_ids'] ?? [];
+        if (! empty($deleteIds)) {
+            $filesToDelete = KeberatanReplyFile::whereIn('id', $deleteIds)
+                ->where('keberatan_id', $keberatan->id)
+                ->get();
+
+            foreach ($filesToDelete as $file) {
+                if (Storage::disk('local')->exists($file->path)) {
+                    Storage::disk('local')->delete($file->path);
+                }
+                $file->delete();
             }
-
-            // Store new reply file on the local disk (private)
-            // will return something like "keberatan/replies/xxxxx.pdf"
-            $path = $request->file('keberatan_file')->store('keberatan/replies', 'local');
-
-            $keberatan->reply_file = $path;
         }
 
         $keberatan->status = $validated['status'];
@@ -39,22 +62,83 @@ class KeberatanController extends Controller
         return back()->with('success', 'Keberatan berhasil diperbarui.');
     }
 
-    public function downloadReplyFile(\App\Models\Permohonan $permohonan, Keberatan $keberatan)
+    public function downloadFile(Permohonan $permohonan, Keberatan $keberatan, KeberatanFile $file)
     {
         if ($keberatan->permohonan_id !== $permohonan->id) {
             abort(404);
         }
 
-        if (! $keberatan->reply_file || ! Storage::disk('local')->exists($keberatan->reply_file)) {
+        if ($file->keberatan_id !== $keberatan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404, 'File keberatan tidak ditemukan.');
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+        $extension    = pathinfo($absolutePath, PATHINFO_EXTENSION);
+        $downloadName = $file->original_name ?? ('keberatan-' . $file->id . '.' . $extension);
+
+        return response()->download($absolutePath, $downloadName);
+    }
+
+    public function downloadReplyFile(Permohonan $permohonan, Keberatan $keberatan, KeberatanReplyFile $file
+    ) {
+        if ($keberatan->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if ($file->keberatan_id !== $keberatan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
             abort(404, 'File balasan keberatan tidak ditemukan.');
         }
 
-        $absolutePath = Storage::disk('local')->path($keberatan->reply_file);
-
-        // filename for download
+        $absolutePath = Storage::disk('local')->path($file->path);
         $extension    = pathinfo($absolutePath, PATHINFO_EXTENSION);
-        $downloadName = 'balasan-keberatan-' . $keberatan->id . '.' . $extension;
+        $downloadName = $file->original_name ?? ('balasan-keberatan-' . $file->id . '.' . $extension);
 
         return response()->download($absolutePath, $downloadName);
+    }
+
+    public function viewFile(Permohonan $permohonan, Keberatan $keberatan, KeberatanFile $file)
+    {
+        if ($keberatan->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if ($file->keberatan_id !== $keberatan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404, 'File keberatan tidak ditemukan.');
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        return response()->file($absolutePath);
+    }
+
+    public function viewReplyFile(Permohonan $permohonan, Keberatan $keberatan, KeberatanReplyFile $file
+    ) {
+        if ($keberatan->permohonan_id !== $permohonan->id) {
+            abort(404);
+        }
+
+        if ($file->keberatan_id !== $keberatan->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('local')->exists($file->path)) {
+            abort(404, 'File balasan keberatan tidak ditemukan.');
+        }
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+
+        return response()->file($absolutePath);
     }
 }

@@ -16,4 +16,14 @@ class Keberatan extends Model
     {
         return $this->belongsTo(Permohonan::class);
     }
+
+        public function files()
+    {
+        return $this->hasMany(KeberatanFile::class);
+    }
+
+    public function replyFiles()
+    {
+        return $this->hasMany(KeberatanReplyFile::class);
+    }
 }
