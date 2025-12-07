@@ -23,16 +23,16 @@ use App\Http\Controllers\PhoneVerificationController;
 use App\Http\Controllers\Auth\PasswordResetController;
 
 // Public Routes
-Route::view('/', 'user.home');
-Route::view('/profil', 'user.profil');
-Route::view('/tugas-dan-fungsi', 'user.tugas-dan-fungsi');
-Route::view('/surat-keterangan', 'user.surat-keterangan');
-Route::view('/sakip', 'user.sakip');
-Route::view('/standar-layanan', 'user.standar-layanan');
-Route::view('/prosedur-layanan', 'user.prosedur-layanan');
-Route::view('/informasi-berkala', 'user.informasi-berkala');
-Route::view('/informasi-tersedia-setiap-saat', 'user.informasi-tersedia-setiap-saat');
-Route::view('/informasi-dikecualikan', 'user.informasi-dikecualikan');
+Route::view('/', 'pages.home');
+Route::view('/profil', 'pages.profil');
+Route::view('/tugas-dan-fungsi', 'pages.tugas-dan-fungsi');
+Route::view('/surat-keterangan', 'pages.surat-keterangan');
+Route::view('/sakip', 'pages.sakip');
+Route::view('/standar-layanan', 'pages.standar-layanan');
+Route::view('/prosedur-layanan', 'pages.prosedur-layanan');
+Route::view('/informasi-berkala', 'pages.informasi-berkala');
+Route::view('/informasi-tersedia-setiap-saat', 'pages.informasi-tersedia-setiap-saat');
+Route::view('/informasi-dikecualikan', 'pages.informasi-dikecualikan');
 
 // UNVERIFIED user routes and basic profile change
 Route::middleware(['auth'])
