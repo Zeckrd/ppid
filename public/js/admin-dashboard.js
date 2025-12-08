@@ -150,3 +150,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// Time filter
+document.addEventListener('DOMContentLoaded', function () {
+    const yearSelect  = document.getElementById('year');
+    const monthSelect = document.getElementById('month');
+
+    if (!yearSelect || !monthSelect) return;
+
+    function updateMonthState() {
+        if (yearSelect.value === 'semua') {
+            monthSelect.value = 'semua';
+            monthSelect.setAttribute('disabled', 'disabled');
+        } else {
+            monthSelect.removeAttribute('disabled');
+        }
+    }
+
+    updateMonthState();
+    yearSelect.addEventListener('change', updateMonthState);
+});

@@ -39,9 +39,7 @@ class PermohonanController extends Controller
         return view('admin.permohonan.show', compact('permohonan'));
     }
 
-    /**
-     * Update permohonan + keberatan + notif (status, petugas notes, reply file).
-     */
+    //Update permohonan + keberatan + notif (status, petugas notes, reply file)
     public function update(Request $request, Permohonan $permohonan, WablasService $wablas)
     {
         $validated = $request->validate([
@@ -220,27 +218,37 @@ class PermohonanController extends Controller
 
     public function search(Request $request)
     {
-        $keyword  = $request->input('q');
-        $status   = $request->input('status');
-        $type    = $request->input('permohonan_type');
+        $keyword   = $request->input('q');
+        $status    = $request->input('status');
+        $type      = $request->input('permohonan_type');
         $keberatan = $request->input('has_keberatan');
-        
+        $attention = $request->boolean('attention');
+
         $query = Permohonan::with(['user', 'keberatan']);
 
         // Keyword search
         if ($keyword) {
             $query->where(function ($q) use ($keyword) {
                 $q->where('keterangan_user', 'like', "%{$keyword}%")
-                ->orWhere('keterangan_petugas', 'like', "%{$keyword}%")
-                ->orWhereHas('user', function ($userQuery) use ($keyword) {
-                    $userQuery->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('keterangan_petugas', 'like', "%{$keyword}%")
+                    ->orWhereHas('user', function ($userQuery) use ($keyword) {
+                        $userQuery->where('name', 'like', "%{$keyword}%")
                                 ->orWhere('email', 'like', "%{$keyword}%");
-                });
+                    });
             });
         }
 
-        // Filter by status
-        if ($status && $status !== 'Semua') {
+        // Attention (needs admin attention)
+        $attentionStatuses = [
+            'Menunggu Verifikasi Berkas Dari Petugas',
+            'Sedang Diverifikasi petugas',
+            'Permohonan Sedang Diproses',
+        ];
+
+        // Filter by "attention" or by single status
+        if ($attention) {
+            $query->whereIn('status', $attentionStatuses);
+        } elseif ($status && $status !== 'Semua') {
             $query->where('status', $status);
         }
 
@@ -257,7 +265,7 @@ class PermohonanController extends Controller
             $query->where('permohonan_type', $type);
         }
 
-        // Filter by keberatan existence
+        // Filter by keberatan exist
         if ($keberatan === 'ya') {
             $query->whereHas('keberatan');
         } elseif ($keberatan === 'tidak') {
@@ -265,11 +273,12 @@ class PermohonanController extends Controller
         }
 
         $permohonans = $query->orderBy('updated_at', 'desc')
-                            ->paginate(10)
-                            ->appends($request->all());
+            ->paginate(10)
+            ->appends($request->all());
 
         return view('admin.permohonan.search', compact('permohonans', 'keyword'));
     }
+
 
     public function downloadFile(Permohonan $permohonan, PermohonanFile $file)
     {
@@ -310,9 +319,7 @@ class PermohonanController extends Controller
 
         foreach ($files as $file) {
             if (Storage::disk('local')->exists($file->path)) {
-                // Absolute path via Storage so it's consistent with your single download
                 $absolutePath = Storage::disk('local')->path($file->path);
-
                 // Use original_name inside the zip
                 $zip->addFile($absolutePath, $file->original_name);
             }

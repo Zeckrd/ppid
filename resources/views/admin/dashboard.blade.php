@@ -1,34 +1,59 @@
 <x-layout>
     <div class="container py-4 pt-5 mt-4">
         {{-- Filter Form --}}
-        <form method="GET" action="{{ route('admin.dashboard.index') }}" 
-        class="mb-4">
-            <div class="row g-2 justify-content-end">
-                <div class="col-auto">
-                    <label for="year" class="visually-hidden">Year</label>
-                    <select name="year" id="year" class="form-select form-select-sm">
-                        @for($y = date('Y'); $y >= date('Y') - 5; $y--)
-                            <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
-                        @endfor
-                    </select>
-                </div>
+        <form method="GET" action="{{ route('admin.dashboard.index') }}" class="mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-end">
+                        {{-- year + month + buttons --}}
+                        <div class="d-flex align-items-end gap-2 flex-nowrap">
 
-                <div class="col-auto">
-                    <label for="month" class="visually-hidden">Month</label>
-                    <select name="month" id="month" class="form-select form-select-sm">
-                        <option value="all" {{ $month === 'all' ? 'selected' : '' }}>Semua Bulan</option>
-                        @foreach(range(1, 12) as $m)
-                            <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
-                                {{ date('M', mktime(0,0,0,$m,1)) }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                            {{-- Year select --}}
+                            <div class="input-group input-group-sm" style="width: auto;">
+                                <span class="input-group-text" id="label-year">
+                                    <i class="ri-time-line"></i>
+                                </span>
+                                <select name="year" id="year" class="form-select form-select-sm" aria-labelledby="label-year">
+                                    <option value="semua" {{ $year === 'semua' ? 'selected' : '' }}>Semua Tahun</option>
+                                    @for($y = date('Y'); $y >= date('Y') - 5; $y--)
+                                        <option value="{{ $y }}" {{ (string)$year === (string)$y ? 'selected' : '' }}>
+                                            {{ $y }}
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
 
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-sm btn-primary d-flex align-items-center">
-                        <i class="ri-filter-3-line me-1"></i> Filter
-                    </button>
+                            {{-- Month select --}}
+                            <div class="input-group input-group-sm" style="width: auto;">
+                                <span class="input-group-text" id="label-month">
+                                    <i class="ri-calendar-line"></i>
+                                </span>
+                                <select name="month" id="month" class="form-select form-select-sm"
+                                        aria-labelledby="label-month"
+                                        {{ $year === 'semua' ? 'disabled' : '' }}>
+                                    <option value="semua" {{ $month === 'semua' ? 'selected' : '' }}>Semua Bulan</option>
+                                    @foreach(range(1, 12) as $m)
+                                        <option value="{{ $m }}" {{ (int)$month === $m ? 'selected' : '' }}>
+                                            {{ date('M', mktime(0, 0, 0, $m, 1)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Apply --}}
+                            <button type="submit" class="btn btn-sm btn-primary d-flex align-items-center">
+                                <i class="ri-filter-3-line me-1"></i> Terapkan
+                            </button>
+
+                            {{-- Reset --}}
+                            @if ($year)
+                                <a href="{{ route('admin.dashboard.index') }}"
+                                class="btn btn-sm btn-danger d-flex align-items-center">
+                                    <i class="ri-refresh-line me-1"></i> Reset
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -36,53 +61,80 @@
         {{-- Summary Cards --}}
         <div class="row g-3 mb-4">
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm bg-primary text-white">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-semibold mb-1">Total User</h6>
-                            <h2 class="fw-bold mb-0">{{ $totalUsers }}</h2>
+                        <a href="{{ route('admin.permohonan.search', [
+                        'date_from' => $dateFrom,
+                        'date_to'   => $dateTo,
+                    ]) }}"
+                class="text-decoration-none">
+                    <div class="card border-0 shadow-sm bg-primary text-white">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="fw-semibold mb-1">Total User</h6>
+                                <h2 class="fw-bold mb-0">{{ $totalUsers }}</h2>
+                            </div>
+                            <i class="ri-user-3-line display-5 opacity-75"></i>
                         </div>
-                        <i class="ri-user-3-line display-5 opacity-75"></i>
                     </div>
-                </div>
+                </a>
             </div>
 
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm bg-info text-white">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-semibold mb-1">Sedang Berlangsung</h6>
-                            <h2 class="fw-bold mb-0">{{ $totalActive }}</h2>
+                <a href="{{ route('admin.permohonan.search', [
+                        'date_from' => $dateFrom,
+                        'date_to'   => $dateTo,
+                        'attention' => 1,
+                    ]) }}"
+                class="text-decoration-none">
+                    <div class="card border-0 shadow-sm bg-info text-white">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="fw-semibold mb-1 text-white">Sedang Berlangsung</h6>
+                                <h2 class="fw-bold mb-0 text-white">{{ $totalActive }}</h2>
+                            </div>
+                            <i class="ri-timer-2-line display-5 opacity-75"></i>
                         </div>
-                        <i class="ri-timer-2-line display-5 opacity-75"></i>
                     </div>
-                </div>
+                </a>
             </div>
+
 
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm bg-success text-white">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-semibold mb-1">Total Permohonan</h6>
-                            <h2 class="fw-bold mb-0">{{ $totalPermohonan }}</h2>
+                <a href="{{ route('admin.permohonan.search', [
+                        'date_from' => $dateFrom,
+                        'date_to'   => $dateTo,
+                    ]) }}"
+                class="text-decoration-none">
+                    <div class="card border-0 shadow-sm bg-success text-white">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="fw-semibold mb-1 text-white">Total Permohonan</h6>
+                                <h2 class="fw-bold mb-0 text-white">{{ $totalPermohonan }}</h2>
+                            </div>
+                            <i class="ri-file-list-3-line display-5 opacity-75"></i>
                         </div>
-                        <i class="ri-file-list-3-line display-5 opacity-75"></i>
                     </div>
-                </div>
+                </a>
             </div>
+
 
             <div class="col-md-3">
-                <div class="card border-0 shadow-sm bg-warning text-dark">
-                    <div class="card-body d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="fw-semibold mb-1">Total Keberatan</h6>
-                            <h2 class="fw-bold mb-0">{{ $totalKeberatan }}</h2>
+                <a href="{{ route('admin.permohonan.search', [
+                        'date_from'     => $dateFrom,
+                        'date_to'       => $dateTo,
+                        'has_keberatan' => 'ya',
+                    ]) }}"
+                class="text-decoration-none">
+                    <div class="card border-0 shadow-sm bg-warning text-dark">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="fw-semibold mb-1">Total Keberatan</h6>
+                                <h2 class="fw-bold mb-0">{{ $totalKeberatan }}</h2>
+                            </div>
+                            <i class="ri-error-warning-line display-5 opacity-75"></i>
                         </div>
-                        <i class="ri-error-warning-line display-5 opacity-75"></i>
                     </div>
-                </div>
+                </a>
             </div>
-
         </div>
 
         {{-- Charts --}}
@@ -103,7 +155,7 @@
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white fw-bold d-flex align-items-center">
-                        @if($month === 'all')
+                        @if($month === 'semua')
                             <i class="ri-line-chart-line me-2 text-success"></i> Tren Pengajuan Bulanan ({{ $year }})
                         @else
                             <i class="ri-calendar-event-line me-2 text-success"></i> Tren Pengajuan Harian — {{ date('F', mktime(0,0,0,$month,1)) }} {{ $year }}
@@ -146,7 +198,8 @@
                                     </small>
                                 </div>
                                 <a href="{{ route('admin.permohonan.show', $p->id) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="ri-eye-line me-1"></i> Lihat
+                                    Lihat Detail
+                                    <i class="ri-arrow-right-line ms-1"></i>
                                 </a>
                             </li>
                         @endforeach
@@ -171,7 +224,7 @@
                 statusLabels: {!! json_encode($statuses) !!},
                 statusData: {!! json_encode(array_map(fn($s) => $statusCounts[$s] ?? 0, $statuses)) !!},
 
-                isMonthly: "{{ $month }}" === "all",
+                isMonthly: "{{ $month }}" === "semua",
                 monthlyLabels: {!! json_encode($monthlyData->pluck('monthLabel')) !!},
                 monthlyPermohonan: {!! json_encode($monthlyData->pluck('permohonan')) !!},
                 monthlyKeberatan: {!! json_encode($monthlyData->pluck('keberatan')) !!},
