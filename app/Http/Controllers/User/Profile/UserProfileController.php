@@ -49,72 +49,71 @@ class UserProfileController extends Controller
      */
     public function updatePhone(Request $request)
     {
-
         $user = Auth::user();
 
+        // Normalize phone BEFORE compare + validation
+        $newPhoneRaw = $request->input('phone', '');
+        $newPhone = preg_replace('/[^0-9]/', '', $newPhoneRaw);
 
-        $rules = [
-            'current_password' => ['required', 'current_password'],
-            'phone' => ['required', 'string', 'max:20'],
-        ];
+        if (str_starts_with($newPhone, '0')) {
+            $newPhone = '62' . substr($newPhone, 1);
+        }
 
-        $newPhone = $request->input('phone');
-        $oldPhone = $user->phone;
+        $request->merge(['phone' => $newPhone]);
 
-        $isSamePhone = $newPhone === $oldPhone;
+        $oldPhone   = $user->phone;
+        $isSamePhone = ($newPhone === $oldPhone);
         $isVerified  = !is_null($user->phone_verified_at);
 
-        // enforce unique if the phone is different
+        // rules (unique only if different)
+        $rules = [
+            'current_password' => ['required', 'current_password'],
+            'phone'            => ['required', 'string', 'max:20'],
+        ];
+
         if (!$isSamePhone) {
             $rules['phone'][] = Rule::unique('users', 'phone')->ignore($user->id);
         }
 
-        // validation
+        // Validate
         $validated = $request->validate($rules, [
             'current_password.current_password' => 'Password saat ini tidak sesuai.',
             'phone.unique' => 'Nomor WhatsApp ini sudah digunakan oleh pengguna lain.',
         ]);
 
-        // in case validation trimmed/normalized
+        // Use validated normalized phone
         $newPhone = $validated['phone'];
-        $isSamePhone = $newPhone === $oldPhone;
+        $isSamePhone = ($newPhone === $oldPhone);
 
-        // ============================
+        // 
         // VERIFIED user
-        // ============================
+        // 
         if ($isVerified) {
-
-            // Verified + same phone = show error, do NOT send anything
             if ($isSamePhone) {
                 return back()->with('error', 'Nomor WhatsApp Anda sudah terverifikasi dan tidak berubah.');
             }
 
-            // Verified + different phone
-            //     = update phone, reset verification, send new link (with cooldown)
             $user->phone = $newPhone;
-            $user->phone_verified_at = null; // force re-verification
+            $user->phone_verified_at = null;
             $user->save();
 
-            // handle 120s cooldown, token creation, and sending WA
             return app(PhoneVerificationController::class)->send($request);
         }
 
-        // ============================
+        // 
         // UNVERIFIED user
-        // ============================
-
-        // Unverified + same phone = just (re)send verification
+        // 
         if ($isSamePhone) {
             return app(PhoneVerificationController::class)->send($request);
         }
 
-        // Unverified + different phone
-        //     = update phone, keep unverified, send new link
         $user->phone = $newPhone;
-        $user->phone_verified_at = null; // stays unverified (explicit)
+        $user->phone_verified_at = null;
         $user->save();
+
         return app(PhoneVerificationController::class)->send($request);
     }
+
 
 
 

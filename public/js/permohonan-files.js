@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     setupFileValidation('permohonan_files', 'permohonan_files_error', 10);           // user permohonan
+        setupFileValidation('keberatan_files', 'keberatan_files_error', 10);           // user permohonan
     setupFileValidation('reply_files', 'reply_files_error', 10);                     // admin permohonan balasan
     setupFileValidation('keberatan_reply_files', 'keberatan_reply_files_error', 10); // admin keberatan balasan
 
@@ -126,8 +127,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    setupFilePreview('reply_files', 'reply_files_preview', 'reply_files_preview_chips');                       // admin permohonan
     setupFilePreview('permohonan_files', 'permohonan_files_preview', 'permohonan_files_preview_chips');       // user permohonan
+    setupFilePreview('keberatan_files', 'keberatan_files_preview', 'keberatan_files_preview_chips');       // user permohonan
+    setupFilePreview('reply_files', 'reply_files_preview', 'reply_files_preview_chips');                       // admin permohonan
     setupFilePreview('keberatan_reply_files', 'keberatan_reply_files_preview', 'keberatan_reply_files_preview_chips'); // admin keberatan
 
 

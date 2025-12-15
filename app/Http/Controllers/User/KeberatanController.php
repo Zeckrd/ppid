@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Keberatan;
 use App\Models\Permohonan;
 use App\Models\KeberatanFile;
@@ -11,6 +12,8 @@ use App\Services\WhatsAppNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AdminKeberatanCreated;
 
 class KeberatanController extends Controller
 {
@@ -72,8 +75,8 @@ class KeberatanController extends Controller
         ]);
 
         // WhatsApp notification on keberatan created
-        app(WhatsAppNotificationService::class)
-            ->notifyKeberatanCreated($keberatan);
+        $admins = User::admins()->get();
+        Notification::send($admins, new AdminKeberatanCreated($keberatan));
 
         return redirect()
             ->route('user.permohonan.show', $permohonan)

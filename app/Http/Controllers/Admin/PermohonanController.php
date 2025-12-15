@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StatusUpdateMail;
+use App\Notifications\PermohonanStatusUpdated;
 use App\Services\WablasService;
 use Illuminate\Support\Arr;
 use ZipArchive;
@@ -183,31 +184,14 @@ class PermohonanController extends Controller
             Arr::only($validated, ['status', 'keterangan_petugas'])
         );
 
-        // Build notification message
-        $message = "Status Permohonan Anda telah diperbarui menjadi: *{$permohonan->status}*.\n";
+        // Notification
+        $channels = array_values(array_filter([
+            $request->boolean('notify_whatsapp') ? 'wablas' : null,
+            $request->boolean('notify_email')    ? 'mail'   : null,
+        ]));
 
-        if ($keberatan) {
-            $message .= "Status Keberatan: {$keberatan->status}\n";
-
-            if ($keberatan->keterangan_petugas) {
-                $message .= "Keterangan Petugas (Keberatan): {$keberatan->keterangan_petugas}\n";
-            }
-        }
-
-        if ($permohonan->keterangan_petugas) {
-            $message .= "Keterangan Petugas (Permohonan): {$permohonan->keterangan_petugas}\n";
-        }
-
-        $message .= "\nTerima kasih telah menggunakan layanan kami.";
-
-        // send WhatsApp notification
-        if ($request->boolean('notify_whatsapp')) {
-            $wablas->sendMessage($permohonan->user->phone, $message);
-        }
-
-        // send Email notification
-        if ($request->boolean('notify_email')) {
-            Mail::to($permohonan->user->email)->send(new StatusUpdateMail($permohonan, $message));
+        if (!empty($channels)) {
+            $permohonan->user->notify(new PermohonanStatusUpdated($permohonan, $channels));
         }
 
         return redirect()

@@ -1,9 +1,13 @@
+@php
+  $detailUrl = route('user.permohonan.show', $permohonan->id, true);
+@endphp
+
 <!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembaruan Status Permohonan</title>
+    <title>Pembaruan Status Permohonan Informasi</title>
      <style media="all" type="text/css">
     /* -------------------------------------
     GLOBAL RESETS
@@ -159,11 +163,11 @@
     
     @media all {
       .btn-primary table td:hover {
-        background-color: #ec0867 !important;
+        background-color: #00054eff !important;
       }
       .btn-primary a:hover {
-        background-color: #ec0867 !important;
-        border-color: #ec0867 !important;
+        background-color: #00054eff !important;
+        border-color: #00054eff !important;
       }
     }
     
@@ -297,80 +301,104 @@
     </style>
   </head>
   <body>
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
-      <tr>
-        <td>&nbsp;</td>
-        <td class="container">
-          <div class="content">
-            <span class="preheader">
-              Pembaruan status permohonan Anda
-            </span>
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+    <tr>
+      <td>&nbsp;</td>
+      <td class="container">
+        <div class="content">
+          <span class="preheader">
+            Status permohonan Anda diperbarui menjadi: {{ $permohonan->status }}
+          </span>
 
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
-              <tr>
-                <td class="wrapper">
-                  <p>Yth. {{ $permohonan->user->name ?? 'Pemohon' }},</p>
+          <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
+            <tr>
+              <td class="wrapper">
 
-                  <p>Status permohonan informasi Anda telah diperbarui menjadi: 
-                    <strong>{{ $permohonan->status }}</strong>.
-                  </p>
+                <p>Yth. {{ $permohonan->user->name ?? 'Pemohon' }},</p>
 
-                  @if($permohonan->keberatan)
-                    <p>Status Keberatan: 
-                      <strong>{{ $permohonan->keberatan->status }}</strong>
-                    </p>
-                  @endif
+                <p>
+                Permohonan informasi Anda telah diperbarui.
+                </p>
 
-                  @if($permohonan->keterangan_petugas)
-                    <p>Keterangan Petugas:</p>
+                {{-- =========================
+                     PERMOHONAN
+                     ========================= --}}
+                <p class="mb0"><strong>Permohonan Informasi</strong></p>
+                <p>
+                  Status Permohonan:
+                  <strong>{{ $permohonan->status }}</strong><br>
+                  @if(!empty($permohonan->keterangan_petugas))
+                    Keterangan Petugas: 
                     <p><em>{{ $permohonan->keterangan_petugas }}</em></p>
                   @endif
+                </p>
 
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                    <tbody>
-                      <tr>
-                        <td align="center">
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                            <tbody>
-                              <tr>
-                                <td> 
-                                  <a href="{{ route('user.permohonan.show', $permohonan->id) }}" target="_blank">
-                                    Lihat Pengajuan
-                                  </a> 
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                {{-- =========================
+                     KEBERATAN
+                     ========================= --}}
+                @if($permohonan->keberatan)
+                  <p class="mb0" style="margin-top: 20px;"><strong>Keberatan atas informasi</strong></p>
+                  <p>
+                    Status Keberatan:
+                    <strong>{{ $permohonan->keberatan->status }}</strong><br>
+                    @if(!empty($permohonan->keberatan->keterangan_petugas))
+                    Keterangan Petugas:
+                    <p><em>{{ $permohonan->keberatan->keterangan_petugas }}</em></p>
+                  @endif
+                  </p>
+                @endif
 
-                  <p>Terima kasih telah menggunakan layanan online PPID.</p>
-                  <p>Salam hormat,<br><strong>Admin PPID</strong></p>
+                {{-- CTA --}}
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="margin-top: 8px;">
+                  <tbody>
+                    <tr>
+                      <td align="center">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <a href="{{ $detailUrl }}" target="_blank" rel="noopener">
+                                  Lihat Detail Permohonan
+                                </a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                {{-- Fallback absolute link --}}
+                <p class="mb0">
+                  Jika tombol tidak berfungsi, buka tautan ini:
+                  <br>
+                  <a class="text-link" href="{{ $detailUrl }}" target="_blank" rel="noopener">{{ $detailUrl }}</a>
+                </p>
+
+                <p style="margin-top: 16px;">Terima kasih telah menggunakan layanan online PPID.</p>
+                <p>Salam hormat,<br><strong>PPID PTUN Bandung</strong></p>
+
+              </td>
+            </tr>
+          </table>
+
+          <div class="footer">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="content-block">
+                  <span class="apple-link">PPID PTUN BANDUNG</span>
+                  <br>
+                  Email ini dikirim otomatis, mohon tidak membalas.
                 </td>
               </tr>
             </table>
-
-            <div class="footer">
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td class="content-block">
-                    <span class="apple-link">
-                      PPID PTUN BANDUNG
-                    </span>
-                    <br> 
-                    Email ini dikirim otomatis, mohon tidak membalas.
-                  </td>
-                </tr>
-                <tr>
-                </tr>
-              </table>
-            </div>
           </div>
-        </td>
-        <td>&nbsp;</td>
-      </tr>
-    </table>
-  </body>
+
+        </div>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</body>
 </html>

@@ -84,33 +84,32 @@
                                 @switch($permohonan->status)
                                     @case('Menunggu Verifikasi Berkas Dari Petugas')
                                         <span class="badge bg-warning text-dark px-3 py-2">
-                                            <i class="ri-time-line me-1"></i>Menunggu Verifikasi
+                                            <i class="ri-time-line me-1"></i> Menunggu Verifikasi
                                         </span>
                                         @break
                                     @case('Sedang Diverifikasi petugas')
                                         <span class="badge bg-primary px-3 py-2">
-                                            <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                            <i class="ri-search-eye-line me-1"></i> Diverifikasi
                                         </span>
                                         @break
                                     @case('Perlu Diperbaiki')
                                         <span class="badge bg-danger px-3 py-2">
-                                            <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
+                                            <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
+                                        </span>
+                                        @break
+                                    @case('Diproses')
+                                        <span class="badge bg-info text-dark px-3 py-2">
+                                            <i class="ri-loader-4-line me-1"></i> Diproses
                                         </span>
                                         @break
                                     @case('Diterima')
-                                        <span class="badge bg-success">
+                                        <span class="badge bg-success px-3 py-2">
                                             <i class="ri-checkbox-circle-line me-1"></i> Diterima
                                         </span>
                                         @break
-                                    
                                     @case('Ditolak')
-                                        <span class="badge bg-danger">
+                                        <span class="badge bg-danger px-3 py-2">
                                             <i class="ri-close-circle-line"></i> Ditolak
-                                        </span>
-                                        @break
-                                    @case('Selesai')
-                                        <span class="badge bg-success px-3 py-2">
-                                            <i class="ri-checkbox-circle-line me-1"></i>Selesai
                                         </span>
                                         @break
                                     @default

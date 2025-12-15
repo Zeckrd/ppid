@@ -13,8 +13,8 @@ use App\Notifications\CustomResetPassword;
 class User extends Authenticatable implements CanResetPassword
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-    use CanResetPasswordTrait;
+    
+    use HasFactory, Notifiable, CanResetPasswordTrait;
     /**
      * The attributes that are mass assignable.
      *
@@ -65,6 +65,24 @@ class User extends Authenticatable implements CanResetPassword
         ];
     }
 
+    /**
+     * Phone number normalizator
+     */
+    public function setPhoneAttribute($value): void
+    {
+        $phone = (string) $value;
+
+        // remove anything except digits
+        $phone = preg_replace('/[^0-9]/', '', $phone) ?? '';
+
+        // convert 0xxxx -> 62xxxx
+        if ($phone !== '' && str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        $this->attributes['phone'] = $phone;
+    }
+
     public function permohonans()
     {
         return $this->hasMany(Permohonan::class);
@@ -79,5 +97,11 @@ class User extends Authenticatable implements CanResetPassword
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+    public function routeNotificationForWablas(): ?string
+    {
+        return $this->phone;
+    }
+
 
 }

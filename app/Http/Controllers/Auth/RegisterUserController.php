@@ -24,6 +24,16 @@ class RegisterUserController extends Controller
         // debug this
         // dd(request()->all());
 
+        // Normaliza phone number
+        $phoneRaw = request()->input('phone', '');
+
+        $phone = preg_replace('/[^0-9]/', '', $phoneRaw);
+        if (str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        request()->merge(['phone' => $phone]);
+
         $attributes = request()->validate([
             'name'          => ['required'],
             'pekerjaan'     => ['required'],

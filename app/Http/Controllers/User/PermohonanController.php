@@ -4,11 +4,15 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
+use App\Models\User;
 use App\Models\Permohonan;
 use App\Models\PermohonanFile;
 use App\Models\PermohonanReplyFile;
-use Illuminate\Support\Facades\Storage;
 use App\Services\WhatsAppNotificationService;
+use App\Notifications\AdminPermohonanCreated;
+use App\Notifications\AdminPermohonanUpdatedByUser;
 
 class PermohonanController extends Controller
 {
@@ -53,8 +57,8 @@ class PermohonanController extends Controller
         }
 
         // WhatsApp notification on permohonan created
-        app(WhatsAppNotificationService::class)
-            ->notifyPermohonanCreated($permohonan);
+        $admins = User::admins()->get();
+        Notification::send($admins, new AdminPermohonanCreated($permohonan));
 
         return redirect()
             ->route('user.dashboard.index')
@@ -170,8 +174,8 @@ class PermohonanController extends Controller
         $permohonan->update($updateData);
 
         // WhatsApp notification on permohonan updated by user
-        app(WhatsAppNotificationService::class)
-            ->notifyPermohonanUpdatedByUser($permohonan);
+        $admins = User::admins()->get();
+        Notification::send($admins, new AdminPermohonanUpdatedByUser($permohonan));
 
         return redirect()
             ->route('user.permohonan.show', $permohonan)
