@@ -18,10 +18,10 @@ class DashboardController extends Controller
         $yearParam = $request->input('year', 'semua');
         $month     = $request->input('month', 'semua');
 
-        // filter year 
+        // Filter year
         $year = $yearParam === 'semua' ? null : (int) $yearParam;
 
-        // year used for charts
+        // Year used for charts (when no filter, show current year)
         $chartYear = $year ?? now()->year;
 
         $dateFrom = null;
@@ -29,19 +29,20 @@ class DashboardController extends Controller
         $start    = null;
         $end      = null;
 
-        // queries (for cards)
+        // Base queries (for cards)
         $permohonanQuery = Permohonan::query();
         $keberatanQuery  = Keberatan::query();
 
-        $attentionStatuses = [
+        // Dashboard-only "active" group (no special preset / no mixing with search filters)
+        $activeStatuses = [
             'Menunggu Verifikasi Berkas Dari Petugas',
             'Sedang Diverifikasi petugas',
-            'Permohonan Sedang Diproses',
+            'Diproses',
         ];
 
-        $activeQuery = Permohonan::whereIn('status', $attentionStatuses);
+        $activeQuery = Permohonan::whereIn('status', $activeStatuses);
 
-        // If year is selected, apply year/monthfilter
+        // If year is selected, apply year/month filter
         if ($year !== null) {
             if ($month !== 'semua') {
                 $monthInt = (int) $month;
@@ -59,49 +60,50 @@ class DashboardController extends Controller
             $keberatanQuery->whereBetween('created_at', [$start, $end]);
             $activeQuery->whereBetween('created_at', [$start, $end]);
 
-            // cumulative users up to end of range
+            // Cumulative users up to end of selected range
             $totalUsers = User::whereDate('created_at', '<=', $dateTo)->count();
         } else {
             // SEMUA WAKTU
             $totalUsers = User::count();
         }
 
+        // Cards
         $totalPermohonan = $permohonanQuery->count();
         $totalKeberatan  = $keberatanQuery->count();
         $totalActive     = $activeQuery->count();
 
         // CHARTS
 
-        // Status distribution (follow filter if year selected, else use chartYear)
+        // Status distribution
         $statuses = [
             'Menunggu Verifikasi Berkas Dari Petugas',
             'Sedang Diverifikasi petugas',
             'Perlu Diperbaiki',
             'Diproses',
             'Diterima',
-            'Ditolak'
+            'Ditolak',
         ];
 
         $statusCounts = [];
         foreach ($statuses as $status) {
-            $query = Permohonan::where('status', $status);
+            $q = Permohonan::where('status', $status);
 
             if ($year !== null) {
                 // If filter year is selected, match the same range as cards
                 if ($month !== 'semua' && $start && $end) {
-                    $query->whereBetween('created_at', [$start, $end]);
+                    $q->whereBetween('created_at', [$start, $end]);
                 } else {
-                    $query->whereYear('created_at', $year);
+                    $q->whereYear('created_at', $year);
                 }
             } else {
                 // No filter = show distribution for current year
-                $query->whereYear('created_at', $chartYear);
+                $q->whereYear('created_at', $chartYear);
             }
 
-            $statusCounts[$status] = $query->count();
+            $statusCounts[$status] = $q->count();
         }
 
-        // Monthly trend
+        // Monthly trend (always based on $chartYear)
         $monthlyData = collect(range(1, 12))->map(function ($m) use ($chartYear) {
             return [
                 'month'      => $m,
@@ -137,7 +139,7 @@ class DashboardController extends Controller
             $dailyData = collect([]);
         }
 
-        // Pekerjaan count
+        // Pekerjaan count (exclude admin)
         $pekerjaanStats = User::select('pekerjaan', DB::raw('COUNT(*) as total'))
             ->whereNotNull('pekerjaan')
             ->where('is_admin', false)
@@ -148,8 +150,8 @@ class DashboardController extends Controller
         $pekerjaanLabels = $pekerjaanStats->pluck('pekerjaan');
         $pekerjaanCounts = $pekerjaanStats->pluck('total');
 
-        // Pending permohonan list
-        $pendingPermohonanQuery = Permohonan::whereIn('status', $attentionStatuses);
+        // "Active" permohonan list (uses the same activeStatuses)
+        $pendingPermohonanQuery = Permohonan::whereIn('status', $activeStatuses);
 
         if ($start && $end) {
             $pendingPermohonanQuery->whereBetween('created_at', [$start, $end]);

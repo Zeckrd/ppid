@@ -78,12 +78,20 @@
                 </a>
             </div>
 
+            @php
+                $activeStatuses = [
+                    'Menunggu Verifikasi Berkas Dari Petugas',
+                    'Sedang Diverifikasi petugas',
+                    'Diproses',
+                ];
+            @endphp
+
             <div class="col-md-3">
-                <a href="{{ route('admin.permohonan.search', [
+                <a href="{{ route('admin.permohonan.search', array_filter([
                         'date_from' => $dateFrom,
                         'date_to'   => $dateTo,
-                        'attention' => 1,
-                    ]) }}"
+                        'statuses'  => $activeStatuses,
+                    ])) }}"
                 class="text-decoration-none">
                     <div class="card border-0 shadow-sm bg-info text-white">
                         <div class="card-body d-flex align-items-center justify-content-between">
@@ -96,6 +104,7 @@
                     </div>
                 </a>
             </div>
+
 
 
             <div class="col-md-3">

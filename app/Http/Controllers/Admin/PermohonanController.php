@@ -203,10 +203,10 @@ class PermohonanController extends Controller
     public function search(Request $request)
     {
         $keyword   = $request->input('q');
-        $status    = $request->input('status');
+        $status    = $request->input('status');              // single
+        $statuses  = (array) $request->input('statuses', []); // multi (preset)
         $type      = $request->input('permohonan_type');
         $keberatan = $request->input('has_keberatan');
-        $attention = $request->boolean('attention');
 
         $query = Permohonan::with(['user', 'keberatan']);
 
@@ -214,26 +214,24 @@ class PermohonanController extends Controller
         if ($keyword) {
             $query->where(function ($q) use ($keyword) {
                 $q->where('keterangan_user', 'like', "%{$keyword}%")
-                    ->orWhere('keterangan_petugas', 'like', "%{$keyword}%")
-                    ->orWhereHas('user', function ($userQuery) use ($keyword) {
-                        $userQuery->where('name', 'like', "%{$keyword}%")
+                ->orWhere('keterangan_petugas', 'like', "%{$keyword}%")
+                ->orWhereHas('user', function ($userQuery) use ($keyword) {
+                    $userQuery->where('name', 'like', "%{$keyword}%")
                                 ->orWhere('email', 'like', "%{$keyword}%");
-                    });
+                });
             });
         }
 
-        // Attention (needs admin attention)
-        $attentionStatuses = [
-            'Menunggu Verifikasi Berkas Dari Petugas',
-            'Sedang Diverifikasi petugas',
-            'Permohonan Sedang Diproses',
-        ];
-
-        // Filter by "attention" or by single status
-        if ($attention) {
-            $query->whereIn('status', $attentionStatuses);
-        } elseif ($status && $status !== 'Semua') {
+        // Status filter: DO NOT MIX single and multi
+        // Priority: explicit single status > statuses[] preset
+        if ($status && $status !== 'Semua') {
             $query->where('status', $status);
+        } elseif (!empty($statuses)) {
+            // Clean up empty values just in case
+            $statuses = array_values(array_filter($statuses, fn ($s) => $s !== null && $s !== ''));
+            if (!empty($statuses)) {
+                $query->whereIn('status', $statuses);
+            }
         }
 
         // Filter by date range
@@ -262,6 +260,7 @@ class PermohonanController extends Controller
 
         return view('admin.permohonan.search', compact('permohonans', 'keyword'));
     }
+
 
 
     public function downloadFile(Permohonan $permohonan, PermohonanFile $file)

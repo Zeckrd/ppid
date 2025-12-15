@@ -108,7 +108,7 @@
 
 
         {{-- Active Filters Display --}}
-        @if(request('q') || request('date_from') || request('date_to') || request('status') || request('permohonan_type') || request('has_keberatan'))
+        @if(request('q') || request('date_from') || request('date_to') || request('status') || request('statuses') || request('permohonan_type') || request('has_keberatan'))
             <div class="mb-3">
                 <small class="text-muted">Filter Aktif:</small>
                 <div class="d-flex flex-wrap gap-2 mt-2">
@@ -137,8 +137,20 @@
                         </span>
                     @endif
 
-                    {{-- Status --}}
-                    @if(request('status') && request('status') != 'Semua')
+                    {{--  Status  --}}
+                    @php
+                        $multiStatuses = (array) request('statuses', []);
+                        $multiStatuses = array_values(array_filter($multiStatuses)); // remove empty
+                    @endphp
+
+                    @if(!empty($multiStatuses))
+                        <span class="badge bg-light text-dark border">
+                            <i class="ri-filter-line me-1"></i>Status:
+                            {{ implode(', ', $multiStatuses) }}
+                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('statuses'))) }}" class="text-dark ms-1">×</a>
+                        </span>
+                    @elseif(request('status') && request('status') != 'Semua')
+                        {{-- Single Status --}}
                         <span class="badge bg-light text-dark border">
                             <i class="ri-filter-line me-1"></i>Status: {{ request('status') }}
                             <a href="{{ route('admin.permohonan.search', array_filter(request()->except('status'))) }}" class="text-dark ms-1">×</a>
