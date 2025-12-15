@@ -12,6 +12,6 @@ class UserSetupController extends Controller
      */
     public function index()
     {
-        return view('user.setup');
+        return view('auth.setup');
     }
 }
