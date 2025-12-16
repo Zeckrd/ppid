@@ -13,13 +13,19 @@ return new class extends Migration
     {
         Schema::create('email_changes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
             $table->string('new_email');
-            $table->string('token')->unique();
+            $table->string('token_hash')->unique();
+
             $table->timestamp('expires_at')->nullable();
+            $table->timestamp('last_sent_at')->nullable();
+
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unique('user_id');
+            $table->index('expires_at');
         });
     }
 

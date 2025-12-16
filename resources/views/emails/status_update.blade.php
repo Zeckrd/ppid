@@ -1,404 +1,360 @@
 @php
   $detailUrl = route('user.permohonan.show', $permohonan->id, true);
+  $logoUrl = asset('img/logoppid.png');
 @endphp
 
-<!doctype html>
-<html lang="id">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembaruan Status Permohonan Informasi</title>
-     <style media="all" type="text/css">
-    /* -------------------------------------
-    GLOBAL RESETS
-------------------------------------- */
-    
-    body {
-      font-family: Helvetica, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      font-size: 16px;
-      line-height: 1.3;
-      -ms-text-size-adjust: 100%;
-      -webkit-text-size-adjust: 100%;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      lang="id">
+<head>
+  <title>Pembaruan Status Permohonan</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!--[if !mso]>-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!--<![endif]-->
+  <meta name="x-apple-disable-message-reformatting" content="" />
+  <meta content="target-densitydpi=device-dpi" name="viewport" />
+  <meta content="true" name="HandheldFriendly" />
+  <meta content="width=device-width" name="viewport" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no" />
+
+  <style type="text/css">
+    table { border-collapse: separate; table-layout: fixed; mso-table-lspace: 0pt; mso-table-rspace: 0pt }
+    table td { border-collapse: collapse }
+    .ExternalClass { width: 100% }
+    .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100% }
+    body, a, li, p, h1, h2, h3 { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+    html { -webkit-text-size-adjust: none !important }
+    body { min-width: 100%; Margin: 0px; padding: 0px; }
+    body, #innerTable { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale }
+    #innerTable img+div { display: none; display: none !important }
+    img { Margin: 0; padding: 0; -ms-interpolation-mode: bicubic }
+    h1, h2, h3, p, a { line-height: inherit; overflow-wrap: normal; white-space: normal; word-break: break-word }
+    a { text-decoration: none }
+    h1, h2, h3, p { min-width: 100%!important; width: 100%!important; max-width: 100%!important; display: inline-block!important; border: 0; padding: 0; margin: 0 }
+    a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important }
+    u + #body a { color: inherit; text-decoration: none; font-size: inherit; font-family: inherit; font-weight: inherit; line-height: inherit; }
+    a[href^="mailto"], a[href^="tel"], a[href^="sms"] { color: inherit; text-decoration: none }
+  </style>
+
+  <style type="text/css">
+    @media (min-width: 481px) { .hd { display: none!important } }
+  </style>
+  <style type="text/css">
+    @media (max-width: 480px) { .hm { display: none!important } }
+  </style>
+  <style type="text/css">
+    @media (max-width: 480px) {
+      .t41,.t46{mso-line-height-alt:0px!important;line-height:0!important;display:none!important}
+      .t42{padding:40px!important;border-radius:0!important}
+      .t20,.t22{max-width:398px!important}
+      .t32{text-align:left!important}
+      .t25{display:revert!important}
+      .t27,.t31{vertical-align:top!important;width:auto!important;max-width:100%!important}
     }
-    
-    table {
-      border-collapse: separate;
-      mso-table-lspace: 0pt;
-      mso-table-rspace: 0pt;
-      width: 100%;
-    }
-    
-    table td {
-      font-family: Helvetica, sans-serif;
-      font-size: 16px;
-      vertical-align: top;
-    }
-    /* -------------------------------------
-    BODY & CONTAINER
-------------------------------------- */
-    
-    body {
-      background-color: #f4f5f6;
-      margin: 0;
-      padding: 0;
-    }
-    
-    .body {
-      background-color: #f4f5f6;
-      width: 100%;
-    }
-    
-    .container {
-      margin: 0 auto !important;
-      max-width: 600px;
-      padding: 0;
-      padding-top: 24px;
-      width: 600px;
-    }
-    
-    .content {
-      box-sizing: border-box;
-      display: block;
-      margin: 0 auto;
-      max-width: 600px;
-      padding: 0;
-    }
-    /* -------------------------------------
-    HEADER, FOOTER, MAIN
-------------------------------------- */
-    
-    .main {
-      background: #ffffff;
-      border: 1px solid #eaebed;
-      border-radius: 16px;
-      width: 100%;
-    }
-    
-    .wrapper {
-      box-sizing: border-box;
-      padding: 24px;
-    }
-    
-    .footer {
-      clear: both;
-      padding-top: 24px;
-      text-align: center;
-      width: 100%;
-    }
-    
-    .footer td,
-    .footer p,
-    .footer span,
-    .footer a {
-      color: #9a9ea6;
-      font-size: 16px;
-      text-align: center;
-    }
-    /* -------------------------------------
-    TYPOGRAPHY
-------------------------------------- */
-    
-    p {
-      font-family: Helvetica, sans-serif;
-      font-size: 16px;
-      font-weight: normal;
-      margin: 0;
-      margin-bottom: 16px;
-    }
-    
-    a {
-      color: #0867ec;
-      text-decoration: underline;
-    }
-    /* -------------------------------------
-    BUTTONS
-------------------------------------- */
-    
-    .btn {
-      box-sizing: border-box;
-      min-width: 100% !important;
-      width: 100%;
-    }
-    
-    .btn > tbody > tr > td {
-      padding-bottom: 16px;
-    }
-    
-    .btn table {
-      width: auto;
-    }
-    
-    .btn table td {
-      background-color: #ffffff;
-      border-radius: 4px;
-      text-align: center;
-    }
-    
-    .btn a {
-      background-color: #ffffff;
-      border: solid 2px #0867ec;
-      border-radius: 4px;
-      box-sizing: border-box;
-      color: #0867ec;
-      cursor: pointer;
-      display: inline-block;
-      font-size: 16px;
-      font-weight: bold;
-      margin: 0;
-      padding: 12px 24px;
-      text-decoration: none;
-      text-transform: capitalize;
-    }
-    
-    .btn-primary table td {
-      background-color: #0867ec;
-    }
-    
-    .btn-primary a {
-      background-color: #0867ec;
-      border-color: #0867ec;
-      color: #ffffff;
-    }
-    
-    @media all {
-      .btn-primary table td:hover {
-        background-color: #00054eff !important;
-      }
-      .btn-primary a:hover {
-        background-color: #00054eff !important;
-        border-color: #00054eff !important;
-      }
-    }
-    
-    /* -------------------------------------
-    OTHER STYLES THAT MIGHT BE USEFUL
-------------------------------------- */
-    
-    .last {
-      margin-bottom: 0;
-    }
-    
-    .first {
-      margin-top: 0;
-    }
-    
-    .align-center {
-      text-align: center;
-    }
-    
-    .align-right {
-      text-align: right;
-    }
-    
-    .align-left {
-      text-align: left;
-    }
-    
-    .text-link {
-      color: #0867ec !important;
-      text-decoration: underline !important;
-    }
-    
-    .clear {
-      clear: both;
-    }
-    
-    .mt0 {
-      margin-top: 0;
-    }
-    
-    .mb0 {
-      margin-bottom: 0;
-    }
-    
-    .preheader {
-      color: transparent;
-      display: none;
-      height: 0;
-      max-height: 0;
-      max-width: 0;
-      opacity: 0;
-      overflow: hidden;
-      mso-hide: all;
-      visibility: hidden;
-      width: 0;
-    }
-    
-    .powered-by a {
-      text-decoration: none;
-    }
-    
-    /* -------------------------------------
-    RESPONSIVE AND MOBILE FRIENDLY STYLES
-------------------------------------- */
-    
-    @media only screen and (max-width: 640px) {
-      .main p,
-      .main td,
-      .main span {
-        font-size: 16px !important;
-      }
-      .wrapper {
-        padding: 8px !important;
-      }
-      .content {
-        padding: 0 !important;
-      }
-      .container {
-        padding: 0 !important;
-        padding-top: 8px !important;
-        width: 100% !important;
-      }
-      .main {
-        border-left-width: 0 !important;
-        border-radius: 0 !important;
-        border-right-width: 0 !important;
-      }
-      .btn table {
-        max-width: 100% !important;
-        width: 100% !important;
-      }
-      .btn a {
-        font-size: 16px !important;
-        max-width: 100% !important;
-        width: 100% !important;
-      }
-    }
-    /* -------------------------------------
-    PRESERVE THESE STYLES IN THE HEAD
-------------------------------------- */
-    
-    @media all {
-      .ExternalClass {
-        width: 100%;
-      }
-      .ExternalClass,
-      .ExternalClass p,
-      .ExternalClass span,
-      .ExternalClass font,
-      .ExternalClass td,
-      .ExternalClass div {
-        line-height: 100%;
-      }
-      .apple-link a {
-        color: inherit !important;
-        font-family: inherit !important;
-        font-size: inherit !important;
-        font-weight: inherit !important;
-        line-height: inherit !important;
-        text-decoration: none !important;
-      }
-      #MessageViewBody a {
-        color: inherit;
-        text-decoration: none;
-        font-size: inherit;
-        font-family: inherit;
-        font-weight: inherit;
-        line-height: inherit;
-      }
-    }
-    </style>
-  </head>
-  <body>
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+  </style>
+
+  <!--[if !mso]>-->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&amp;family=Sofia+Sans:wght@700&amp;family=Open+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet" type="text/css" />
+  <!--<![endif]-->
+
+  <!--[if mso]>
+  <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+  </xml>
+  <![endif]-->
+</head>
+
+<body id="body" class="t49" style="min-width:100%;Margin:0px;padding:0px;background-color:#FFFFFF;">
+<div class="t48" style="background-color:#FFFFFF;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
     <tr>
-      <td>&nbsp;</td>
-      <td class="container">
-        <div class="content">
-          <span class="preheader">
-            Status permohonan Anda diperbarui menjadi: {{ $permohonan->status }}
-          </span>
+      <td class="t47" style="font-size:0;line-height:0;mso-line-height-rule:exactly;background-color:#FFFFFF;" valign="top" align="center">
 
-          <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
-            <tr>
-              <td class="wrapper">
+        <!--[if mso]>
+        <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false">
+          <v:fill color="#FFFFFF"/>
+        </v:background>
+        <![endif]-->
 
-                <p>Yth. {{ $permohonan->user->name ?? 'Pemohon' }},</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" id="innerTable">
+          <tr>
+            <td>
+              <div class="t41" style="mso-line-height-rule:exactly;mso-line-height-alt:50px;line-height:50px;font-size:1px;display:block;">&nbsp;&nbsp;</div>
+            </td>
+          </tr>
 
-                <p>
-                Permohonan informasi Anda telah diperbarui.
-                </p>
+          <tr>
+            <td align="center">
+              <table class="t45" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                <tr>
+                  <td width="600" class="t44" style="width:600px;">
+                    <table class="t43" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                      <tr>
+                        <td class="t42" style="border:1px solid #EBEBEB;overflow:hidden;background-color:#FFFFFF;padding:44px 42px 32px 42px;border-radius:3px 3px 3px 3px;">
 
-                {{-- =========================
-                     PERMOHONAN
-                     ========================= --}}
-                <p class="mb0"><strong>Permohonan Informasi</strong></p>
-                <p>
-                  Status Permohonan:
-                  <strong>{{ $permohonan->status }}</strong><br>
-                  @if(!empty($permohonan->keterangan_petugas))
-                    Keterangan Petugas: 
-                    <p><em>{{ $permohonan->keterangan_petugas }}</em></p>
-                  @endif
-                </p>
+                          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100% !important;">
 
-                {{-- =========================
-                     KEBERATAN
-                     ========================= --}}
-                @if($permohonan->keberatan)
-                  <p class="mb0" style="margin-top: 20px;"><strong>Keberatan atas informasi</strong></p>
-                  <p>
-                    Status Keberatan:
-                    <strong>{{ $permohonan->keberatan->status }}</strong><br>
-                    @if(!empty($permohonan->keberatan->keterangan_petugas))
-                    Keterangan Petugas:
-                    <p><em>{{ $permohonan->keberatan->keterangan_petugas }}</em></p>
-                  @endif
-                  </p>
-                @endif
-
-                {{-- CTA --}}
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="margin-top: 8px;">
-                  <tbody>
-                    <tr>
-                      <td align="center">
-                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                          <tbody>
+                            {{-- Logo --}}
                             <tr>
-                              <td>
-                                <a href="{{ $detailUrl }}" target="_blank" rel="noopener">
-                                  Lihat Detail Permohonan
-                                </a>
+                              <td align="left">
+                                <table class="t4" role="presentation" cellpadding="0" cellspacing="0" style="Margin-right:auto;">
+                                  <tr>
+                                    <td width="200" class="t3" style="width:200px;">
+                                      <table class="t2" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                        <tr>
+                                          <td class="t1">
+                                            <div style="font-size:0px;">
+                                              <img class="t0"
+                                                   style="display:block;border:0;height:auto;width:100%;Margin:0;max-width:100%;"
+                                                   width="200" height="100" alt="PPID"
+                                                   src="{{ $logoUrl }}" />
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </table>
                               </td>
                             </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
 
-                {{-- Fallback absolute link --}}
-                <p class="mb0">
-                  Jika tombol tidak berfungsi, buka tautan ini:
-                  <br>
-                  <a class="text-link" href="{{ $detailUrl }}" target="_blank" rel="noopener">{{ $detailUrl }}</a>
-                </p>
+                            <tr><td><div class="t5" style="mso-line-height-rule:exactly;mso-line-height-alt:42px;line-height:42px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr>
 
-                <p style="margin-top: 16px;">Terima kasih telah menggunakan layanan online PPID.</p>
-                <p>Salam hormat,<br><strong>PPID PTUN Bandung</strong></p>
+                            {{-- Title --}}
+                            <tr>
+                              <td align="center">
+                                <table class="t10" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                                  <tr>
+                                    <td width="514" class="t9" style="width:600px;">
+                                      <table class="t8" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                        <tr>
+                                          <td class="t7" style="border-bottom:1px solid #EFF1F4;padding:0 0 18px 0;">
+                                            <h1 class="t6"
+                                                style="margin:0;Margin:0;font-family:Montserrat,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:28px;font-weight:700;font-style:normal;font-size:24px;text-decoration:none;text-transform:none;letter-spacing:-1px;direction:ltr;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:1px;">
+                                              Pembaruan Status Permohonan Informasi
+                                            </h1>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
 
-              </td>
-            </tr>
-          </table>
+                            <tr><td><div class="t11" style="mso-line-height-rule:exactly;mso-line-height-alt:18px;line-height:18px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr>
 
-          <div class="footer">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td class="content-block">
-                  <span class="apple-link">PPID PTUN BANDUNG</span>
-                  <br>
-                  Email ini dikirim otomatis, mohon tidak membalas.
-                </td>
-              </tr>
-            </table>
-          </div>
+                            {{-- Intro --}}
+                            <tr>
+                              <td align="center">
+                                <table class="t16" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                                  <tr>
+                                    <td width="514" class="t15" style="width:600px;">
+                                      <table class="t14" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                        <tr>
+                                          <td class="t13">
+                                            <p class="t12"
+                                               style="margin:0;Margin:0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:400;font-style:normal;font-size:15px;text-decoration:none;text-transform:none;letter-spacing:-0.1px;direction:ltr;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                              Yth. {{ $permohonan->user->name ?? 'Pemohon' }},<br/>
+                                              Permohonan informasi Anda telah diperbarui.
+                                              <br/><br/>
+                                              <strong>Nomor Permohonan:</strong> #{{ $permohonan->id }}
+                                            </p>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
 
-        </div>
+                            <tr><td><div class="t18" style="mso-line-height-rule:exactly;mso-line-height-alt:24px;line-height:24px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr>
+
+                            {{-- PERMOHONAN FIRST --}}
+                            <tr>
+                              <td align="center">
+                                <table class="t16" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                                  <tr>
+                                    <td width="514" class="t15" style="width:600px;">
+                                      <table class="t14" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                        <tr>
+                                          <td class="t13">
+                                            <p class="t12" style="margin:0;Margin:0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:600;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                              Permohonan Informasi
+                                            </p>
+                                            <p class="t12" style="margin:8px 0 0 0;Margin:8px 0 0 0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:400;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                              <strong>Status Permohonan:</strong> {{ $permohonan->status }}
+                                            </p>
+
+                                            @if(!empty($permohonan->keterangan_petugas))
+                                              <p class="t12" style="margin:10px 0 0 0;Margin:10px 0 0 0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:600;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                                Keterangan Petugas
+                                              </p>
+                                              <p class="t12" style="margin:6px 0 0 0;Margin:6px 0 0 0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:400;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                                {{ $permohonan->keterangan_petugas }}
+                                              </p>
+                                            @endif
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+
+                            {{-- KEBERATAN SECOND --}}
+                            @if($permohonan->keberatan)
+                              <tr><td><div class="t18" style="mso-line-height-rule:exactly;mso-line-height-alt:18px;line-height:18px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr>
+
+                              <tr>
+                                <td align="center">
+                                  <table class="t16" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                                    <tr>
+                                      <td width="514" class="t15" style="width:600px;">
+                                        <table class="t14" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                          <tr>
+                                            <td class="t13">
+                                              <p class="t12" style="margin:0;Margin:0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:600;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                                Keberatan Atas Informasi
+                                              </p>
+                                              <p class="t12" style="margin:8px 0 0 0;Margin:8px 0 0 0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:400;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                                <strong>Status Keberatan:</strong> {{ $permohonan->keberatan->status }}
+                                              </p>
+
+                                              @if(!empty($permohonan->keberatan->keterangan_petugas))
+                                                <p class="t12" style="margin:10px 0 0 0;Margin:10px 0 0 0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:600;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                                  Keterangan Petugas
+                                                </p>
+                                                <p class="t12" style="margin:6px 0 0 0;Margin:6px 0 0 0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:25px;font-weight:400;font-style:normal;font-size:15px;letter-spacing:-0.1px;color:#141414;text-align:left;mso-line-height-rule:exactly;mso-text-raise:3px;">
+                                                  {{ $permohonan->keberatan->keterangan_petugas }}
+                                                </p>
+                                              @endif
+                                            </td>
+                                          </tr>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            @endif
+
+                            <tr><td><div class="t18" style="mso-line-height-rule:exactly;mso-line-height-alt:24px;line-height:24px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr>
+
+                            {{-- Button --}}
+                            <tr>
+                              <td align="left">
+                                <table class="t22" role="presentation" cellpadding="0" cellspacing="0" style="Margin-right:auto;max-width:514px;">
+                                  <tr>
+                                    <td class="t21" style="width:auto;">
+                                      <table class="t20" role="presentation" cellpadding="0" cellspacing="0" style="width:auto;max-width:514px;">
+                                        <tr>
+                                          <td class="t19" style="overflow:hidden;background-color:#0666EB;text-align:center;line-height:34px;mso-line-height-rule:exactly;mso-text-raise:5px;padding:0 23px 0 23px;border-radius:40px 40px 40px 40px;">
+                                            <a href="{{ $detailUrl }}"
+                                               target="_blank"
+                                               rel="noopener"
+                                               style="display:block;margin:0;font-family:Sofia Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:34px;font-weight:700;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;letter-spacing:-0.2px;direction:ltr;color:#FFFFFF;text-align:center;">
+                                              Lihat Detail Permohonan
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+
+                            {{-- Fallback absolute link --}}
+                            <tr><td><div class="t18" style="mso-line-height-rule:exactly;mso-line-height-alt:14px;line-height:14px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr>
+                            <tr>
+                              <td align="center">
+                                <table class="t16" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                                  <tr>
+                                    <td width="514" class="t15" style="width:600px;">
+                                      <table class="t14" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                        <tr>
+                                          <td class="t13">
+                                            <p class="t12"
+                                              style="margin:0;Margin:0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:22px;font-weight:400;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.1px;direction:ltr;color:#555555;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
+                                              Jika tombol tidak berfungsi, buka tautan ini:
+                                              <br/>
+                                              <a href="{{ $detailUrl }}" target="_blank" rel="noopener" style="color:#0666EB;text-decoration:underline;">
+                                                {{ $detailUrl }}
+                                              </a>
+                                            </p>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+
+                            <tr><td><div class="t36" style="mso-line-height-rule:exactly;mso-line-height-alt:40px;line-height:40px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr>
+
+                            {{-- Footer --}}
+                            <tr>
+                              <td align="center">
+                                <table class="t40" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
+                                  <tr>
+                                    <td width="514" class="t39" style="width:600px;">
+                                      <table class="t38" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                        <tr>
+                                          <td class="t37" style="border-top:1px solid #DFE1E4;padding:24px 0 0 0;">
+                                            <p style="margin:0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:20px;font-weight:600;font-size:14px;color:#222222;text-align:left;">
+                                              PPID PTUN Bandung
+                                            </p>
+                                            <p style="margin:6px 0 0 0;font-family:Open Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:20px;font-weight:400;font-size:13px;color:#7A7A7A;text-align:left;">
+                                              Email ini dikirim otomatis, mohon tidak membalas.
+                                            </p>
+                                          </td>
+                                        </tr>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="t46" style="mso-line-height-rule:exactly;mso-line-height-alt:50px;line-height:50px;font-size:1px;display:block;">&nbsp;&nbsp;</div>
+            </td>
+          </tr>
+
+        </table>
+
       </td>
-      <td>&nbsp;</td>
     </tr>
   </table>
+</div>
+
+<div class="gmail-fix" style="display:none; white-space:nowrap; font:15px courier; line-height:0;">
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+</div>
+
 </body>
 </html>

@@ -33,7 +33,7 @@ class DashboardController extends Controller
         $permohonanQuery = Permohonan::query();
         $keberatanQuery  = Keberatan::query();
 
-        // Dashboard-only "active" group (no special preset / no mixing with search filters)
+        // "active" group
         $activeStatuses = [
             'Menunggu Verifikasi Berkas Dari Petugas',
             'Sedang Diverifikasi petugas',
@@ -61,10 +61,12 @@ class DashboardController extends Controller
             $activeQuery->whereBetween('created_at', [$start, $end]);
 
             // Cumulative users up to end of selected range
-            $totalUsers = User::whereDate('created_at', '<=', $dateTo)->count();
+            $totalUsers = User::where('is_admin', 0)
+                ->whereDate('created_at', '<=', $dateTo)
+                ->count();
         } else {
             // SEMUA WAKTU
-            $totalUsers = User::count();
+            $totalUsers = User::where('is_admin', 0)->count();
         }
 
         // Cards
@@ -150,7 +152,7 @@ class DashboardController extends Controller
         $pekerjaanLabels = $pekerjaanStats->pluck('pekerjaan');
         $pekerjaanCounts = $pekerjaanStats->pluck('total');
 
-        // "Active" permohonan list (uses the same activeStatuses)
+        // "Active" permohonan list
         $pendingPermohonanQuery = Permohonan::whereIn('status', $activeStatuses);
 
         if ($start && $end) {

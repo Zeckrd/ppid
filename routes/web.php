@@ -9,7 +9,7 @@ use App\Http\Controllers\User\PermohonanController as UserPermohonanController;
 use App\Http\Controllers\User\KeberatanController;
 use App\Http\Controllers\Auth\UserSetupController as UserSetupController;
 use App\Http\Controllers\User\Profile\UserProfileController;
-use App\Http\Controllers\User\Profile\EmailChangeController;
+use App\Http\Controllers\User\Profile\EmailChangeController as EmailChangeController;
 
 // Admin controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -63,14 +63,11 @@ Route::middleware(['auth'])
 Route::middleware(['auth'])
     ->group(function () {
 
-        Route::post('/email/change', [EmailChangeController::class, 'requestChange'])
-            ->name('email.change');
-
-        Route::get('/email/change/verify/{token}', [EmailChangeController::class, 'verify'])
-            ->name('email.change.verify');
-        
-    });
-
+    Route::post('/profile/email-change', [EmailChangeController::class, 'requestChange'])
+        ->name('email.change.request');
+});
+Route::get('/profile/email-change/confirm/{token}', [EmailChangeController::class, 'confirm'])
+    ->name('email.change.confirm');
 
 // Verified User Routes
 Route::middleware(['auth', 'phone.verified'])

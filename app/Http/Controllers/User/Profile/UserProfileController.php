@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Models\EmailChange;
 
 class UserProfileController extends Controller
 {
@@ -18,8 +19,11 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
 
-        return view('user.profile.edit', compact('user'));
+        $emailChangeRequest = EmailChange::where('user_id', $user->id)->first();
+
+        return view('user.profile.edit', compact('user', 'emailChangeRequest'));
     }
+
 
     /**
      * Update basic profile info:
@@ -67,7 +71,7 @@ class UserProfileController extends Controller
 
         // rules (unique only if different)
         $rules = [
-            'current_password' => ['required', 'current_password'],
+            'current_password_phone' => ['required', 'current_password'],
             'phone'            => ['required', 'string', 'max:20'],
         ];
 
@@ -77,7 +81,7 @@ class UserProfileController extends Controller
 
         // Validate
         $validated = $request->validate($rules, [
-            'current_password.current_password' => 'Password saat ini tidak sesuai.',
+            'current_password_phone.current_password' => 'Password tidak sesuai.',
             'phone.unique' => 'Nomor WhatsApp ini sudah digunakan oleh pengguna lain.',
         ]);
 
@@ -125,10 +129,10 @@ class UserProfileController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'current_password' => ['required', 'current_password'],
+            'current_password_password' => ['required', 'current_password'],
             'password' => ['required', 'confirmed', 'min:5'],
         ], [
-            'current_password.current_password' => 'Password saat ini tidak sesuai.',
+            'current_password_password.current_password' => 'Password saat ini tidak sesuai.',
         ]);
 
         $user->password = Hash::make($validated['password']);

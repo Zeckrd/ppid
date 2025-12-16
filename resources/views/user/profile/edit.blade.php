@@ -1,5 +1,5 @@
 <x-layout>
-    <section class="my-4 mx-3 mx-md-5">
+    <section class="my-5 mx-3 mx-md-5">
         <div class="container">
             <div class="row justify-content-center">
 
@@ -10,7 +10,7 @@
                             <div class="card-body p-3">
                                 <h6 class="text-uppercase text-muted small mb-3">Pengaturan Akun</h6>
                                 <div class="nav flex-column nav-pills" id="profile-settings-nav" role="tablist" aria-orientation="vertical">
-                                    <button class="nav-link active text-start mb-1"
+                                    <button class="nav-link text-start mb-1"
                                             type="button"
                                             data-scroll-target="#section-basic">
                                         Profil Dasar
@@ -115,11 +115,11 @@
                                 @endif
                             </div>
 
-                            {{-- Satu form saja untuk update + kirim / kirim ulang verifikasi --}}
+                            {{-- update + kirim / kirim ulang verifikasi --}}
                             <form method="POST" action="{{ route('user.profile.phone.update') }}" id="changePhoneForm">
                                 @csrf
 
-                                {{-- Nomor WhatsApp saat ini (hanya info) --}}
+                                {{-- Nomor WhatsApp saat ini --}}
                                 <div class="mb-3">
                                     <label class="form-label">Nomor WhatsApp Saat Ini</label>
                                     <input type="tel"
@@ -134,7 +134,7 @@
 
                                 {{-- Password saat ini --}}
                                 <x-form.password
-                                    name="current_password"
+                                    name="current_password_phone"
                                     label="Password Saat Ini"
                                     required
                                 />
@@ -144,7 +144,6 @@
                                     type="tel"
                                     name="phone"
                                     label="Nomor WhatsApp Baru"
-                                    :value="old('phone', $user->phone)"
                                     placeholder="Contoh: 0812xxxxxxxx"
                                     required
                                 />
@@ -183,10 +182,10 @@
                                 </div>
                             </div>
 
-                            <form method="POST" action="{{ route('email.change') }}" id="changeEmailForm">
+                            <form method="POST" action="{{ route('email.change.request') }}" id="changeEmailForm">
                                 @csrf
 
-                                {{-- Email saat ini (readonly) --}}
+                                {{-- Email saat ini --}}
                                 <div class="mb-3 text-start">
                                     <label class="form-label">Email Saat Ini</label>
                                     <input type="email"
@@ -201,7 +200,7 @@
 
                                 {{-- Password saat ini --}}
                                 <x-form.password
-                                    name="current_password"
+                                    name="current_password_email"
                                     label="Password Saat Ini"
                                     required
                                 >
@@ -267,7 +266,7 @@
 
                                 {{-- Password saat ini --}}
                                 <x-form.password
-                                    name="current_password"
+                                    name="current_password_password"
                                     label="Password Saat Ini"
                                     required
                                 >
@@ -330,6 +329,11 @@
         <script src="{{ asset('js/toggle-password.js') }}"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+                if ('scrollRestoration' in history) {
+                        history.scrollRestoration = 'manual';
+                    }
+                    window.scrollTo(0, 0);
+
                 const navButtons = document.querySelectorAll('#profile-settings-nav .nav-link');
 
                 navButtons.forEach(btn => {
@@ -343,10 +347,6 @@
                                 behavior: 'smooth'
                             });
                         }
-
-                        // set active state
-                        navButtons.forEach(b => b.classList.remove('active'));
-                        this.classList.add('active');
                     });
                 });
             });
