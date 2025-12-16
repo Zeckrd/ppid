@@ -10,7 +10,7 @@
                             <div class="card-body p-3">
                                 <h6 class="text-uppercase text-muted small mb-3">Pengaturan Akun</h6>
                                 <div class="nav flex-column nav-pills" id="profile-settings-nav" role="tablist" aria-orientation="vertical">
-                                    <button class="nav-link text-start mb-1"
+                                    <button class="nav-link active text-start mb-1"
                                             type="button"
                                             data-scroll-target="#section-basic">
                                         Profil Dasar
@@ -333,7 +333,7 @@
                         history.scrollRestoration = 'manual';
                     }
                     window.scrollTo(0, 0);
-
+                    
                 const navButtons = document.querySelectorAll('#profile-settings-nav .nav-link');
 
                 navButtons.forEach(btn => {
@@ -347,6 +347,10 @@
                                 behavior: 'smooth'
                             });
                         }
+
+                        // set active state
+                        navButtons.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
                     });
                 });
             });
