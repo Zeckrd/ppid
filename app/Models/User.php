@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
-use App\Notifications\CustomResetPassword;
+use App\Notifications\ResetPassword;
 
 class User extends Authenticatable implements CanResetPassword
 {
@@ -95,7 +95,7 @@ class User extends Authenticatable implements CanResetPassword
     
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new CustomResetPassword($token));
+        $this->notify(new ResetPassword($token));
     }
 
     public function routeNotificationForWablas(): ?string

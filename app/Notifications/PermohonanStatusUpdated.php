@@ -19,7 +19,7 @@ class PermohonanStatusUpdated extends Notification
         $mapped = [];
 
         foreach ($this->channels as $ch) {
-            $mapped[] = $ch === 'wablas' ? WablasChannel::class : $ch; // 'mail' stays 'mail'
+            $mapped[] = $ch === 'wablas' ? WablasChannel::class : $ch;
         }
 
         return $mapped;
@@ -60,7 +60,6 @@ class PermohonanStatusUpdated extends Notification
 
     public function toMail($notifiable): MailMessage
     {
-        // reuse existing blade email view
         return (new MailMessage)
             ->subject('Pembaruan Status Permohonan Informasi')
             ->view('emails.status_update', [
