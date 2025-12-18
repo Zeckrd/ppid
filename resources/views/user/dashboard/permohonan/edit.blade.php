@@ -278,7 +278,7 @@
                                 Anda dapat menambah file baru. Total maksimal 10 file, masing-masing 5 MB.
                             </div>
 
-                            {{-- Preview files that are about to be uploaded --}}
+                            {{-- Preview files about to be uploaded --}}
                             <div id="permohonan_files_preview" class="mt-2 d-none">
                                 <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
                                     <span class="mt-1">

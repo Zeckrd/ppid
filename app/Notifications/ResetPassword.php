@@ -35,7 +35,6 @@ class ResetPassword extends Notification //implements ShouldQueue
 
         return (new MailMessage)
             ->subject('Reset Password Akun Anda')
-            // Render your own HTML blade email:
             ->view('emails.reset-password', [
                 'user' => $notifiable,
                 'confirmUrl' => $confirmUrl,

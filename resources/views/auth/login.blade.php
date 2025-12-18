@@ -1,7 +1,6 @@
 <x-layout>
     <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
         <div class="row w-100 justify-content-center">
-            {{-- Make sure the column is wide enough for reCAPTCHA on all breakpoints --}}
             <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                 <div class="card shadow border-0">
                     <div class="card-body p-4 text-center">

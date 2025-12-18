@@ -329,6 +329,8 @@
         <script src="{{ asset('js/toggle-password.js') }}"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+
+                // BANDAID CUZ PAGE KEEPS SCROLLING TO EMAIL SECTION
                 if ('scrollRestoration' in history) {
                         history.scrollRestoration = 'manual';
                     }

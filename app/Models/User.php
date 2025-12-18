@@ -66,7 +66,7 @@ class User extends Authenticatable implements CanResetPassword
     }
 
     /**
-     * Phone number normalizator
+     * Phone number normalizator DEPRECIATED
      */
     public function setPhoneAttribute($value): void
     {

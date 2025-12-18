@@ -1,3 +1,5 @@
+{{-- DEPRECIATED --}}
+{{-- TODO: REUSE NEXT REFACTOR --}}
 @switch($status)
     @case('Menunggu Verifikasi Berkas Dari Petugas')
         <span class="badge bg-warning text-dark"><i class="ri-time-line me-1"></i>Menunggu Verifikasi</span>

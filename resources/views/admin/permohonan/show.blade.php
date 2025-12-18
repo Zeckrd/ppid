@@ -159,7 +159,7 @@
                                             <div class="d-flex justify-content-between align-items-center gap-3">
                                                 <div class="flex-grow-1 min-width-0">
                                                     <div class="fw-medium text-truncate" title="{{ $file->original_name }}">
-                                                        {{-- BLUE icon here --}}
+                                                        {{-- BLUE icon --}}
                                                         <i class="ri-file-line me-1 text-primary"></i>
                                                         {{ $file->original_name }}
                                                     </div>
@@ -171,7 +171,7 @@
                                                 </div>
 
                                                 <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                                    {{-- eye icon stays grey (no extra color) --}}
+                                                    {{-- eye icon --}}
                                                     @if ($file->isPdf())
                                                         <a href="{{ route('admin.permohonan.files.view', [$permohonan->id, $file->id]) }}"
                                                         target="_blank"
@@ -275,10 +275,10 @@
 
                                     <hr class="my-3">
 
-                                    {{-- Lampiran Keberatan (USER ONLY, like Lampiran) --}}
+                                    {{-- Lampiran Keberatan --}}
                                     <div class="mb-2">
                                         <div class="d-flex align-items-center mb-3">
-                                            {{-- RED icon & standardized "Lampiran" --}}
+                                            {{-- RED icon --}}
                                             <i class="ri-file-text-line text-danger me-2"></i>
                                             <h6 class="mb-0 small text-muted fw-bold">Lampiran</h6>
                                         </div>
@@ -302,7 +302,7 @@
                                                             </div>
 
                                                             <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                                                {{-- eye icons grey (no color class) --}}
+                                                                {{-- eye icon --}}
                                                                 @if($file->isPdf())
                                                                     <a href="{{ route('admin.keberatan.files.view', [$permohonan, $permohonan->keberatan, $file]) }}"
                                                                     target="_blank"
@@ -423,7 +423,7 @@
                                         (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 5 MB.
                                     </div>
 
-                                    {{-- Preview files that are about to be uploaded --}}
+                                    {{-- Preview files about to be uploaded --}}
                                     <div id="reply_files_preview" class="mt-2 d-none">
                                         <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
                                             <span class="mt-1">
@@ -435,7 +435,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Existing reply files + delete toggle --}}
+                                {{-- Existing reply files --}}
                                 @if($replyFiles->count())
                                     <div class="mt-3">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -473,7 +473,7 @@
                                                         </div>
 
                                                         <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                                            {{-- View (grey) --}}
+                                                            {{-- View --}}
                                                             @if($file->isPdf())
                                                                 <a href="{{ route('admin.permohonan.reply-files.view', [$permohonan->id, $file->id]) }}"
                                                                 target="_blank"
@@ -581,7 +581,7 @@
                                             (PDF, DOC, DOCX). Maksimal 10 file, masing-masing 5 MB.
                                         </div>
 
-                                        {{-- Preview files that are about to be uploaded --}}
+                                        {{-- Preview files to be uploaded --}}
                                         <div id="keberatan_reply_files_preview" class="mt-2 d-none">
                                             <div class="small text-muted d-flex align-items-start gap-2 flex-wrap">
                                                 <span class="mt-1">
@@ -594,7 +594,7 @@
                                         </div>
                                     </div>
 
-                                    {{-- Existing reply files + delete toggle --}}
+                                    {{-- Existing reply files --}}
                                     @if($kbReplyFiles->count())
                                         <div class="mt-3">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -633,7 +633,7 @@
                                                             </div>
 
                                                             <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                                                {{-- View (grey) --}}
+                                                                {{-- View --}}
                                                                 @if($file->isPdf())
                                                                     <a href="{{ route('admin.keberatan.reply_files.view', [$permohonan, $permohonan->keberatan, $file]) }}"
                                                                     target="_blank"

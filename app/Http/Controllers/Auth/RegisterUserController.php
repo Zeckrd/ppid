@@ -24,7 +24,7 @@ class RegisterUserController extends Controller
         // debug this
         // dd(request()->all());
 
-        // Normaliza phone number
+        //normaliza phone number
         $phoneRaw = request()->input('phone', '');
 
         $phone = preg_replace('/[^0-9]/', '', $phoneRaw);
@@ -45,7 +45,7 @@ class RegisterUserController extends Controller
         //create User
         $user = User::create($attributes);
 
-         // Str to generate token example: "20a5d4cb-8b12-48c6-a0b2-e4e39d01e3b5"
+         //str to generate token
         $token = Str::uuid();
 
         //store token in prone verification table with associated user id

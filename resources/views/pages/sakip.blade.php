@@ -6,7 +6,7 @@
     <!-- Menu -->
     <section class="py-5" id="features">
         <div class="container px-5 my-5">
-            <div class="row gx-5 row-cols-2 row-cols-md-3 g-4 justify-content-center"> <!-- TODO: target="_blank" on all a href -->
+            <div class="row gx-5 row-cols-2 row-cols-md-3 g-4 justify-content-center">
                 <div class=" col-md-9">
                     <div class="tab-content" id="v-pills-tabContent">
                         <div class="tab-pane fade show active" id="v-pills-sakip" role="tabpanel" aria-labelledby="v-pills-sakip-tab">

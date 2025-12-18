@@ -222,12 +222,11 @@ class PermohonanController extends Controller
             });
         }
 
-        // Status filter: DO NOT MIX single and multi
-        // Priority: explicit single status > statuses[] preset
+        // Status filter
         if ($status && $status !== 'Semua') {
             $query->where('status', $status);
         } elseif (!empty($statuses)) {
-            // Clean up empty values just in case
+            // Clean up empty values
             $statuses = array_values(array_filter($statuses, fn ($s) => $s !== null && $s !== ''));
             if (!empty($statuses)) {
                 $query->whereIn('status', $statuses);

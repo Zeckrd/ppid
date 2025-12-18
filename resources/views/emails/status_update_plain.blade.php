@@ -1,3 +1,4 @@
+{{-- DEPRECIATED --}}
 Yth. {{ $permohonan->user->name ?? 'Pemohon' }},
 
 Status permohonan Anda telah diperbarui menjadi: {{ $permohonan->status }}.

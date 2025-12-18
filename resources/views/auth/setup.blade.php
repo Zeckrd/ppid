@@ -51,33 +51,6 @@
                                 Edit Profil (Email / No. WhatsApp / Nama)
                             </a>
 
-                            {{-- reverify phone
-                            <form action="{{ route('phone.send') }}" method="POST">
-                                @csrf
-
-                                @php
-                                    $verification = \App\Models\PhoneVerification::where('user_id', auth()->id())->first();
-                                    $cooldown = 0;
-
-                                    if ($verification && $verification->last_sent_at) {
-                                        $secondsSince = now()->diffInSeconds($verification->last_sent_at);
-                                        if ($secondsSince < 120) {
-                                            $cooldown = 120 - $secondsSince;
-                                        }
-                                    }
-                                @endphp
-
-                                @if($cooldown > 0)
-                                    <button type="button" class="btn btn-secondary w-100" disabled>
-                                        Tunggu {{ $cooldown }} detik untuk mengirim ulang
-                                    </button>
-                                @else
-                                    <button class="btn btn-primary w-100">
-                                        Kirim Ulang Link Verifikasi
-                                    </button>
-                                @endif
-                            </form> --}}
-
                             {{-- logout --}}
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
