@@ -26,7 +26,6 @@ class PermohonanController extends Controller
         $ext  = pathinfo($name, PATHINFO_EXTENSION);
         $base = pathinfo($name, PATHINFO_FILENAME);
 
-        // Replace disallowed chars with hyphen
         $base = preg_replace('/[^\pL\pN .,_-]+/u', '-', $base);
         $base = preg_replace('/\s+/', ' ', $base);
         $base = trim($base, ".-_ ");
@@ -165,9 +164,9 @@ class PermohonanController extends Controller
 
                 $permohonan->files()->create([
                     'path'          => $path,
-                    'original_name' => $safeName,                  // sanitized on upload
+                    'original_name' => $safeName,
                     'size'          => $uploadedFile->getSize(),
-                    'mime_type'     => $uploadedFile->getMimeType(), // server-detected
+                    'mime_type'     => $uploadedFile->getMimeType(),
                 ]);
             }
 
@@ -235,7 +234,6 @@ class PermohonanController extends Controller
 
         $absolutePath = Storage::disk('local')->path($file->path);
 
-        // Optional: if you already added sanitizeFilename() helper in the controller, use it here
         $filename = method_exists($this, 'sanitizeFilename')
             ? $this->sanitizeFilename($file->original_name ?? 'reply.pdf')
             : ($file->original_name ?? 'reply.pdf');
