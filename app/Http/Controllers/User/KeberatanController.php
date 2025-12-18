@@ -88,7 +88,7 @@ class KeberatanController extends Controller
         }
 
         $validated = $request->validate([
-            'keterangan_user'   => 'required|string|max:1000',
+            'keterangan_user'   => 'required|string|max:1024',
             'keberatan_files'   => 'required|array|min:1|max:10',
             'keberatan_files.*' => 'file|mimes:pdf,doc,docx|max:5120',
         ]);
