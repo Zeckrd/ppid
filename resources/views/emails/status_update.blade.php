@@ -263,7 +263,7 @@
                                                target="_blank"
                                                rel="noopener"
                                                style="display:block;margin:0;font-family:Sofia Sans,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:34px;font-weight:700;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;letter-spacing:-0.2px;direction:ltr;color:#FFFFFF;text-align:center;">
-                                              Lihat Detail Permohonan
+                                              Lihat Detail
                                             </a>
                                           </td>
                                         </tr>

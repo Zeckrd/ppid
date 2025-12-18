@@ -32,19 +32,23 @@ class PermohonanStatusUpdated extends Notification
 
     public function toWablas($notifiable): string
     {
-        $p = $this->permohonan->loadMissing('keberatan');
+        $p = $this->permohonan->loadMissing(['keberatan', 'user']);
+
+        $userName = $notifiable->name
+            ?? optional($p->user)->name
+            ?? '';
 
         $lines = [];
-        $lines[] = "Status Permohonan informasi: *{$p->status}*";
+        $lines[] = "Halo *{$userName}*, permohonan informasi Anda telah diperbarui.";
+        $lines[] = "Status Permohonan Informasi: *{$p->status}*";
 
         if (!empty($p->keterangan_petugas)) {
             $lines[] = "Keterangan Petugas: {$p->keterangan_petugas}";
         }
 
-        $lines[] = "";
-
         if ($p->keberatan) {
-            $lines[] = "Status Keberatan atas informasi: {$p->keberatan->status}";
+            $lines[] = "";
+            $lines[] = "Status Keberatan: *{$p->keberatan->status}*";
 
             if (!empty($p->keberatan->keterangan_petugas)) {
                 $lines[] = "Keterangan Petugas: {$p->keberatan->keterangan_petugas}";
@@ -52,7 +56,6 @@ class PermohonanStatusUpdated extends Notification
         }
 
         $lines[] = "";
-
         $lines[] = "Lihat detail: " . $this->userPermohonanUrl();
 
         return implode("\n", $lines);
