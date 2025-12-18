@@ -10,12 +10,35 @@ use App\Models\User;
 use App\Models\Permohonan;
 use App\Models\PermohonanFile;
 use App\Models\PermohonanReplyFile;
-use App\Services\WhatsAppNotificationService;
 use App\Notifications\AdminPermohonanCreated;
 use App\Notifications\AdminPermohonanUpdatedByUser;
 
 class PermohonanController extends Controller
 {
+    /**
+     * Make a filename to store/display/download.
+     */
+    protected function sanitizeFilename(string $name): string
+    {
+        $name = preg_replace("/[\r\n]+/", ' ', $name);
+        $name = trim($name);
+
+        $ext  = pathinfo($name, PATHINFO_EXTENSION);
+        $base = pathinfo($name, PATHINFO_FILENAME);
+
+        // Replace disallowed chars with hyphen
+        $base = preg_replace('/[^\pL\pN .,_-]+/u', '-', $base);
+        $base = preg_replace('/\s+/', ' ', $base);
+        $base = trim($base, ".-_ ");
+
+        if ($base === '') $base = 'file';
+
+        $ext = preg_replace('/[^A-Za-z0-9]+/', '', $ext);
+        $ext = strtolower($ext);
+
+        return $ext ? ($base . '.' . $ext) : $base;
+    }
+
     public function create()
     {
         return view('user.dashboard.permohonan.create');
@@ -25,14 +48,13 @@ class PermohonanController extends Controller
     {
         $validated = $request->validate([
             'permohonan_type' => 'required|in:biasa,khusus',
-            'keterangan_user' => 'required|string|max:512',
+            'keterangan_user' => 'required|string|max:1024',
             'reply_type'      => 'required|in:softcopy,hardcopy',
 
             'permohonan_files'   => 'required|array|min:1|max:10',
             'permohonan_files.*' => 'file|mimes:pdf,doc,docx|max:5120',
         ]);
 
-        // create permohonan
         $permohonan = Permohonan::create([
             'user_id'         => auth()->id(),
             'permohonan_type' => $validated['permohonan_type'],
@@ -40,23 +62,21 @@ class PermohonanController extends Controller
             'reply_type'      => $validated['reply_type'],
         ]);
 
-        // store each file on private disk and create records
-        /** @var \Illuminate\Http\UploadedFile[] $uploadedFiles */
         $uploadedFiles = $request->file('permohonan_files', []);
 
         foreach ($uploadedFiles as $uploadedFile) {
-            // store in private area: storage/app/permohonan/...
-            $path = $uploadedFile->store('permohonan', 'local'); 
+            $path = $uploadedFile->store('permohonan', 'local');
+
+            $safeName = $this->sanitizeFilename($uploadedFile->getClientOriginalName());
 
             $permohonan->files()->create([
                 'path'          => $path,
-                'original_name' => $uploadedFile->getClientOriginalName(),
+                'original_name' => $safeName,
                 'size'          => $uploadedFile->getSize(),
-                'mime_type'     => $uploadedFile->getClientMimeType(),
+                'mime_type'     => $uploadedFile->getMimeType(),
             ]);
         }
 
-        // WhatsApp notification on permohonan created
         $admins = User::admins()->get();
         Notification::send($admins, new AdminPermohonanCreated($permohonan));
 
@@ -65,21 +85,25 @@ class PermohonanController extends Controller
             ->with('success', 'Permohonan berhasil dibuat.');
     }
 
-
     public function show(Permohonan $permohonan)
     {
+        $this->authorize('view', $permohonan);
+
         $permohonan->load('files', 'keberatan');
         return view('user.dashboard.permohonan.show', compact('permohonan'));
     }
 
     public function edit(Permohonan $permohonan)
     {
+        $this->authorize('update', $permohonan);
+
         return view('user.dashboard.permohonan.edit', compact('permohonan'));
     }
 
     public function update(Request $request, Permohonan $permohonan)
     {
-        // status 'Menunggu Verifikasi Berkas Dari Petugas', 'Perlu Diperbaiki' can be edited
+        $this->authorize('update', $permohonan);
+
         $canEditFiles = in_array(
             $permohonan->status,
             ['Menunggu Verifikasi Berkas Dari Petugas', 'Perlu Diperbaiki']
@@ -87,7 +111,7 @@ class PermohonanController extends Controller
 
         $rules = [
             'permohonan_type' => 'required|in:biasa,khusus',
-            'keterangan_user' => 'required|string',
+            'keterangan_user' => 'required|string|max:1024',
             'reply_type'      => 'required|in:softcopy,hardcopy',
         ];
 
@@ -108,7 +132,6 @@ class PermohonanController extends Controller
         ];
 
         if ($canEditFiles) {
-            // Delete selected existing files
             $deleteIds = $validated['delete_file_ids'] ?? [];
 
             if (! empty($deleteIds)) {
@@ -117,55 +140,44 @@ class PermohonanController extends Controller
                     ->get();
 
                 foreach ($filesToDelete as $file) {
-                    // delete physical file
                     if (Storage::disk('local')->exists($file->path)) {
                         Storage::disk('local')->delete($file->path);
                     }
-
-                    // delete DB record
                     $file->delete();
                 }
             }
 
-            // Add new files
             $newFiles = $request->file('permohonan_files', []);
 
             $currentCount  = $permohonan->files()->count();
             $newFilesCount = $newFiles ? count($newFiles) : 0;
-            $totalAfter    = $currentCount + $newFilesCount;
 
-            if ($totalAfter > 10) {
+            if (($currentCount + $newFilesCount) > 10) {
                 return back()
-                    ->withErrors([
-                        'permohonan_files' => 'Jumlah lampiran tidak boleh lebih dari 10.',
-                    ])
+                    ->withErrors(['permohonan_files' => 'Jumlah lampiran tidak boleh lebih dari 10.'])
                     ->withInput();
             }
 
-            if (! empty($newFiles)) {
-                foreach ($newFiles as $uploadedFile) {
-                    $path = $uploadedFile->store('permohonan', 'local');
+            foreach ($newFiles as $uploadedFile) {
+                $path = $uploadedFile->store('permohonan', 'local');
 
-                    $permohonan->files()->create([
-                        'path'          => $path,
-                        'original_name' => $uploadedFile->getClientOriginalName(),
-                        'size'          => $uploadedFile->getSize(),
-                        'mime_type'     => $uploadedFile->getClientMimeType(),
-                    ]);
-                }
+                $safeName = $this->sanitizeFilename($uploadedFile->getClientOriginalName());
+
+                $permohonan->files()->create([
+                    'path'          => $path,
+                    'original_name' => $safeName,                  // sanitized on upload
+                    'size'          => $uploadedFile->getSize(),
+                    'mime_type'     => $uploadedFile->getMimeType(), // server-detected
+                ]);
             }
 
-            // ensure at least 1 attachment remains
             if ($permohonan->files()->count() === 0) {
                 return back()
-                    ->withErrors([
-                        'permohonan_files' => 'Minimal satu lampiran diperlukan.',
-                    ])
+                    ->withErrors(['permohonan_files' => 'Minimal satu lampiran diperlukan.'])
                     ->withInput();
             }
         }
 
-        // Status reset logic
         if ($permohonan->status === 'Perlu Diperbaiki') {
             $updateData['status'] = 'Menunggu Verifikasi Berkas Dari Petugas';
             $updateData['keterangan_petugas'] = null;
@@ -173,7 +185,6 @@ class PermohonanController extends Controller
 
         $permohonan->update($updateData);
 
-        // WhatsApp notification on permohonan updated by user
         $admins = User::admins()->get();
         Notification::send($admins, new AdminPermohonanUpdatedByUser($permohonan));
 
@@ -184,66 +195,82 @@ class PermohonanController extends Controller
 
     public function viewFile(Permohonan $permohonan, PermohonanFile $file)
     {
-        if ($file->permohonan_id !== $permohonan->id) {
-            abort(404);
-        }
+        $this->authorize('view', $permohonan);
 
-        if (! Storage::disk('local')->exists($file->path)) {
-            abort(404);
-        }
+        if ($file->permohonan_id !== $permohonan->id) abort(404);
+        if (!Storage::disk('local')->exists($file->path)) abort(404);
 
-        // (failsafe) if not PDF, just send them to the download route
+        // Only inline PDF; others download
         if (! $file->isPdf()) {
             return redirect()->route('user.permohonan.files.download', [$permohonan->id, $file->id]);
         }
 
         $absolutePath = Storage::disk('local')->path($file->path);
+        $safeName = $this->sanitizeFilename($file->original_name ?? 'file.pdf');
 
-        // stream inline so browser opens PDF viewer
         return response()->file($absolutePath, [
-            'Content-Disposition' => 'inline; filename="' . $file->original_name . '"',
+            'Content-Type' => 'application/pdf',
+            'X-Content-Type-Options' => 'nosniff',
+            'Content-Disposition' => 'inline; filename="' . $safeName . '"',
         ]);
     }
 
-    public function downloadFile(Permohonan $permohonan, PermohonanFile $file)
+    public function viewReplyFile(Permohonan $permohonan, PermohonanReplyFile $file)
     {
-        // Ensure file belongs to this permohonan
+        $this->authorize('view', $permohonan);
+
+        // ensure reply file belongs to this permohonan
         if ($file->permohonan_id !== $permohonan->id) {
             abort(404);
         }
 
-        // Ensure current user owns this permohonan
-        if ($permohonan->user_id !== auth()->id()) {
-            abort(403);
+        if (!Storage::disk('local')->exists($file->path)) {
+            abort(404);
         }
 
-        if (! Storage::disk('local')->exists($file->path)) {
-            abort(404);
+        // Only inline PDF; others go to download
+        if (! $file->isPdf()) {
+            return redirect()->route('user.permohonan.reply-files.download', [$permohonan->id, $file->id]);
         }
 
         $absolutePath = Storage::disk('local')->path($file->path);
 
-        return response()->download($absolutePath, $file->original_name);
+        // Optional: if you already added sanitizeFilename() helper in the controller, use it here
+        $filename = method_exists($this, 'sanitizeFilename')
+            ? $this->sanitizeFilename($file->original_name ?? 'reply.pdf')
+            : ($file->original_name ?? 'reply.pdf');
+
+        return response()->file($absolutePath, [
+            'Content-Type' => 'application/pdf',
+            'X-Content-Type-Options' => 'nosniff',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+        ]);
+    }
+
+
+    public function downloadFile(Permohonan $permohonan, PermohonanFile $file)
+    {
+        $this->authorize('view', $permohonan);
+
+        if ($file->permohonan_id !== $permohonan->id) abort(404);
+        if (!Storage::disk('local')->exists($file->path)) abort(404);
+
+        $absolutePath = Storage::disk('local')->path($file->path);
+        $safeName = $this->sanitizeFilename($file->original_name ?? 'file');
+
+        return response()->download($absolutePath, $safeName);
     }
 
     public function downloadReplyFile(Permohonan $permohonan, PermohonanReplyFile $file)
     {
-        if ($file->permohonan_id !== $permohonan->id) {
-            abort(404);
-        }
+        $this->authorize('view', $permohonan);
 
-        if ($permohonan->user_id !== auth()->id()) {
-            abort(403);
-        }
-
-        if (! Storage::disk('local')->exists($file->path)) {
-            abort(404);
-        }
+        if ($file->permohonan_id !== $permohonan->id) abort(404);
+        if (!Storage::disk('local')->exists($file->path)) abort(404);
 
         $absolutePath = Storage::disk('local')->path($file->path);
+        $safeName = $this->sanitizeFilename($file->original_name ?? 'file');
 
-        return response()->download($absolutePath, $file->original_name);
+        return response()->download($absolutePath, $safeName);
     }
-
 }
-
