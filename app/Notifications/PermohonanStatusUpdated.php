@@ -40,6 +40,7 @@ class PermohonanStatusUpdated extends Notification
 
         $lines = [];
         $lines[] = "Halo *{$userName}*, permohonan informasi Anda telah diperbarui.";
+        $lines[] = "";
         $lines[] = "Status Permohonan Informasi: *{$p->status}*";
 
         if (!empty($p->keterangan_petugas)) {
