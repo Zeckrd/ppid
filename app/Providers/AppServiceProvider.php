@@ -48,7 +48,7 @@ public function boot(): void
             if ($userId) {
                 return [
                     Limit::perMinute(2)->by('email-change:user:'.$userId),
-                    Limit::perHour(5)->by('email-change:user:'.$userId),
+                    Limit::perHour(4)->by('email-change:user:'.$userId),
                 ];
             }
 
