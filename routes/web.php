@@ -64,10 +64,14 @@ Route::middleware(['auth'])
     ->group(function () {
 
     Route::post('/profile/email-change', [EmailChangeController::class, 'requestChange'])
+        ->middleware(['auth','throttle:email-change'])
         ->name('email.change.request');
+
 });
 Route::get('/profile/email-change/confirm/{token}', [EmailChangeController::class, 'confirm'])
+    ->middleware('throttle:email-confirm')
     ->name('email.change.confirm');
+
 
 // Verified User Routes
 Route::middleware(['auth', 'phone.verified'])
@@ -196,10 +200,12 @@ Route::get('/dashboard', function () {
 
 // Authentication Routes
 Route::get('/register', [RegisterUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisterUserController::class, 'store']);
+Route::post('/register', [RegisterUserController::class, 'store'])
+    ->middleware('throttle:register');
 
 Route::get('/login', [SessionController::class, 'create'])->name('login');
-Route::post('/login', [SessionController::class, 'store']);
+Route::post('/login', [SessionController::class, 'store'])
+    ->middleware('throttle:login');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
 Route::get('/forgot-password', [PasswordResetController::class, 'requestForm'])->name('password.request');
@@ -212,7 +218,11 @@ Route::post('/reset-password', [PasswordResetController::class, 'updatePassword'
 
 
 // Phone Verification
-Route::get('/verify-phone/{token}', [PhoneVerificationController::class, 'verify'])->name('verify.phone');
+Route::get('/verify-phone/{token}', [PhoneVerificationController::class, 'verify'])
+    ->middleware('throttle:phone-verify')
+    ->name('verify.phone');
+
 Route::post('/verify-phone/send', [PhoneVerificationController::class, 'send'])
-     ->middleware(['auth'])
-     ->name('phone.send');
+    ->middleware(['auth','throttle:phone-send'])
+    ->name('phone.send');
+
