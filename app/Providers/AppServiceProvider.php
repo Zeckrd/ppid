@@ -38,7 +38,7 @@ public function boot(): void
 
         // register: limit by IP
         RateLimiter::for('register', function (Request $request) {
-            return Limit::perMinute(2)->by($request->ip());
+            return Limit::perMinute(5)->by($request->ip());
         });
 
         // email-change: request: limit per user + IP fallback
@@ -47,12 +47,12 @@ public function boot(): void
 
             if ($userId) {
                 return [
-                    Limit::perMinute(2)->by('email-change:user:'.$userId),
-                    Limit::perHour(4)->by('email-change:user:'.$userId),
+                    Limit::perMinute(3)->by('email-change:user:'.$userId),
+                    Limit::perHour(6)->by('email-change:user:'.$userId),
                 ];
             }
 
-            return Limit::perMinute(2)->by('email-change:ip:'.$request->ip());
+            return Limit::perMinute(3)->by('email-change:ip:'.$request->ip());
         });
 
         // email-confirm link: limit by IP
