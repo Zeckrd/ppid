@@ -5,6 +5,9 @@ use App\Http\Middleware\IsAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Http\Request;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,6 +22,31 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+
+        $exceptions->render(function (ThrottleRequestsException $e, Request $request) {
+            $retryAfter = (int) ($e->getHeaders()['Retry-After'] ?? 60);
+
+            $message = "Terlalu banyak percobaan. Silakan coba lagi dalam {$retryAfter} detik.";
+
+            $headers = $e->getHeaders();
+
+            // For API
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message], 429, $headers);
+            }
+
+            // For GET endpoints
+            if ($request->isMethod('get')) {
+                return response($message, 429, $headers);
+            }
+
+            // For form POST: redirect back with error
+            return back()
+                ->withInput($request->except(['password', 'password_confirmation']))
+                ->withErrors(['throttle' => $message])
+                ->setStatusCode(429)
+                ->withHeaders($headers);
+        });
+
     })
     ->create();
