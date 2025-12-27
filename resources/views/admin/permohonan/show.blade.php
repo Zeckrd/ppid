@@ -12,7 +12,7 @@
                 <p class="text-muted mb-0">Kelola dan proses permohonan</p>
             </div>
             <div class="d-flex gap-2 align-items-center">
-                <span class="badge bg-secondary px-3 py-2">Admin View</span>
+                <span class="badge bg-secondary px-3 py-2">Admin</span>
             </div>
         </div>
 
@@ -39,58 +39,59 @@
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body p-4">
                         <!-- User & Status Banner -->
-                        <div class="d-flex align-items-center justify-content-between p-3 rounded mb-4" style="background-color: #f8f9fa;">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle" style="width: 48px; height: 48px;">
-                                    <i class="ri-user-line text-primary" style="font-size: 1.5rem;"></i>
-                                </div>
-                                <div>
-                                    <h5 class="mb-1 fw-bold">{{ $permohonan->user->name ?? '-' }}</h5>
-                                    <div class="text-muted small">
-                                        <i class="ri-mail-line me-1"></i>
-                                        {{ $permohonan->user->email ?? '-' }}
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2 p-3 rounded mb-4"
+                            style="background-color: #f8f9fa;">
+                        <div class="d-flex align-items-center gap-3">
                             <div>
-                                @switch($permohonan->status)
-                                    @case('Menunggu Verifikasi Berkas Dari Petugas')
-                                        <span class="badge bg-warning text-dark px-3 py-2">
-                                            <i class="ri-time-line me-1"></i> Menunggu Verifikasi
-                                        </span>
-                                        @break
-                                    @case('Sedang Diverifikasi petugas')
-                                        <span class="badge bg-primary px-3 py-2">
-                                            <i class="ri-search-eye-line me-1"></i> Diverifikasi
-                                        </span>
-                                        @break
-                                    @case('Perlu Diperbaiki')
-                                        <span class="badge bg-danger px-3 py-2">
-                                            <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
-                                        </span>
-                                        @break
-                                    @case('Diproses')
-                                        <span class="badge bg-info text-dark px-3 py-2">
-                                            <i class="ri-loader-4-line me-1"></i> Diproses
-                                        </span>
-                                        @break
-                                    @case('Diterima')
-                                        <span class="badge bg-success px-3 py-2">
-                                            <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                        </span>
-                                        @break
-                                    @case('Ditolak')
-                                        <span class="badge bg-danger px-3 py-2">
-                                            <i class="ri-close-circle-line"></i> Ditolak
-                                        </span>
-                                        @break
-                                    @default
-                                        <span class="badge bg-secondary px-3 py-2">
-                                            {{ ucfirst($permohonan->status) }}
-                                        </span>
-                                @endswitch
+                                <h5 class="mb-1 fw-bold">{{ $permohonan->user->name ?? '-' }}</h5>
+                                <div class="text-muted small text-truncate">
+                                    <i class="ri-mail-line me-1"></i>
+                                    {{ $permohonan->user->email ?? '-' }}
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Status Badge -->
+                        <div class="w-100 text-md-end">
+                            @switch($permohonan->status)
+                            @case('Menunggu Verifikasi Berkas Dari Petugas')
+                                <span class="badge bg-warning text-dark px-3 py-2 d-inline-flex align-items-center">
+                                <i class="ri-time-line me-1"></i> Menunggu Verifikasi
+                                </span>
+                                @break
+                            @case('Sedang Diverifikasi petugas')
+                                <span class="badge bg-primary px-3 py-2 d-inline-flex align-items-center">
+                                <i class="ri-search-eye-line me-1"></i> Diverifikasi
+                                </span>
+                                @break
+                            @case('Perlu Diperbaiki')
+                                <span class="badge bg-danger px-3 py-2 d-inline-flex align-items-center">
+                                <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
+                                </span>
+                                @break
+                            @case('Diproses')
+                                <span class="badge bg-info text-dark px-3 py-2 d-inline-flex align-items-center">
+                                <i class="ri-loader-4-line me-1"></i> Diproses
+                                </span>
+                                @break
+                            @case('Diterima')
+                                <span class="badge bg-success px-3 py-2 d-inline-flex align-items-center">
+                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
+                                </span>
+                                @break
+                            @case('Ditolak')
+                                <span class="badge bg-danger px-3 py-2 d-inline-flex align-items-center">
+                                <i class="ri-close-circle-line me-1"></i> Ditolak
+                                </span>
+                                @break
+                            @default
+                                <span class="badge bg-secondary px-3 py-2 d-inline-flex align-items-center">
+                                {{ ucfirst($permohonan->status) }}
+                                </span>
+                            @endswitch
+                        </div>
+                        </div>
+
 
                         <!-- Detail Pengajuan -->
                         <div class="row g-4 mb-4">
@@ -228,7 +229,7 @@
                                         <div class="d-flex align-items-center">
                                             <i class="ri-calendar-event-line text-muted me-2"></i>
                                             <span class="text-muted small">
-                                                Diajukan pada {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}
+                                                Diajukan {{ $permohonan->keberatan->created_at->format('d M Y, H:i') }}
                                             </span>
                                         </div>
                                         @php

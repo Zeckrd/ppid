@@ -170,11 +170,11 @@
                     <hr class="my-4">
 
                     <!-- Action Buttons -->
-                    <div class="d-flex justify-content-between align-items-center">
-                        <a href="{{ route('user.dashboard.index') }}" class="btn btn-outline-secondary">
+                    <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-between align-items-stretch align-items-md-center mt-4">
+                        <a href="{{ route('user.dashboard.index') }}" class="btn btn-outline-secondary col-12 col-md-auto">
                             <i class="ri-close-line me-1"></i> Batal
                         </a>
-                        <button type="submit" class="btn btn-primary px-4">
+                        <button type="submit" class="btn btn-primary px-4 col-12 col-md-auto">
                             <i class="ri-send-plane-line me-1"></i> Kirim Permohonan
                         </button>
                     </div>

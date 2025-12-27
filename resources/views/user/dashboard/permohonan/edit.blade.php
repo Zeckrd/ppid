@@ -49,28 +49,22 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
                     <!-- Status Banner -->
-                    <div class="d-flex align-items-center justify-content-between p-3 rounded mb-4" style="background-color: #f8f9fa;">
+                    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2 p-3 rounded mb-4"
+                            style="background-color: #f8f9fa;">
+                        
                         <div class="d-flex align-items-center gap-3">
-                            <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle" style="width: 48px; height: 48px;">
-                                <i class="ri-edit-line text-primary" style="font-size: 1.5rem;"></i>
+                            <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle"
+                                style="width: 48px; height: 48px;">
+                            <i class="ri-edit-line text-primary" style="font-size: 1.5rem;"></i>
                             </div>
+
                             <div>
-                                <h5 class="mb-1 fw-bold">Permohonan #{{ $permohonan->id }}</h5>
-                                <div class="text-muted small">Sedang dalam mode edit</div>
+                            <h5 class="mb-1 fw-bold">Permohonan #{{ $permohonan->id }}</h5>
+                            <div class="text-muted small">Sedang dalam mode edit</div>
                             </div>
-                        </div>
-                        <div>
-                            @if($permohonan->status == 'Perlu Diperbaiki')
-                                <span class="badge bg-danger px-3 py-2">
-                                    <i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki
-                                </span>
-                            @else
-                                <span class="badge bg-warning text-dark px-3 py-2">
-                                    <i class="ri-time-line me-1"></i>Menunggu Verifikasi
-                                </span>
-                            @endif
                         </div>
                     </div>
+
 
                     <!-- Form Fields -->
                     <div class="row g-4 mb-4">
@@ -297,11 +291,13 @@
 
 
                     <!-- Action Buttons -->
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <a href="{{ route('user.permohonan.show', $permohonan->id) }}" class="btn btn-outline-secondary">
+                    <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-between align-items-stretch align-items-md-center mt-4">
+                        <a href="{{ route('user.permohonan.show', $permohonan->id) }}"
+                            class="btn btn-outline-secondary col-12 col-md-auto">
                             <i class="ri-close-line me-1"></i> Batal
                         </a>
-                        <button type="submit" class="btn btn-primary px-4">
+
+                        <button type="submit" class="btn btn-primary px-4 col-12 col-md-auto">
                             <i class="ri-save-line me-1"></i> Simpan Perubahan
                         </button>
                     </div>

@@ -332,7 +332,7 @@
                                         
                                         @case('Ditolak')
                                             <span class="badge bg-danger">
-                                                <i class="ri-close-circle-line"></i> Ditolak
+                                                <i class="ri-close-circle-line me-1"></i> Ditolak
                                             </span>
                                             @break
 
@@ -367,48 +367,83 @@
             {{-- Mobile Card View --}}
             <div class="d-lg-none">
                 @foreach($permohonans as $permohonan)
-                    <div class="card border-0 shadow-sm mb-3" 
-                         onclick="window.location='{{ route('admin.permohonan.show', $permohonan->id) }}';" 
-                         style="cursor: pointer;">
+                    <div class="card border-0 shadow-sm mb-3"
+                        onclick="window.location='{{ route('admin.permohonan.show', $permohonan->id) }}';"
+                        style="cursor: pointer;">
                         <div class="card-body p-3">
-                            {{-- Header: Status + Keberatan Badge --}}
+                            {{-- Header: Status Permohonan + Status Keberatan --}}
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <div>
+                                <div class="d-flex flex-wrap gap-2">
+
+                                    {{-- Status Permohonan --}}
                                     @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
-                                        <span class="badge bg-warning text-dark small">
-                                            <i class="ri-time-line me-1"></i>Menunggu
-                                        </span>
-                                    @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
-                                        <span class="badge bg-primary small">
-                                            <i class="ri-search-eye-line me-1"></i>Diverifikasi
-                                        </span>
-                                    @elseif($permohonan->status == 'Perlu Diperbaiki')
-                                        <span class="badge bg-danger small">
-                                            <i class="ri-error-warning-line me-1"></i>Perlu Perbaikan
-                                        </span>
-                                    @elseif($permohonan->status == 'Diproses')
-                                        <span class="badge bg-info text-dark small">
-                                            <i class="ri-loader-4-line me-1"></i>Diproses
-                                        </span>
-                                    @elseif($permohonan->status == 'Diterima')
-                                        <span class="badge bg-success small">
-                                            <i class="ri-checkbox-circle-line me-1"></i>Diterima
-                                        </span>
-                                    @elseif($permohonan->status == 'Ditolak')
-                                        <span class="badge bg-danger small">
-                                            <i class="ri-close-circle-line"></i>Ditolak
-                                        </span>
-                                    @else
-                                        <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>
-                                    @endif
-                                </div>
-                                
-                                @if($permohonan->keberatan && $permohonan->keberatan->count() > 0)
-                                    <span class="badge bg-danger-subtle text-danger border border-danger small">
-                                        <i class="ri-alert-line"></i>
+                                    <span class="badge bg-warning text-dark small">
+                                        <i class="ri-time-line me-1"></i>Menunggu Verifikasi
                                     </span>
-                                @endif
+                                    @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
+                                    <span class="badge bg-primary small">
+                                        <i class="ri-search-eye-line me-1"></i>Diverifikasi
+                                    </span>
+                                    @elseif($permohonan->status == 'Perlu Diperbaiki')
+                                    <span class="badge bg-danger small">
+                                        <i class="ri-error-warning-line me-1"></i>Perlu Perbaikan
+                                    </span>
+                                    @elseif($permohonan->status == 'Diproses')
+                                    <span class="badge bg-info text-dark small">
+                                        <i class="ri-loader-4-line me-1"></i>Diproses
+                                    </span>
+                                    @elseif($permohonan->status == 'Diterima')
+                                    <span class="badge bg-success small">
+                                        <i class="ri-checkbox-circle-line me-1"></i>Diterima
+                                    </span>
+                                    @elseif($permohonan->status == 'Ditolak')
+                                    <span class="badge bg-danger small">
+                                        <i class="ri-close-circle-line me-1"></i>Ditolak
+                                    </span>
+                                    @else
+                                    <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>
+                                    @endif
+
+                                    {{-- Status Keberatan (if keberatan exists) --}}
+                                    @if($permohonan->keberatan)
+                                    @php
+                                        $kStatus = $permohonan->keberatan->status ?? 'Pending';
+                                    @endphp
+                                        @switch($kStatus)
+                                            @case('Pending')
+                                            <span class="badge bg-warning text-dark small">
+                                                <i class="ri-time-line me-1"></i>Keberatan: Pending
+                                            </span>
+                                            @break
+
+                                            @case('Diproses')
+                                            <span class="badge bg-info text-dark small">
+                                                <i class="ri-loader-4-line me-1"></i>Keberatan: Diproses
+                                            </span>
+                                            @break
+
+                                            @case('Diterima')
+                                            <span class="badge bg-success small">
+                                                <i class="ri-checkbox-circle-line me-1"></i>Keberatan: Diterima
+                                            </span>
+                                            @break
+
+                                            @case('Ditolak')
+                                            <span class="badge bg-danger small">
+                                                <i class="ri-close-circle-line me-1"></i>Keberatan: Ditolak
+                                            </span>
+                                            @break
+
+                                            @default
+                                            <span class="badge bg-secondary small">
+                                                <i class="ri-question-line me-1"></i>Keberatan: {{ ucfirst($kStatus) }}
+                                            </span>
+                                        @endswitch
+                                    @endif
+
+                                </div>
                             </div>
+
 
                             {{-- Pemohon Name --}}
                             <h6 class="mb-2 fw-semibold">
@@ -429,16 +464,16 @@
                             </div>
 
                             {{-- Action Button --}}
-                            <a href="{{ route('admin.permohonan.show', $permohonan->id) }}" 
-                               class="btn btn-outline-primary btn-sm w-100"
-                               onclick="event.stopPropagation();">
+                            <a href="{{ route('admin.permohonan.show', $permohonan->id) }}"
+                                class="btn btn-outline-primary btn-sm w-100"
+                                onclick="event.stopPropagation();">
                                 Lihat Detail <i class="ri-arrow-right-line ms-1"></i>
                             </a>
+
                         </div>
                     </div>
                 @endforeach
             </div>
-
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
                     {{ $permohonans->appends(request()->query())->links('pagination::bootstrap-5') }}

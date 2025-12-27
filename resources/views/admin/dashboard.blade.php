@@ -5,53 +5,62 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body py-3">
                     <div class="d-flex justify-content-end">
-                        {{-- year + month + buttons --}}
-                        <div class="d-flex align-items-end gap-2 flex-nowrap">
-
-                            {{-- Year select --}}
-                            <div class="input-group input-group-sm" style="width: auto;">
-                                <span class="input-group-text" id="label-year">
-                                    <i class="ri-time-line"></i>
-                                </span>
-                                <select name="year" id="year" class="form-select form-select-sm" aria-labelledby="label-year">
-                                    <option value="semua" {{ $year === 'semua' ? 'selected' : '' }}>Semua Tahun</option>
-                                    @for($y = date('Y'); $y >= date('Y') - 5; $y--)
-                                        <option value="{{ $y }}" {{ (string)$year === (string)$y ? 'selected' : '' }}>
-                                            {{ $y }}
-                                        </option>
-                                    @endfor
-                                </select>
+                        {{-- year + month + button --}}
+                        <div class="row g-2 align-items-end">
+                            
+                        {{-- year select --}}
+                        <div class="col-12 col-md-auto">
+                            <div class="input-group input-group-sm w-100">
+                            <span class="input-group-text" id="label-year">
+                                <i class="ri-time-line"></i>
+                            </span>
+                            <select name="year" id="year" class="form-select form-select-sm" aria-labelledby="label-year">
+                                <option value="semua" {{ $year === 'semua' ? 'selected' : '' }}>Semua Tahun</option>
+                                @for($y = date('Y'); $y >= date('Y') - 5; $y--)
+                                <option value="{{ $y }}" {{ (string)$year === (string)$y ? 'selected' : '' }}>
+                                    {{ $y }}
+                                </option>
+                                @endfor
+                            </select>
                             </div>
+                        </div>
 
-                            {{-- Month select --}}
-                            <div class="input-group input-group-sm" style="width: auto;">
-                                <span class="input-group-text" id="label-month">
-                                    <i class="ri-calendar-line"></i>
-                                </span>
-                                <select name="month" id="month" class="form-select form-select-sm"
-                                        aria-labelledby="label-month"
-                                        {{ $year === 'semua' ? 'disabled' : '' }}>
-                                    <option value="semua" {{ $month === 'semua' ? 'selected' : '' }}>Semua Bulan</option>
-                                    @foreach(range(1, 12) as $m)
-                                        <option value="{{ $m }}" {{ (int)$month === $m ? 'selected' : '' }}>
-                                            {{ date('M', mktime(0, 0, 0, $m, 1)) }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                        {{-- month select --}}
+                        <div class="col-12 col-md-auto">
+                            <div class="input-group input-group-sm w-100">
+                            <span class="input-group-text" id="label-month">
+                                <i class="ri-calendar-line"></i>
+                            </span>
+                            <select name="month" id="month" class="form-select form-select-sm"
+                                    aria-labelledby="label-month"
+                                    {{ $year === 'semua' ? 'disabled' : '' }}>
+                                <option value="semua" {{ $month === 'semua' ? 'selected' : '' }}>Semua Bulan</option>
+                                @foreach(range(1, 12) as $m)
+                                <option value="{{ $m }}" {{ (int)$month === $m ? 'selected' : '' }}>
+                                    {{ date('M', mktime(0, 0, 0, $m, 1)) }}
+                                </option>
+                                @endforeach
+                            </select>
                             </div>
+                        </div>
 
-                            {{-- Apply --}}
-                            <button type="submit" class="btn btn-sm btn-primary d-flex align-items-center">
-                                <i class="ri-filter-3-line me-1"></i> Terapkan
+                        {{-- apply --}}
+                        <div class="col-6 col-md-auto d-grid">
+                            <button type="submit" class="btn btn-sm btn-primary d-flex align-items-center justify-content-center">
+                            <i class="ri-filter-3-line me-1"></i> Terapkan
                             </button>
+                        </div>
 
-                            {{-- Reset --}}
-                            @if ($year)
-                                <a href="{{ route('admin.dashboard.index') }}"
-                                class="btn btn-sm btn-danger d-flex align-items-center">
-                                    <i class="ri-refresh-line me-1"></i> Reset
-                                </a>
-                            @endif
+                        {{-- reset --}}
+                        @if ($year)
+                            <div class="col-6 col-md-auto d-grid">
+                            <a href="{{ route('admin.dashboard.index') }}"
+                                class="btn btn-sm btn-danger d-flex align-items-center justify-content-center">
+                                <i class="ri-refresh-line me-1"></i> Reset
+                            </a>
+                            </div>
+                        @endif
+
                         </div>
                     </div>
                 </div>

@@ -27,15 +27,15 @@
 
         <!-- Navigation -->
         <nav class="navbar fixed-top navbar-expand-lg navbar-white bg-white shadow">
-            <div class="container px-5">
+            <div class="container px-3 px-lg-5">
                 <a class="navbar-brand" href="/">
-                    <img src="{{ asset('img/logoppid.png') }}" class="navbar-brand" height="60px" alt="PTUN Bandung logo">
+                <img src="{{ asset('img/logoppid.png') }}" class="navbar-logo"alt="PTUN Bandung logo">
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -122,9 +122,7 @@
         <div class="container px-5">
             <div class="row align-items-center justify-content-between flex-column flex-sm-row">
                 <div class="col-auto">
-                    <div class="small m-0 text-white">
-                        &copy; Pengadilan Tata Usaha Negara Bandung
-                    </div>
+                    <div class="small m-0 text-white">&copy; Pengadilan Tata Usaha Negara Bandung</div>
                 </div>
                 <div class="col-auto">
                     <a class="link-light small" href="tel:+62227213999">📞 (022) 7213999</a>
