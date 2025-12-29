@@ -215,7 +215,7 @@
                                         {{ $p->created_at->format('d M Y') }}
                                     </small>
                                 </div>
-                                <a href="{{ route('admin.permohonan.show', $p->id) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ route('admin.permohonan.show', $p->id) }}" class="btn btn-sm btn-outline-primary text-nowrap">
                                     Lihat Detail
                                     <i class="ri-arrow-right-line ms-1"></i>
                                 </a>
