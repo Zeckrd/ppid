@@ -10842,13 +10842,14 @@ html {
   height: 100%;
 }
 
-.feature {
+.feature{
+  width: 3rem;
+  height: 3rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 3rem;
-  width: 3rem;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 .feature-box {
