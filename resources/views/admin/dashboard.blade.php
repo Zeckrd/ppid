@@ -90,7 +90,7 @@
             @php
                 $activeStatuses = [
                     'Menunggu Verifikasi',
-                    'Sedang Diverifikasi petugas',
+                    'Sedang Diverifikasi',
                     'Diproses',
                 ];
             @endphp
