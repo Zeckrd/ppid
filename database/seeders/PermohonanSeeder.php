@@ -22,9 +22,10 @@ class PermohonanSeeder extends Seeder
 
             $permohonan->update([
                 'status' => fake()->randomElement([
-                    'Menunggu Verifikasi Berkas Dari Petugas',
-                    'Sedang Diverifikasi petugas',
+                    'Menunggu Verifikasi',
+                    'Sedang Diverifikasi',
                     'Perlu Diperbaiki',
+                    'Menunggu Pembayaran',
                     'Diproses',
                     'Diterima',
                     'Ditolak'

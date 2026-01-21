@@ -31,11 +31,11 @@ class DashboardController extends Controller
 
         // Base queries (for cards)
         $permohonanQuery = Permohonan::query();
-        $keberatanQuery  = Keberatan::query();
+        $pendingKeberatanQuery = Keberatan::query()->where('status', 'Pending');
 
         // "active" group
         $activeStatuses = [
-            'Menunggu Verifikasi Berkas Dari Petugas',
+            'Menunggu Verifikasi',
             'Sedang Diverifikasi petugas',
             'Diproses',
         ];
@@ -57,7 +57,7 @@ class DashboardController extends Controller
             $dateTo   = $end->toDateString();
 
             $permohonanQuery->whereBetween('created_at', [$start, $end]);
-            $keberatanQuery->whereBetween('created_at', [$start, $end]);
+            $pendingKeberatanQuery->whereBetween('created_at', [$start, $end]);
             $activeQuery->whereBetween('created_at', [$start, $end]);
 
             // Cumulative users up to end of selected range
@@ -71,16 +71,17 @@ class DashboardController extends Controller
 
         // Cards
         $totalPermohonan = $permohonanQuery->count();
-        $totalKeberatan  = $keberatanQuery->count();
+        $pendingKeberatanCount = $pendingKeberatanQuery->count();
         $totalActive     = $activeQuery->count();
 
         // CHARTS
 
         // Status distribution
         $statuses = [
-            'Menunggu Verifikasi Berkas Dari Petugas',
-            'Sedang Diverifikasi petugas',
+            'Menunggu Verifikasi',
+            'Sedang Diverifikasi',
             'Perlu Diperbaiki',
+            'Menunggu Pembayaran',
             'Diproses',
             'Diterima',
             'Ditolak',
@@ -91,33 +92,51 @@ class DashboardController extends Controller
             $q = Permohonan::where('status', $status);
 
             if ($year !== null) {
-                // If filter year is selected, match the same range as cards
                 if ($month !== 'semua' && $start && $end) {
                     $q->whereBetween('created_at', [$start, $end]);
                 } else {
                     $q->whereYear('created_at', $year);
                 }
             } else {
-                // No filter = show distribution for current year
-                $q->whereYear('created_at', $chartYear);
+                // SEMUA WAKTU => NO YEAR FILTER
             }
 
             $statusCounts[$status] = $q->count();
         }
 
+
         // Monthly trend (always based on $chartYear)
-        $monthlyData = collect(range(1, 12))->map(function ($m) use ($chartYear) {
-            return [
-                'month'      => $m,
-                'monthLabel' => date('M', mktime(0, 0, 0, $m, 1)),
-                'permohonan' => Permohonan::whereYear('created_at', $chartYear)
-                    ->whereMonth('created_at', $m)
-                    ->count(),
-                'keberatan'  => Keberatan::whereYear('created_at', $chartYear)
-                    ->whereMonth('created_at', $m)
-                    ->count(),
-            ];
-        });
+        if ($year !== null) {
+            // Monthly trend for selected year
+            $monthlyData = collect(range(1, 12))->map(function ($m) use ($year) {
+                return [
+                    'month'      => $m,
+                    'monthLabel' => date('M', mktime(0, 0, 0, $m, 1)),
+                    'permohonan' => Permohonan::whereYear('created_at', $year)->whereMonth('created_at', $m)->count(),
+                    'keberatan'  => Keberatan::whereYear('created_at', $year)->whereMonth('created_at', $m)->count(),
+                ];
+            });
+        } else {
+            // SEMUA WAKTU => rolling last 12 months (Year-Month buckets)
+            $endMonth = now()->startOfMonth();
+            $startMonth = (clone $endMonth)->subMonths(11);
+
+            $labels = collect();
+            $monthlyData = collect();
+
+            for ($i = 0; $i < 12; $i++) {
+                $cursor = (clone $startMonth)->addMonths($i);
+                $from = (clone $cursor)->startOfMonth();
+                $to   = (clone $cursor)->endOfMonth();
+
+                $monthlyData->push([
+                    'monthLabel' => $cursor->format('M Y'),
+                    'permohonan' => Permohonan::whereBetween('created_at', [$from, $to])->count(),
+                    'keberatan'  => Keberatan::whereBetween('created_at', [$from, $to])->count(),
+                ]);
+            }
+        }
+
 
         // Daily trend for selected month (only when filter year + month selected)
         if ($year !== null && $month !== 'semua') {
@@ -173,7 +192,7 @@ class DashboardController extends Controller
             // Cards
             'totalUsers'      => $totalUsers,
             'totalPermohonan' => $totalPermohonan,
-            'totalKeberatan'  => $totalKeberatan,
+            'pendingKeberatanCount'  => $pendingKeberatanCount,
             'totalActive'     => $totalActive,
 
             // Charts

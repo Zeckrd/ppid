@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\User::class);
             $table->enum('permohonan_type', ['biasa', 'khusus'])->default('biasa');
-            $table->string('status')->default('Menunggu Verifikasi Berkas Dari Petugas');
-            // Menunggu Verifikasi Berkas Dari Petugas -> Sedang Diverifikasi petugas -> Permohonan Sedang Diproses -> Selesai
-            // Menunggu Verifikasi Berkas Dari Petugas -> Sedang Diverifikasi petugas -> Perlu Diperbaiki -> RESET -> Menunggu Verifikasi Berkas Dari Petugas
+            $table->string('status')->default('Menunggu Verifikasi');
+            // Menunggu -> Sedang Diverifikasi ->Diproses -> Selesai
+            // Menunggu Verifikasi -> Sedang Diverifikasi -> Perlu Diperbaiki -> RESET -> Menunggu Verifikasi
             $table->text('keterangan_user');
             $table->text('keterangan_petugas')->nullable();
             $table->string('reply_file')->nullable();

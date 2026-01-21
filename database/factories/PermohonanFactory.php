@@ -21,9 +21,10 @@ class PermohonanFactory extends Factory
             'user_id' => User::factory(),
             'permohonan_type' => fake()->randomElement(['Biasa', 'Khusus']),
             'status' => fake()->randomElement([
-                'Menunggu Verifikasi Berkas Dari Petugas',
-                'Sedang Diverifikasi petugas',
+                'Menunggu Verifikasi',
+                'Sedang Diverifikasi',
                 'Perlu Diperbaiki',
+                'Menunggu Pembayaran',
                 'Diproses',
                 'Selesai',
             ]),

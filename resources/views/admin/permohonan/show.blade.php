@@ -53,46 +53,10 @@
 
                         <!-- Status Badge -->
                         <div class="w-100 text-md-end">
-                            @switch($permohonan->status)
-                            @case('Menunggu Verifikasi Berkas Dari Petugas')
-                                <span class="badge bg-warning text-dark px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-time-line me-1"></i> Menunggu Verifikasi
-                                </span>
-                                @break
-                            @case('Sedang Diverifikasi petugas')
-                                <span class="badge bg-primary px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-search-eye-line me-1"></i> Diverifikasi
-                                </span>
-                                @break
-                            @case('Perlu Diperbaiki')
-                                <span class="badge bg-danger px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
-                                </span>
-                                @break
-                            @case('Diproses')
-                                <span class="badge bg-info text-dark px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-loader-4-line me-1"></i> Diproses
-                                </span>
-                                @break
-                            @case('Diterima')
-                                <span class="badge bg-success px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                </span>
-                                @break
-                            @case('Ditolak')
-                                <span class="badge bg-danger px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-close-circle-line me-1"></i> Ditolak
-                                </span>
-                                @break
-                            @default
-                                <span class="badge bg-secondary px-3 py-2 d-inline-flex align-items-center">
-                                {{ ucfirst($permohonan->status) }}
-                                </span>
-                            @endswitch
+                            <x-badge-status :status="$permohonan->status" class="px-3 py-2 d-inline-flex align-items-center"/>
                         </div>
                         </div>
-
-
+                        
                         <!-- Detail Pengajuan -->
                         <div class="row g-4 mb-4">
                             <div class="col-md-6">
@@ -378,9 +342,10 @@
                                         <i class="ri-flag-line me-1 text-primary"></i> Update Status
                                     </label>
                                     <select name="status" id="status" class="form-select">
-                                        <option value="Menunggu Verifikasi Berkas Dari Petugas" @selected($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')>Menunggu Verifikasi</option>
-                                        <option value="Sedang Diverifikasi petugas" @selected($permohonan->status == 'Sedang Diverifikasi petugas')>Sedang Diverifikasi</option>
+                                        <option value="Menunggu Verifikasi" @selected($permohonan->status == 'Menunggu Verifikasi')>Menunggu Verifikasi</option>
+                                        <option value="Sedang Diverifikasi" @selected($permohonan->status == 'Sedang Diverifikasi')>Sedang Diverifikasi</option>
                                         <option value="Perlu Diperbaiki" @selected($permohonan->status == 'Perlu Diperbaiki')>Perlu Diperbaiki</option>
+                                        <option value="Menunggu Pembayaran" @selected($permohonan->status == 'Menunggu Pembayaran')>Menunggu Pembayaran</option>
                                         <option value="Diproses" @selected($permohonan->status == 'Diproses')>Diproses</option>
                                         <option value="Diterima" @selected($permohonan->status == 'Diterima')>Diterima</option>
                                         <option value="Ditolak" @selected($permohonan->status == 'Ditolak')>Ditolak</option>

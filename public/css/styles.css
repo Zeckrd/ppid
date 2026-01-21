@@ -10886,3 +10886,30 @@ html {
 .table-no-inner-border thead th {
     border-bottom: 2px solid #dee2e6;
 }
+
+.badge-status {
+  font-weight: 600;
+}
+
+.badge-status--menunggu-verifikasi  { background-color: #6E6D6D; color: #fff; }
+.badge-status--sedang-diverifikasi  { background-color: #30F1FF; color: #111; }
+.badge-status--diproses             { background-color: #4050FF; color: #fff; }
+.badge-status--menunggu-pembayaran  { background-color: #FFD500; color: #111; }
+.badge-status--diterima             { background-color: #188F18; color: #fff; }
+.badge-status--perlu-diperbaiki     { background-color: #FF7F27; color: #111; }
+.badge-status--ditolak              { background-color: #ED1C24; color: #fff; }
+
+.pagination .page-link {
+  background: #fff;
+  color: #0d6efd;
+}
+
+.pagination .page-item.active .page-link {
+  background: #0d6efd;
+  color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #adb5bd;
+  background: #f8f9fa;
+}

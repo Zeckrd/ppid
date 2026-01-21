@@ -85,43 +85,8 @@
                         </div>
 
                         <!-- Status Badge -->
-                        <div class="w-100 w-md-auto text-md-end">
-                            @switch($permohonan->status)
-                            @case('Menunggu Verifikasi Berkas Dari Petugas')
-                                <span class="badge bg-warning text-dark px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-time-line me-1"></i> Menunggu Verifikasi
-                                </span>
-                                @break
-                            @case('Sedang Diverifikasi petugas')
-                                <span class="badge bg-primary px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-search-eye-line me-1"></i> Diverifikasi
-                                </span>
-                                @break
-                            @case('Perlu Diperbaiki')
-                                <span class="badge bg-danger px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
-                                </span>
-                                @break
-                            @case('Diproses')
-                                <span class="badge bg-info text-dark px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-loader-4-line me-1"></i> Diproses
-                                </span>
-                                @break
-                            @case('Diterima')
-                                <span class="badge bg-success px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                </span>
-                                @break
-                            @case('Ditolak')
-                                <span class="badge bg-danger px-3 py-2 d-inline-flex align-items-center">
-                                <i class="ri-close-circle-line me-1"></i> Ditolak
-                                </span>
-                                @break
-                            @default
-                                <span class="badge bg-secondary px-3 py-2 d-inline-flex align-items-center">
-                                {{ ucfirst($permohonan->status) }}
-                                </span>
-                            @endswitch
+                        <div class="w-100 text-md-end">
+                            <x-badge-status :status="$permohonan->status" class="px-3 py-2 d-inline-flex align-items-center"/>
                         </div>
                         </div>
                     </div>
@@ -532,15 +497,16 @@
                         <div>
                             <div class="fw-semibold mb-1">Anda dapat mengajukan keberatan</div>
                             <div class="small text-muted">
-                            Jika Anda tidak puas dengan hasil permohonan, silakan ajukan keberatan.
+                            Jika Anda tidak puas dengan hasil permohonan informasi, silakan ajukan keberatan.
                             </div>
                         </div>
                         </div>
-
-                        <a href="{{ route('user.keberatan.create', $permohonan->id) }}"
-                        class="btn btn-danger w-100 w-md-auto">
-                        <i class="ri-add-line me-1"></i> Buat Keberatan
-                        </a>
+                        <div class="col-12 col-md-auto">
+                            <a href="{{ route('user.keberatan.create', $permohonan->id) }}"
+                                class="btn btn-danger w-100 w-md-auto">
+                                <i class="ri-add-line me-1"></i> Buat Keberatan
+                            </a>
+                        </div>
                     </div>
                     </div>
                 @else

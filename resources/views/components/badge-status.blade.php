@@ -1,21 +1,53 @@
-{{-- DEPRECIATED --}}
-{{-- TODO: REUSE NEXT REFACTOR --}}
-@switch($status)
-    @case('Menunggu Verifikasi Berkas Dari Petugas')
-        <span class="badge bg-warning text-dark"><i class="ri-time-line me-1"></i>Menunggu Verifikasi</span>
-        @break
-    @case('Sedang Diverifikasi petugas')
-        <span class="badge bg-primary"><i class="ri-search-eye-line me-1"></i>Diverifikasi</span>
-        @break
-    @case('Perlu Diperbaiki')
-        <span class="badge bg-danger"><i class="ri-error-warning-line me-1"></i>Perlu Diperbaiki</span>
-        @break
-    @case('Diproses')
-        <span class="badge bg-info text-dark"><i class="ri-loader-4-line me-1"></i>Diproses</span>
-        @break
-    @case('Selesai')
-        <span class="badge bg-success"><i class="ri-checkbox-circle-line me-1"></i>Selesai</span>
-        @break
-    @default
-        <span class="badge bg-secondary"><i class="ri-information-line me-1"></i>{{ ucfirst($status) }}</span>
-@endswitch
+@props(['status' => null])
+
+@php
+  $status = $status ?? '-';
+
+  $map = [
+    'Menunggu Verifikasi' => [
+      'class' => 'badge-status--menunggu-verifikasi',
+      'icon'  => 'ri-time-line',
+      'label' => 'Menunggu Verifikasi',
+    ],
+    'Sedang Diverifikasi' => [
+      'class' => 'badge-status--sedang-diverifikasi',
+      'icon'  => 'ri-search-eye-line',
+      'label' => 'Sedang Diverifikasi',
+    ],
+    'Diproses' => [
+      'class' => 'badge-status--diproses',
+      'icon'  => 'ri-loader-4-line',
+      'label' => 'Diproses',
+    ],
+    'Menunggu Pembayaran' => [
+      'class' => 'badge-status--menunggu-pembayaran',
+      'icon'  => 'ri-wallet-3-line',
+      'label' => 'Menunggu Pembayaran',
+    ],
+    'Diterima' => [
+      'class' => 'badge-status--diterima',
+      'icon'  => 'ri-checkbox-circle-line',
+      'label' => 'Diterima',
+    ],
+    'Perlu Diperbaiki' => [
+      'class' => 'badge-status--perlu-diperbaiki',
+      'icon'  => 'ri-error-warning-line',
+      'label' => 'Perlu Diperbaiki',
+    ],
+    'Ditolak' => [
+      'class' => 'badge-status--ditolak',
+      'icon'  => 'ri-close-circle-line',
+      'label' => 'Ditolak',
+    ],
+  ];
+
+  $cfg = $map[$status] ?? [
+    'class' => 'bg-secondary text-white',
+    'icon'  => 'ri-information-line',
+    'label' => is_string($status) ? ucfirst($status) : '-',
+  ];
+@endphp
+
+<span {{ $attributes->merge(['class' => 'badge badge-status ' . $cfg['class']]) }}>
+  <i class="{{ $cfg['icon'] }} me-1"></i>{{ $cfg['label'] }}
+</span>

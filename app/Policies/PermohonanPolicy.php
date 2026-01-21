@@ -39,8 +39,10 @@ class PermohonanPolicy
     {
         return $user->id === $permohonan->user_id && 
                in_array($permohonan->status, [
-                   'Menunggu Verifikasi Berkas Dari Petugas',
-                   'Perlu Diperbaiki'
+                   'Menunggu Verifikasi',
+                   'Perlu Diperbaiki',
+                   'Sedang Diverifikasi',
+                   'Menunggu Pembayaran'
                ]);
     }
 
@@ -50,7 +52,7 @@ class PermohonanPolicy
     public function delete(User $user, Permohonan $permohonan): bool
     {
         return $user->id === $permohonan->user_id && 
-               $permohonan->status === 'Menunggu Verifikasi Berkas Dari Petugas';
+               $permohonan->status === 'Menunggu Verifikasi';
     }
 
     /**
@@ -68,4 +70,17 @@ class PermohonanPolicy
     {
         return false;
     }
+
+    public function updateFiles(User $user, Permohonan $permohonan): bool
+    {
+        if ($permohonan->user_id !== $user->id) return false;
+
+        return in_array($permohonan->status, [
+            'Menunggu Verifikasi',
+            'Perlu Diperbaiki',
+            'Sedang Diverifikasi',
+            'Menunggu Pembayaran'
+        ], true);
+    }
+
 }

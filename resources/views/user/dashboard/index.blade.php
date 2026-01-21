@@ -15,13 +15,14 @@
 
         {{-- QUICK FILTERS --}}
         <div class="mb-4">
-            <ul class="nav nav-pills flex-wrap gap-2">
+            <ul class="nav nav-pills flex-wrap">
                 @php
                     $statuses = [
                         'Semua',
-                        'Menunggu Verifikasi Berkas Dari Petugas',
-                        'Sedang Diverifikasi petugas',
+                        'Menunggu Verifikasi',
+                        'Sedang Diverifikasi',
                         'Perlu Diperbaiki',
+                        'Menunggu Pembayaran',
                         'Diproses',
                         'Diterima',
                         'Ditolak',
@@ -40,14 +41,17 @@
                                 @case('Semua')
                                     <i class="ri-file-list-3-line me-1"></i>Semua
                                     @break
-                                @case('Menunggu Verifikasi Berkas Dari Petugas')
+                                @case('Menunggu Verifikasi')
                                     <i class="ri-time-line me-1"></i> Menunggu Verifikasi
                                     @break
-                                @case('Sedang Diverifikasi petugas')
+                                @case('Sedang Diverifikasi')
                                     <i class="ri-search-eye-line me-1"></i> Diverifikasi
                                     @break
                                 @case('Perlu Diperbaiki')
                                     <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
+                                    @break
+                                @case('Menunggu Pembayaran')
+                                    <i class="ri-wallet-3-line me-1"></i> Menunggu Pembayaran
                                     @break
                                 @case('Diproses')
                                     <i class="ri-loader-4-line me-1"></i> Diproses
@@ -74,7 +78,7 @@
                 <h5 class="mb-3">Belum Ada Permohonan</h5>
                 <p class="text-muted mb-4">Anda belum membuat permohonan apapun.<br>Mulai dengan mengajukan permohonan baru.</p>
                 <a href="{{ route('user.permohonan.create') }}" class="btn btn-primary">
-                    <i class="ri-add-line me-1"></i>Buat Permohonan Pertama
+                    <i class="ri-add-line me-1"></i>Buat Permohonan
                 </a>
             </div>
         @else
@@ -115,35 +119,7 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 align-middle">
-                                        @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
-                                            <span class="badge bg-warning text-dark">
-                                                <i class="ri-time-line me-1"></i>Menunggu Verifikasi
-                                            </span>
-                                        @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
-                                            <span class="badge bg-primary">
-                                                <i class="ri-search-eye-line me-1"></i> Diverifikasi
-                                            </span>
-                                        @elseif($permohonan->status == 'Perlu Diperbaiki')
-                                            <span class="badge bg-danger">
-                                                <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
-                                            </span>
-                                        @elseif($permohonan->status == 'Diproses')
-                                            <span class="badge bg-info text-dark">
-                                                <i class="ri-loader-4-line me-1"></i> Diproses
-                                            </span>
-                                        @elseif($permohonan->status == 'Diterima')
-                                            <span class="badge bg-success small">
-                                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                            </span>
-                                        @elseif($permohonan->status == 'Ditolak')
-                                            <span class="badge bg-danger small">
-                                                <i class="ri-close-circle-line me-1"></i> Ditolak
-                                            </span>
-                                        @else
-                                            <span class="badge bg-secondary">
-                                                <i class="ri-information-line me-1"></i>{{ ucfirst($permohonan->status) }}
-                                            </span>
-                                        @endif
+                                        <x-badge-status :status="$permohonan->status" />
                                     </td>
 
                                 {{-- Status Keberatan --}}
@@ -218,33 +194,7 @@
                                 <div class="d-flex flex-wrap gap-2">
 
                                     {{-- Status Permohonan --}}
-                                    @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
-                                    <span class="badge bg-warning text-dark small">
-                                        <i class="ri-time-line me-1"></i>Menunggu Verifikasi
-                                    </span>
-                                    @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
-                                    <span class="badge bg-primary small">
-                                        <i class="ri-search-eye-line me-1"></i>Diverifikasi
-                                    </span>
-                                    @elseif($permohonan->status == 'Perlu Diperbaiki')
-                                    <span class="badge bg-danger small">
-                                        <i class="ri-error-warning-line me-1"></i>Perlu Perbaikan
-                                    </span>
-                                    @elseif($permohonan->status == 'Diproses')
-                                    <span class="badge bg-info text-dark small">
-                                        <i class="ri-loader-4-line me-1"></i>Diproses
-                                    </span>
-                                    @elseif($permohonan->status == 'Diterima')
-                                    <span class="badge bg-success small">
-                                        <i class="ri-checkbox-circle-line me-1"></i>Diterima
-                                    </span>
-                                    @elseif($permohonan->status == 'Ditolak')
-                                    <span class="badge bg-danger small">
-                                        <i class="ri-close-circle-line me-1"></i>Ditolak
-                                    </span>
-                                    @else
-                                    <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>
-                                    @endif
+                                    <x-badge-status :status="$permohonan->status" />
 
                                     {{-- Status Keberatan (if keberatan exists) --}}
                                     @if($permohonan->keberatan)
@@ -309,16 +259,9 @@
                     </div>
                 @endforeach
             </div>
-
-            <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
-            <div class="text-muted">
-                <i class="ri-file-list-line me-1"></i>
-                Menampilkan <strong>{{ $permohonans->firstItem() }}</strong> 
-                sampai <strong>{{ $permohonans->lastItem() }}</strong> 
-                dari <strong>{{ $permohonans->total() }}</strong> pengajuan
-            </div>
-                <div>
-                    {{ $permohonans->links('pagination::bootstrap-5') }}
+            <div class="card border-0 my-3">
+                <div class="card-body py-3">
+                    {{ $permohonans->appends(request()->query())->links('vendor.pagination.paginator') }}
                 </div>
             </div>
         @endif

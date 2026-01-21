@@ -184,9 +184,10 @@
                 @php
                     $statuses = [
                         'Semua',
-                        'Menunggu Verifikasi Berkas Dari Petugas',
-                        'Sedang Diverifikasi petugas',
+                        'Menunggu Verifikasi',
+                        'Sedang Diverifikasi',
                         'Perlu Diperbaiki',
+                        'Menunggu Pembayaran',
                         'Diproses',
                         'Diterima',
                         'Ditolak',
@@ -211,14 +212,17 @@
                                 @case('Semua')
                                     <i class="ri-file-list-3-line me-1"></i> Semua
                                     @break
-                                @case('Menunggu Verifikasi Berkas Dari Petugas')
+                                @case('Menunggu Verifikasi')
                                     <i class="ri-time-line me-1"></i> Menunggu Verifikasi
                                     @break
-                                @case('Sedang Diverifikasi petugas')
+                                @case('Sedang Diverifikasi')
                                     <i class="ri-search-eye-line me-1"></i> Diverifikasi
                                     @break
                                 @case('Perlu Diperbaiki')
                                     <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
+                                    @break
+                                @case('Menunggu Pembayaran')
+                                    <i class="ri-wallet-3-line me-1"></i> Menunggu Pembayaran
                                     @break
                                 @case('Diproses')
                                     <i class="ri-loader-4-line me-1"></i> Diproses
@@ -262,102 +266,64 @@
                         <tbody>
                             @foreach($permohonans as $permohonan)
                                 <tr onclick="window.location='{{ route('admin.permohonan.show', $permohonan->id) }}';" style="cursor: pointer;">
-                                    <td class="px-4 py-3 align-middle">
-                                        <i class="ri-calendar-line text-muted me-2"></i>
-                                        {{ $permohonan->updated_at->format('d M Y, H:i') }}
-                                    </td>
-                                    <td class="px-4 py-3 align-middle">
-                                        <i class="ri-user-line text-muted me-2"></i>
-                                        {{ $permohonan->user->name ?? '-' }}
-                                    </td>
-                                    <td class="px-4 py-3 align-middle">
-                                        <span class="fw-medium">{{ ucfirst($permohonan->permohonan_type ?? '-') }}</span>
-                                    </td>
-                                    <td class="px-4 py-3 align-middle">
-                                        @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
-                                            <span class="badge bg-warning text-dark">
-                                                <i class="ri-time-line me-1"></i> Menunggu Verifikasi
-                                            </span>
-                                        @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
-                                            <span class="badge bg-primary">
-                                                <i class="ri-search-eye-line me-1"></i> Diverifikasi
-                                            </span>
-                                        @elseif($permohonan->status == 'Perlu Diperbaiki')
-                                            <span class="badge bg-danger">
-                                                <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
-                                            </span>
-                                        @elseif($permohonan->status == 'Diproses')
-                                            <span class="badge bg-info text-dark">
-                                                <i class="ri-loader-4-line me-1"></i> Diproses
-                                            </span>
-                                        @elseif($permohonan->status == 'Diterima')
-                                            <span class="badge bg-success">
-                                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                            </span>
-                                        @elseif($permohonan->status == 'Ditolak')
-                                            <span class="badge bg-danger">
-                                                <i class="ri-close-circle-line"></i> Ditolak
-                                            </span>
-                                        @else
-                                            <span class="badge bg-secondary">
-                                                <i class="ri-information-line me-1"></i>{{ ucfirst($permohonan->status) }}
-                                            </span>
-                                        @endif
-                                    </td>
+                                {{-- Pembaruan Terakhir --}}
+                                <td class="px-4 py-3 align-middle">
+                                    <i class="ri-calendar-line text-muted me-2"></i>
+                                    {{ $permohonan->updated_at->format('d M Y, H:i') }}
+                                </td>
+                                
+                                {{-- Nama --}}
+                                <td class="px-4 py-3 align-middle">
+                                    <i class="ri-user-line text-muted me-2"></i>
+                                    {{ $permohonan->user->name ?? '-' }}
+                                </td>
+
+                                {{-- Jenis Permohonan --}}
+                                <td class="px-4 py-3 align-middle">
+                                    <span class="fw-medium">{{ ucfirst($permohonan->permohonan_type ?? '-') }}</span>
+                                </td>
+
+                                {{-- Status Permohonan --}}
+                                <td class="px-4 py-3 align-middle">
+                                    <x-badge-status :status="$permohonan->status" />
+                                </td>
 
                                 {{-- Status Keberatan --}}
                                 <td class="px-4 py-3 align-middle">
                                     @if ($permohonan->keberatan)
-                                        @php
-                                            $status = $permohonan->keberatan->status ?? 'Pending';
-                                        @endphp
+                                    @php $status = $permohonan->keberatan->status ?? 'Pending'; @endphp
+
                                     @switch($status)
                                         @case('Pending')
-                                            <span class="badge bg-warning text-dark">
-                                                <i class="ri-time-line me-1"></i> Pending
-                                            </span>
-                                            @break
-
+                                        <span class="badge bg-warning text-dark"><i class="ri-time-line me-1"></i> Pending</span>
+                                        @break
                                         @case('Diproses')
-                                            <span class="badge bg-info text-dark">
-                                                <i class="ri-loader-4-line me-1"></i> Diproses
-                                            </span>
-                                            @break
-
+                                        <span class="badge bg-info text-dark"><i class="ri-loader-4-line me-1"></i> Diproses</span>
+                                        @break
                                         @case('Diterima')
-                                            <span class="badge bg-success">
-                                                <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                            </span>
-                                            @break
-                                        
+                                        <span class="badge bg-success"><i class="ri-checkbox-circle-line me-1"></i> Diterima</span>
+                                        @break
                                         @case('Ditolak')
-                                            <span class="badge bg-danger">
-                                                <i class="ri-close-circle-line me-1"></i> Ditolak
-                                            </span>
-                                            @break
-
+                                        <span class="badge bg-danger"><i class="ri-close-circle-line me-1"></i> Ditolak</span>
+                                        @break
                                         @default
-                                            <span class="badge bg-secondary">
-                                                <i class="ri-question-line me-1"></i> {{ ucfirst($status) }}
-                                            </span>
+                                        <span class="badge bg-secondary"><i class="ri-question-line me-1"></i> {{ ucfirst($status) }}</span>
                                     @endswitch
-
                                     @else
-                                        <span class="text-muted">
-                                            <i class="ri-close-circle-line me-1"></i> Tidak Ada
-                                        </span>
+                                    <span class="text-muted"><i class="ri-close-circle-line me-1"></i> Tidak Ada</span>
                                     @endif
-
                                 </td>
-                                    <td class="px-4 py-3 text-end align-middle">
-                                        <a href="{{ route('admin.permohonan.show', $permohonan->id) }}" 
-                                           class="btn btn-sm btn-outline-primary"
-                                           onclick="event.stopPropagation();">
-                                            Lihat Detail
-                                            <i class="ri-arrow-right-line ms-1"></i>
-                                        </a>
-                                    </td>
+
+                                {{-- Aksi --}}
+                                <td class="px-4 py-3 text-end align-middle">
+                                    <a href="{{ route('admin.permohonan.show', $permohonan->id) }}"
+                                    class="btn btn-sm btn-outline-primary"
+                                    onclick="event.stopPropagation();">
+                                    Lihat Detail <i class="ri-arrow-right-line ms-1"></i>
+                                    </a>
+                                </td>
                                 </tr>
+
                             @endforeach
                         </tbody>
                     </table>
@@ -374,35 +340,7 @@
                             {{-- Header: Status Permohonan + Status Keberatan --}}
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div class="d-flex flex-wrap gap-2">
-
-                                    {{-- Status Permohonan --}}
-                                    @if($permohonan->status == 'Menunggu Verifikasi Berkas Dari Petugas')
-                                    <span class="badge bg-warning text-dark small">
-                                        <i class="ri-time-line me-1"></i>Menunggu Verifikasi
-                                    </span>
-                                    @elseif($permohonan->status == 'Sedang Diverifikasi petugas')
-                                    <span class="badge bg-primary small">
-                                        <i class="ri-search-eye-line me-1"></i>Diverifikasi
-                                    </span>
-                                    @elseif($permohonan->status == 'Perlu Diperbaiki')
-                                    <span class="badge bg-danger small">
-                                        <i class="ri-error-warning-line me-1"></i>Perlu Perbaikan
-                                    </span>
-                                    @elseif($permohonan->status == 'Diproses')
-                                    <span class="badge bg-info text-dark small">
-                                        <i class="ri-loader-4-line me-1"></i>Diproses
-                                    </span>
-                                    @elseif($permohonan->status == 'Diterima')
-                                    <span class="badge bg-success small">
-                                        <i class="ri-checkbox-circle-line me-1"></i>Diterima
-                                    </span>
-                                    @elseif($permohonan->status == 'Ditolak')
-                                    <span class="badge bg-danger small">
-                                        <i class="ri-close-circle-line me-1"></i>Ditolak
-                                    </span>
-                                    @else
-                                    <span class="badge bg-secondary small">{{ ucfirst($permohonan->status) }}</span>
-                                    @endif
+                                    <x-badge-status :status="$permohonan->status" />
 
                                     {{-- Status Keberatan (if keberatan exists) --}}
                                     @if($permohonan->keberatan)
@@ -440,7 +378,6 @@
                                             </span>
                                         @endswitch
                                     @endif
-
                                 </div>
                             </div>
 
@@ -474,9 +411,9 @@
                     </div>
                 @endforeach
             </div>
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <div>
-                    {{ $permohonans->appends(request()->query())->links('pagination::bootstrap-5') }}
+            <div class="card border-0 my-3">
+                <div class="card-body py-3">
+                    {{ $permohonans->appends(request()->query())->links('vendor.pagination.paginator') }}
                 </div>
             </div>
         @endif

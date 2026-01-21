@@ -89,7 +89,7 @@
 
             @php
                 $activeStatuses = [
-                    'Menunggu Verifikasi Berkas Dari Petugas',
+                    'Menunggu Verifikasi',
                     'Sedang Diverifikasi petugas',
                     'Diproses',
                 ];
@@ -140,13 +140,14 @@
                         'date_from'     => $dateFrom,
                         'date_to'       => $dateTo,
                         'has_keberatan' => 'ya',
+                        'keberatan_status' => 'Pending',
                     ]) }}"
                 class="text-decoration-none">
                     <div class="card border-0 shadow-sm bg-warning text-dark">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h6 class="fw-semibold mb-1">Total Keberatan</h6>
-                                <h2 class="fw-bold mb-0">{{ $totalKeberatan }}</h2>
+                                <h6 class="fw-semibold mb-1">Pending Keberatan</h6>
+                                <h2 class="fw-bold mb-0">{{ $pendingKeberatanCount }}</h2>
                             </div>
                             <i class="ri-error-warning-line display-5 opacity-75"></i>
                         </div>
