@@ -36,7 +36,7 @@ class DashboardController extends Controller
         // "active" group
         $activeStatuses = [
             'Menunggu Verifikasi',
-            'Sedang Diverifikasi petugas',
+            'Sedang Diverifikasi',
             'Diproses',
         ];
 
