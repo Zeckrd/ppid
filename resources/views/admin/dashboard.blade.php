@@ -225,8 +225,8 @@
                     </ul>
                 </div>
                     {{-- Pagination --}}
-                    <div class="d-flex justify-content-end">
-                        {{ $pendingPermohonan->links('pagination::bootstrap-5') }}
+                    <div class="d-flex justify-content-center mb-3">
+                        {{ $pendingPermohonan->appends(request()->query())->links('vendor.pagination.paginator') }}
                     </div>
                 @else
                     <p class="text-muted mb-0">Tidak ada permohonan yang sedang berlangsung saat ini.</p>
