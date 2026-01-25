@@ -116,6 +116,161 @@
 
                 <hr class="my-4">
 
+                @php
+                    $canUploadProof = in_array($permohonan->status, ['Menunggu Pembayaran', 'Perlu Diperbaiki'], true);
+                    $bukti = $permohonan->buktiBayar;
+
+                    $proofHint = match($permohonan->status) {
+                        'Menunggu Pembayaran' => 'Silakan unggah bukti pembayaran agar dapat diverifikasi oleh petugas.',
+                        'Perlu Diperbaiki'    => 'Bukti pembayaran perlu diperbaiki. Mohon unggah ulang sesuai catatan petugas.',
+                        default              => 'Bukti pembayaran tidak dapat diubah pada status ini.',
+                    };
+                @endphp
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-3 p-md-4">
+
+                                <div class="d-flex flex-column flex-lg-row align-items-start justify-content-between gap-3">
+
+                                    {{-- LEFT: title + status --}}
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <h6 class="mb-0 fw-bold">Bukti Pembayaran</h6>
+
+                                            @if($bukti)
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                    Sudah diunggah
+                                                </span>
+                                            @else
+                                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                                                    Belum ada
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="text-muted small mt-1">
+                                            {{ $proofHint }}
+                                        </div>
+
+                                        @if($bukti && $bukti->created_at)
+                                            <div class="small text-muted mt-2">
+                                                <i class="ri-time-line me-1"></i>
+                                                Terakhir diunggah: {{ $bukti->created_at->format('d M Y, H:i') }}
+                                            </div>
+                                        @endif
+
+                                        @if($bukti)
+                                            <div class="mt-3 d-flex flex-wrap gap-2">
+                                                <a href="{{ route('user.permohonan.bukti-bayar.view', $permohonan) }}"
+                                                target="_blank"
+                                                class="btn btn-sm btn-outline-secondary">
+                                                    <i class="ri-eye-line me-1"></i> Lihat
+                                                </a>
+                                                <a href="{{ route('user.permohonan.bukti-bayar.download', $permohonan) }}"
+                                                target="_blank"
+                                                class="btn btn-sm btn-outline-primary">
+                                                    <i class="ri-download-line me-1"></i> Download
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- RIGHT: Upload UI --}}
+                                    <div class="proof-right">
+                                        @if($canUploadProof)
+                                            <form
+                                                action="{{ $bukti
+                                                    ? route('user.permohonan.bukti-bayar.update', $permohonan)
+                                                    : route('user.permohonan.bukti-bayar.store', $permohonan) }}"
+                                                method="POST"
+                                                enctype="multipart/form-data"
+                                                class="m-0"
+                                            >
+                                                @csrf
+                                                @if($bukti) @method('PUT') @endif
+
+                                                <input
+                                                    type="file"
+                                                    name="bukti_bayar"
+                                                    id="bukti_bayar"
+                                                    class="d-none"
+                                                    accept=".jpg,.jpeg,.png,.pdf"
+                                                    onchange="this.form.submit()"
+                                                />
+
+                                                <label for="bukti_bayar" class="proof-dropzone text-decoration-none w-100">
+                                                    <div class="d-flex align-items-center justify-content-between gap-3">
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <div class="proof-dropzone-icon">
+                                                                <i class="ri-upload-cloud-2-line"></i>
+                                                            </div>
+                                                            <div class="text-start">
+                                                                <div class="fw-semibold text-dark">
+                                                                    {{ $bukti ? 'Ganti Bukti' : 'Unggah Bukti' }}
+                                                                </div>
+                                                                <div class="small text-muted">
+                                                                    Klik untuk pilih file
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <span class="btn btn-outline-primary btn-sm text-nowrap">
+                                                            {{ $bukti ? 'Ganti' : 'Upload' }}
+                                                            <i class="ri-arrow-right-line ms-1"></i>
+                                                        </span>
+                                                    </div>
+                                                </label>
+
+                                                {{-- Format note moved near the action --}}
+                                                <div class="small text-muted mt-2">
+                                                    <i class="ri-information-line me-1"></i>
+                                                    JPG/PNG/PDF • Maks 5 MB
+                                                </div>
+
+                                                @error('bukti_bayar')
+                                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                                @enderror
+                                            </form>
+                                        @else
+                                            {{-- Locked: keep same dropzone shape, just disabled --}}
+                                            <div class="proof-dropzone proof-dropzone--disabled w-100" role="button" aria-disabled="true">
+                                                <div class="d-flex align-items-center justify-content-between gap-3">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <div class="proof-dropzone-icon">
+                                                            <i class="ri-lock-2-line"></i>
+                                                        </div>
+                                                        <div class="text-start">
+                                                            <div class="fw-semibold text-muted">
+                                                                Upload file Belum Tersedia
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <span class="btn btn-outline-secondary btn-sm text-nowrap" aria-hidden="true">
+                                                        Belum Tersedia
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="small text-muted mt-2">
+                                                <i class="ri-information-line me-1"></i>
+                                                JPG/PNG/PDF • Maks 5 MB
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr class="my-4">
+
                 {{-- Keterangan User --}}
                 <div class="mb-4">
                     <div class="d-flex align-items-center mb-3">

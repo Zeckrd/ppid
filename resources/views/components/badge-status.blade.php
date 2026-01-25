@@ -24,6 +24,11 @@
       'icon'  => 'ri-wallet-3-line',
       'label' => 'Menunggu Pembayaran',
     ],
+    'Memverifikasi Pembayaran' => [
+      'class' => 'badge-status--memverifikasi-pembayaran',
+      'icon'  => 'ri-secure-payment-line',
+      'label' => 'Memverifikasi Pembayaran',
+    ],
     'Diterima' => [
       'class' => 'badge-status--diterima',
       'icon'  => 'ri-checkbox-circle-line',

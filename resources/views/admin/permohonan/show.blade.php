@@ -70,6 +70,15 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="d-flex align-items-start">
+                                    <i class="ri-mail-line text-muted me-2 mt-1"></i>
+                                    <div>
+                                        <div class="text-muted small mb-1">Jenis Balasan</div>
+                                        <div class="fw-medium">{{ ucfirst($permohonan->reply_type) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-start">
                                     <i class="ri-calendar-line text-muted me-2 mt-1"></i>
                                     <div>
                                         <div class="text-muted small mb-1">Waktu Dibuat</div>
@@ -86,15 +95,63 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-start">
-                                    <i class="ri-mail-line text-muted me-2 mt-1"></i>
-                                    <div>
-                                        <div class="text-muted small mb-1">Jenis Balasan</div>
-                                        <div class="fw-medium">{{ ucfirst($permohonan->reply_type) }}</div>
+                        </div>
+
+                        <hr class="my-4">
+                        @php
+                            $bukti = $permohonan->buktiBayar;
+                        @endphp
+
+                            <div class="mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="ri-bank-card-line text-primary me-2"></i>
+                                <h6 class="mb-0 fw-bold">Bukti Pembayaran</h6>
+                            </div>
+
+                            @if($bukti)
+                                <div class="border rounded-3 p-3" style="background-color:#f8f9fa;">
+                                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2">
+                                    <div class="min-width-0">
+                                    <div class="fw-medium text-truncate" title="{{ $bukti->original_name }}">
+                                        <i class="ri-file-line me-1 text-primary"></i>
+                                        {{ $bukti->original_name }}
+                                    </div>
+                                    <div class="small text-muted mt-1">
+                                        <i class="ri-time-line me-1"></i>
+                                        Diunggah {{ optional($bukti->created_at)->format('d M Y, H:i') ?? '-' }}
+                                        @if($bukti->size)
+                                        • {{ number_format($bukti->size / 1024, 1) }} KB
+                                        @endif
+                                    </div>
+                                    </div>
+
+                                    <div class="d-flex gap-2 flex-shrink-0">
+                                    <a href="{{ route('admin.permohonan.bukti-bayar.view', $permohonan) }}"
+                                        target="_blank"
+                                        class="btn btn-sm btn-outline-secondary">
+                                        <i class="ri-eye-line"></i>
+                                    </a>
+
+                                    <a href="{{ route('admin.permohonan.bukti-bayar.download', $permohonan) }}"
+                                        class="btn btn-sm btn-outline-primary">
+                                        <i class="ri-download-line"></i>
+                                    </a>
                                     </div>
                                 </div>
-                            </div>
+
+                                @if($permohonan->status === 'Memverifikasi Pembayaran')
+                                    <div class="alert alert-info mb-0 mt-3 py-2 small">
+                                    <i class="ri-information-line me-1"></i>
+                                    Status sedang <b>Memverifikasi Pembayaran</b>. Silakan cek bukti, lalu lanjutkan proses atau minta perbaikan.
+                                    </div>
+                                @endif
+                                </div>
+                            @else
+                                <div class="text-center py-3 text-muted border rounded">
+                                <i class="ri-image-off-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                <p class="small mb-0 mt-2">Belum ada bukti pembayaran</p>
+                                </div>
+                            @endif
                         </div>
 
                         <hr class="my-4">
@@ -346,6 +403,7 @@
                                         <option value="Sedang Diverifikasi" @selected($permohonan->status == 'Sedang Diverifikasi')>Sedang Diverifikasi</option>
                                         <option value="Perlu Diperbaiki" @selected($permohonan->status == 'Perlu Diperbaiki')>Perlu Diperbaiki</option>
                                         <option value="Menunggu Pembayaran" @selected($permohonan->status == 'Menunggu Pembayaran')>Menunggu Pembayaran</option>
+                                        <option value="Memverifikasi Pembayaran" @selected($permohonan->status == 'Memverifikasi Pembayaran')>Memverifikasi Pembayaran</option>
                                         <option value="Diproses" @selected($permohonan->status == 'Diproses')>Diproses</option>
                                         <option value="Diterima" @selected($permohonan->status == 'Diterima')>Diterima</option>
                                         <option value="Ditolak" @selected($permohonan->status == 'Ditolak')>Ditolak</option>

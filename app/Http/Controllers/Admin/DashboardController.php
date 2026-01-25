@@ -82,6 +82,7 @@ class DashboardController extends Controller
             'Sedang Diverifikasi',
             'Perlu Diperbaiki',
             'Menunggu Pembayaran',
+            'Memverifikasi Pembayaran',
             'Diproses',
             'Diterima',
             'Ditolak',

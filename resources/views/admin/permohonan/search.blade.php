@@ -8,236 +8,243 @@
             </div>
         </div>
 
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-body py-3">
-                <form action="{{ route('admin.permohonan.search') }}" method="GET" id="filterForm">
-                    
-                    {{-- Top Row (Search + Buttons) --}}
-                    <div class="d-flex flex-wrap gap-2 align-items-stretch">
-                        <div class="flex-grow-1">
-                            <div class="input-group rounded-pill shadow-sm">
-                                <span class="input-group-text bg-transparent border-0">
-                                    <i class="ri-search-line text-muted"></i>
-                                </span>
-                                <input 
-                                    type="text" 
-                                    name="q" 
-                                    value="{{ request('q') }}" 
-                                    class="form-control border-0" 
-                                    placeholder="Cari nama, email, atau keterangan...">
-                            </div>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-outline-secondary rounded-pill flex-grow-1 flex-md-grow-0" 
-                                    type="button" 
-                                    data-bs-toggle="collapse" 
-                                    data-bs-target="#advancedFilter">
-                                <i class="ri-filter-3-line me-1"></i> Filter Lanjutan
-                            </button>
+        {{-- FILTER TOOLBAR --}}
+        @php
+            $hasAdvanced =
+                request('date_from') || request('date_to') ||
+                request('permohonan_type') || request('has_keberatan');
 
-                            <button class="btn btn-primary rounded-pill px-4 flex-grow-1 flex-md-grow-0" type="submit">
-                                <i class="ri-search-line me-1"></i> Cari
-                            </button>
+            $multiStatuses = (array) request('statuses', []);
+            $multiStatuses = array_values(array_filter($multiStatuses));
+
+            $hasAny =
+                request('q') || request('date_from') || request('date_to') ||
+                (request('status') && request('status') !== 'Semua') ||
+                !empty($multiStatuses) ||
+                request('permohonan_type') || request('has_keberatan');
+        @endphp
+
+            {{-- FILTER TOOLBAR --}}
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body p-3 p-md-4">
+                    <form action="{{ route('admin.permohonan.search') }}" method="GET" id="filterForm" class="vstack gap-3">
+
+                    {{-- Top row: Search + Actions --}}
+                    <div class="d-flex flex-column flex-md-row gap-2 align-items-stretch">
+
+                        {{-- Search --}}
+                        <div class="flex-grow-1">
+                        <div class="input-group bg-light rounded-pill px-2">
+                            <span class="input-group-text bg-transparent border-0">
+                            <i class="ri-search-line text-muted"></i>
+                            </span>
+                            <input
+                            type="text"
+                            name="q"
+                            value="{{ request('q') }}"
+                            class="form-control bg-transparent border-0"
+                            placeholder="Cari nama, email, atau keterangan..."
+                            aria-label="Pencarian"
+                            >
+                            @if(request('q'))
+                            <a class="btn btn-sm btn-link text-muted"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('q','page'))) }}"
+                                aria-label="Hapus pencarian">
+                                <i class="ri-close-line"></i>
+                            </a>
+                            @endif
+                        </div>
+                        </div>
+
+                        {{-- Buttons --}}
+                        <div class="d-flex gap-2">
+                        <button class="btn btn-outline-secondary btn-rsq"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#advancedFilter"
+                                aria-expanded="{{ $hasAdvanced ? 'true' : 'false' }}"
+                                aria-controls="advancedFilter">
+                            <i class="ri-filter-3-line me-1"></i> Filter Lanjutan
+                        </button>
+
+                        <button class="btn btn-primary btn-rsq px-4" type="submit">
+                            <i class="ri-search-line me-1"></i> Terapkan
+                        </button>
                         </div>
                     </div>
 
-                    {{-- Collapsible Section --}}
-                    <div class="collapse mt-3" id="advancedFilter">
-                        
-                        {{-- Date Range --}}
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Tanggal Pembuatan Permohonan</label>
+                    {{-- Active filter chips --}}
+                    @if($hasAny)
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <small class="text-muted me-1">Filter aktif:</small>
+
+                        @if(request('q'))
+                            <span class="badge rounded-pill bg-light text-dark border py-2 px-3">
+                            <i class="ri-search-line me-1 text-muted"></i>
+                            {{ \Illuminate\Support\Str::limit(request('q'), 40) }}
+                            <a class="text-dark ms-2"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('q','page'))) }}"
+                                aria-label="Hapus pencarian">×</a>
+                            </span>
+                        @endif
+
+                        @if(request('date_from'))
+                            <span class="badge rounded-pill bg-light text-dark border py-2 px-3">
+                            <i class="ri-calendar-line me-1 text-muted"></i>
+                            Dari {{ \Carbon\Carbon::parse(request('date_from'))->format('d M Y') }}
+                            <a class="text-dark ms-2"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('date_from','page'))) }}"
+                                aria-label="Hapus tanggal dari">×</a>
+                            </span>
+                        @endif
+
+                        @if(request('date_to'))
+                            <span class="badge rounded-pill bg-light text-dark border py-2 px-3">
+                            <i class="ri-calendar-line me-1 text-muted"></i>
+                            Sampai {{ \Carbon\Carbon::parse(request('date_to'))->format('d M Y') }}
+                            <a class="text-dark ms-2"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('date_to','page'))) }}"
+                                aria-label="Hapus tanggal sampai">×</a>
+                            </span>
+                        @endif
+
+                        @if(!empty($multiStatuses))
+                            <span class="badge rounded-pill bg-light text-dark border py-2 px-3">
+                            <i class="ri-filter-line me-1 text-muted"></i>
+                            Status: {{ implode(', ', $multiStatuses) }}
+                            <a class="text-dark ms-2"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('statuses','page'))) }}"
+                                aria-label="Hapus status multi">×</a>
+                            </span>
+                        @elseif(request('status') && request('status') !== 'Semua')
+                            <span class="badge rounded-pill bg-light text-dark border py-2 px-3">
+                            <i class="ri-filter-line me-1 text-muted"></i>
+                            Status: {{ request('status') }}
+                            <a class="text-dark ms-2"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('status','page'))) }}"
+                                aria-label="Hapus status">×</a>
+                            </span>
+                        @endif
+
+                        @if(request('permohonan_type'))
+                            <span class="badge rounded-pill bg-light text-dark border py-2 px-3">
+                            <i class="ri-file-list-line me-1 text-muted"></i>
+                            Jenis: {{ request('permohonan_type') }}
+                            <a class="text-dark ms-2"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('permohonan_type','page'))) }}"
+                                aria-label="Hapus jenis">×</a>
+                            </span>
+                        @endif
+
+                        @if(request('has_keberatan'))
+                            <span class="badge rounded-pill bg-light text-dark border py-2 px-3">
+                            <i class="ri-error-warning-line me-1 text-muted"></i>
+                            Keberatan: {{ ucfirst(request('has_keberatan')) }}
+                            <a class="text-dark ms-2"
+                                href="{{ route('admin.permohonan.search', array_filter(request()->except('has_keberatan','page'))) }}"
+                                aria-label="Hapus keberatan">×</a>
+                            </span>
+                        @endif
+                        </div>
+                    @endif
+
+                    {{-- Advanced Filters --}}
+                    <div class="collapse {{ $hasAdvanced ? 'show' : '' }}" id="advancedFilter">
+                        <div class="p-3 p-md-4 bg-light border rounded-4 mt-1">
+
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="fw-semibold">
+                            <i class="ri-equalizer-2-line me-1"></i> Filter Lanjutan
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-6">
+                            <label class="form-label fw-semibold">Tanggal Pembuatan</label>
                             <div class="row g-2">
-                                <div class="col-md-6">
-                                    <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control shadow-sm">
+                                <div class="col-12 col-md-6">
+                                <input type="date" name="date_from" value="{{ request('date_from') }}"
+                                        class="form-control shadow-sm" id="dateFrom">
                                 </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-control shadow-sm">
+                                <div class="col-12 col-md-6">
+                                <input type="date" name="date_to" value="{{ request('date_to') }}"
+                                        class="form-control shadow-sm" id="dateTo">
                                 </div>
                             </div>
-                        </div>
 
-                        {{-- Quick Date Filters --}}
-                        <div class="mb-3">
-                            <div class="d-flex flex-wrap gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary quick-date-btn" data-type="today">
-                                    Hari Ini
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary quick-date-btn" data-type="week">
-                                    Minggu Ini
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary quick-date-btn" data-type="month">
-                                    Bulan Ini
-                                </button>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-rsq quick-date-btn" data-type="today">Hari Ini</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-rsq quick-date-btn" data-type="week">Minggu Ini</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-rsq quick-date-btn" data-type="month">Bulan Ini</button>
                             </div>
-                        </div>
+                            </div>
 
-                        {{-- Jenis Permohonan --}}
-                        <div class="mb-3">
+                            <div class="col-12 col-lg-3">
                             <label class="form-label fw-semibold">Jenis Permohonan</label>
                             <select name="permohonan_type" class="form-select shadow-sm">
                                 <option value="">Semua</option>
                                 <option value="Biasa" {{ request('permohonan_type') == 'Biasa' ? 'selected' : '' }}>Biasa</option>
                                 <option value="Khusus" {{ request('permohonan_type') == 'Khusus' ? 'selected' : '' }}>Khusus</option>
                             </select>
-                        </div>
+                            </div>
 
-                        {{-- Keberatan --}}
-                        <div class="mb-3">
+                            <div class="col-12 col-lg-3">
                             <label class="form-label fw-semibold">Memiliki Keberatan?</label>
                             <select name="has_keberatan" class="form-select shadow-sm">
                                 <option value="">Semua</option>
                                 <option value="ya" {{ request('has_keberatan') == 'ya' ? 'selected' : '' }}>Ya</option>
                                 <option value="tidak" {{ request('has_keberatan') == 'tidak' ? 'selected' : '' }}>Tidak</option>
                             </select>
+                            </div>
                         </div>
 
-                        {{-- Reset Filter Button --}}
-                        <div class="mt-4 pt-3 border-top">
-                            <button type="button" class="btn btn-danger w-100 rounded-pill" id="resetFilters">
-                                <i class="ri-refresh-line me-1"></i> Reset Semua Filter
+                        <div class="d-flex flex-column flex-md-row gap-2 mt-4">
+                            <button class="btn btn-primary btn-rsq px-4" type="submit">
+                            <i class="ri-check-line me-1"></i> Terapkan Filter
                             </button>
                         </div>
                     </div>
+                </div>
 
                     <input type="hidden" name="status" value="{{ request('status') }}">
-                </form>
-            </div>
-        </div>
-
-
-
-        {{-- Active Filters Display --}}
-        @if(request('q') || request('date_from') || request('date_to') || request('status') || request('statuses') || request('permohonan_type') || request('has_keberatan'))
-            <div class="mb-3">
-                <small class="text-muted">Filter Aktif:</small>
-                <div class="d-flex flex-wrap gap-2 mt-2">
-
-                    {{-- Pencarian --}}
-                    @if(request('q'))
-                        <span class="badge bg-light text-dark border">
-                            <i class="ri-search-line me-1"></i>Pencarian: "{{ request('q') }}"
-                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('q'))) }}" class="text-dark ms-1">×</a>
-                        </span>
-                    @endif
-
-                    {{-- Tanggal Dari --}}
-                    @if(request('date_from'))
-                        <span class="badge bg-light text-dark border">
-                            <i class="ri-calendar-line me-1"></i>Dari: {{ \Carbon\Carbon::parse(request('date_from'))->format('d M Y') }}
-                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('date_from'))) }}" class="text-dark ms-1">×</a>
-                        </span>
-                    @endif
-
-                    {{-- Tanggal Sampai --}}
-                    @if(request('date_to'))
-                        <span class="badge bg-light text-dark border">
-                            <i class="ri-calendar-line me-1"></i>Sampai: {{ \Carbon\Carbon::parse(request('date_to'))->format('d M Y') }}
-                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('date_to'))) }}" class="text-dark ms-1">×</a>
-                        </span>
-                    @endif
-
-                    {{--  Status  --}}
-                    @php
-                        $multiStatuses = (array) request('statuses', []);
-                        $multiStatuses = array_values(array_filter($multiStatuses)); // remove empty
-                    @endphp
-
-                    @if(!empty($multiStatuses))
-                        <span class="badge bg-light text-dark border">
-                            <i class="ri-filter-line me-1"></i>Status:
-                            {{ implode(', ', $multiStatuses) }}
-                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('statuses'))) }}" class="text-dark ms-1">×</a>
-                        </span>
-                    @elseif(request('status') && request('status') != 'Semua')
-                        {{-- Single Status --}}
-                        <span class="badge bg-light text-dark border">
-                            <i class="ri-filter-line me-1"></i>Status: {{ request('status') }}
-                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('status'))) }}" class="text-dark ms-1">×</a>
-                        </span>
-                    @endif
-
-                    {{-- Jenis Permohonan --}}
-                    @if(request('permohonan_type'))
-                        <span class="badge bg-light text-dark border">
-                            <i class="ri-file-list-line me-1"></i>Jenis: {{ request('permohonan_type') }}
-                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('permohonan_type'))) }}" class="text-dark ms-1">×</a>
-                        </span>
-                    @endif
-
-                    {{-- Memiliki Keberatan --}}
-                    @if(request('has_keberatan'))
-                        <span class="badge bg-light text-dark border">
-                            <i class="ri-error-warning-line me-1"></i>Keberatan: {{ ucfirst(request('has_keberatan')) }}
-                            <a href="{{ route('admin.permohonan.search', array_filter(request()->except('has_keberatan'))) }}" class="text-dark ms-1">×</a>
-                        </span>
-                    @endif
-
+                    </form>
                 </div>
             </div>
-        @endif
+        {{-- STATUS PILLS --}}
+        @php
+            $statuses = [
+                'Semua' => ['icon' => 'ri-file-list-3-line', 'label' => 'Semua'],
+                'Menunggu Verifikasi' => ['icon' => 'ri-time-line', 'label' => 'Menunggu'],
+                'Sedang Diverifikasi' => ['icon' => 'ri-search-eye-line', 'label' => 'Diverifikasi'],
+                'Perlu Diperbaiki' => ['icon' => 'ri-error-warning-line', 'label' => 'Perlu Perbaiki'],
+                'Menunggu Pembayaran' => ['icon' => 'ri-wallet-3-line', 'label' => 'Menunggu Bayar'],
+                'Memverifikasi Pembayaran' => ['icon' => 'ri-secure-payment-line', 'label' => 'Verifikasi Bayar'],
+                'Diproses' => ['icon' => 'ri-loader-4-line', 'label' => 'Diproses'],
+                'Diterima' => ['icon' => 'ri-checkbox-circle-line', 'label' => 'Diterima'],
+                'Ditolak' => ['icon' => 'ri-close-circle-line', 'label' => 'Ditolak'],
+            ];
+        @endphp
 
-
-        {{-- FILTER STATUS --}}
         <div class="mb-4">
-            <ul class="nav nav-pills flex-wrap">
-                @php
-                    $statuses = [
-                        'Semua',
-                        'Menunggu Verifikasi',
-                        'Sedang Diverifikasi',
-                        'Perlu Diperbaiki',
-                        'Menunggu Pembayaran',
-                        'Diproses',
-                        'Diterima',
-                        'Ditolak',
-                    ];
-                @endphp
-
-                @foreach($statuses as $item)
+            <div class="status-scroll">
+                <ul class="nav nav-pills gap-2">
+                @foreach($statuses as $key => $meta)
                     @php
-                        $active = (request('status') == $item || (request('status') == null && $item == 'Semua')) ? 'active' : '';
+                    $isActive = (request('status') == $key || (request('status') == null && $key == 'Semua')) ? 'active' : '';
 
-                        $params = request()->except('page', 'status');
-
-                        if ($item !== 'Semua') {
-                            $params['status'] = $item;
-                        }
+                    $params = request()->except('page', 'status');
+                    if ($key !== 'Semua') $params['status'] = $key;
                     @endphp
 
-                    <li class="nav-item mb-2 me-2">
-                        <a class="nav-link {{ $active }}"
+                    <li class="nav-item">
+                    <a class="nav-link {{ $isActive }} rounded-pill"
                         href="{{ route('admin.permohonan.search', $params) }}">
-                            @switch($item)
-                                @case('Semua')
-                                    <i class="ri-file-list-3-line me-1"></i> Semua
-                                    @break
-                                @case('Menunggu Verifikasi')
-                                    <i class="ri-time-line me-1"></i> Menunggu Verifikasi
-                                    @break
-                                @case('Sedang Diverifikasi')
-                                    <i class="ri-search-eye-line me-1"></i> Diverifikasi
-                                    @break
-                                @case('Perlu Diperbaiki')
-                                    <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
-                                    @break
-                                @case('Menunggu Pembayaran')
-                                    <i class="ri-wallet-3-line me-1"></i> Menunggu Pembayaran
-                                    @break
-                                @case('Diproses')
-                                    <i class="ri-loader-4-line me-1"></i> Diproses
-                                    @break
-                                @case('Diterima')
-                                    <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                    @break
-                                @case('Ditolak')
-                                    <i class="ri-close-circle-line me-1"></i> Ditolak
-                                    @break
-                            @endswitch
-                        </a>
+                        <i class="{{ $meta['icon'] }} me-1"></i> {{ $meta['label'] }}
+                    </a>
                     </li>
                 @endforeach
-            </ul>
+                </ul>
+            </div>
         </div>
 
         {{-- SEARCH RESULTS --}}
@@ -381,7 +388,6 @@
                                 </div>
                             </div>
 
-
                             {{-- Pemohon Name --}}
                             <h6 class="mb-2 fw-semibold">
                                 <i class="ri-user-line text-muted me-1"></i>
@@ -425,65 +431,48 @@
 
     @push('scripts')
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('filterForm');
-        const dateFrom = form.querySelector('[name="date_from"]');
-        const dateTo = form.querySelector('[name="date_to"]');
-        const buttons = form.querySelectorAll('.quick-date-btn');
-        const resetBtn = document.getElementById('resetFilters');
-        const today = new Date();
+        (function () {
+            const dateFrom = document.getElementById('dateFrom');
+            const dateTo   = document.getElementById('dateTo');
+            const form     = document.getElementById('filterForm');
 
-        const formatDate = (date) => date.toISOString().split('T')[0];
+            function fmt(d) {
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+            }
 
-        // --- Quick date buttons ---
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Reset button visuals
-                buttons.forEach(b => b.classList.remove('btn-secondary', 'active'));
-                buttons.forEach(b => b.classList.add('btn-outline-secondary'));
+            function startOfWeek(d) {
+            const day = (d.getDay() + 6) % 7;
+            const out = new Date(d);
+            out.setDate(d.getDate() - day);
+            return out;
+            }
 
-                // Highlight the clicked button
-                this.classList.remove('btn-outline-secondary');
-                this.classList.add('btn-secondary', 'active');
+            document.querySelectorAll('.quick-date-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const now = new Date();
+                let from = new Date(now);
+                let to = new Date(now);
 
-                // Apply date logic
-                const type = this.dataset.type;
-                let start = new Date(today);
-                let end = new Date(today);
+                const type = btn.dataset.type;
 
-                if (type === 'week') {
-                    start.setDate(today.getDate() - today.getDay() + 1);
+                if (type === 'today') {
+                } else if (type === 'week') {
+                from = startOfWeek(now);
                 } else if (type === 'month') {
-                    start = new Date(today.getFullYear(), today.getMonth(), 1);
+                from = new Date(now.getFullYear(), now.getMonth(), 1);
                 }
 
-                dateFrom.value = formatDate(start);
-                dateTo.value = formatDate(end);
-            });
-        });
+                if (dateFrom) dateFrom.value = fmt(from);
+                if (dateTo) dateTo.value = fmt(to);
 
-        // --- Reset button ---
-        resetBtn.addEventListener('click', function() {
-            // Clear all inputs manually
-            form.querySelectorAll('input, select').forEach(el => {
-                if (el.type === 'text' || el.type === 'date' || el.tagName === 'SELECT') {
-                    el.value = '';
-                }
+                form.submit();
             });
-
-            // Reset quick-date button visuals
-            buttons.forEach(b => {
-                b.classList.remove('btn-secondary', 'active');
-                b.classList.add('btn-outline-secondary');
             });
-
-            // Remove all query parameters and reload
-            const baseUrl = form.getAttribute('action');
-            window.location.href = baseUrl;
-        });
-    });
+        })();
     </script>
     @endpush
-
 
 </x-layout>

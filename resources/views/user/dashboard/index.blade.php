@@ -14,59 +14,40 @@
         </div>
 
         {{-- QUICK FILTERS --}}
-        <div class="mb-4">
-            <ul class="nav nav-pills flex-wrap">
-                @php
-                    $statuses = [
-                        'Semua',
-                        'Menunggu Verifikasi',
-                        'Sedang Diverifikasi',
-                        'Perlu Diperbaiki',
-                        'Menunggu Pembayaran',
-                        'Diproses',
-                        'Diterima',
-                        'Ditolak',
-                    ];
-                @endphp
+        @php
+            $statuses = [
+                'Semua' => ['icon' => 'ri-file-list-3-line', 'label' => 'Semua'],
+                'Menunggu Verifikasi' => ['icon' => 'ri-time-line', 'label' => 'Menunggu'],
+                'Sedang Diverifikasi' => ['icon' => 'ri-search-eye-line', 'label' => 'Diverifikasi'],
+                'Perlu Diperbaiki' => ['icon' => 'ri-error-warning-line', 'label' => 'Perlu Perbaiki'],
+                'Menunggu Pembayaran' => ['icon' => 'ri-wallet-3-line', 'label' => 'Menunggu Bayar'],
+                'Memverifikasi Pembayaran' => ['icon' => 'ri-secure-payment-line', 'label' => 'Verifikasi Bayar'],
+                'Diproses' => ['icon' => 'ri-loader-4-line', 'label' => 'Diproses'],
+                'Diterima' => ['icon' => 'ri-checkbox-circle-line', 'label' => 'Diterima'],
+                'Ditolak' => ['icon' => 'ri-close-circle-line', 'label' => 'Ditolak'],
+            ];
+        @endphp
 
-                @foreach($statuses as $item)
+        <div class="mb-4">
+            <div class="status-scroll">
+                <ul class="nav nav-pills gap-2">
+                @foreach($statuses as $key => $meta)
                     @php
-                        // determine if this filter is active
-                        $active = (request('status') == $item || (request('status') == null && $item == 'Semua')) ? 'active' : '';
+                    $isActive = (request('status') == $key || (request('status') == null && $key == 'Semua')) ? 'active' : '';
+
+                    $params = request()->except('page', 'status');
+                    if ($key !== 'Semua') $params['status'] = $key;
                     @endphp
-                    <li class="nav-item mb-2 me-2">
-                        <a class="nav-link {{ $active }}" 
-                        href="{{ route('user.dashboard.index', ['status' => $item == 'Semua' ? null : $item]) }}">
-                            @switch($item)
-                                @case('Semua')
-                                    <i class="ri-file-list-3-line me-1"></i>Semua
-                                    @break
-                                @case('Menunggu Verifikasi')
-                                    <i class="ri-time-line me-1"></i> Menunggu Verifikasi
-                                    @break
-                                @case('Sedang Diverifikasi')
-                                    <i class="ri-search-eye-line me-1"></i> Diverifikasi
-                                    @break
-                                @case('Perlu Diperbaiki')
-                                    <i class="ri-error-warning-line me-1"></i> Perlu Diperbaiki
-                                    @break
-                                @case('Menunggu Pembayaran')
-                                    <i class="ri-wallet-3-line me-1"></i> Menunggu Pembayaran
-                                    @break
-                                @case('Diproses')
-                                    <i class="ri-loader-4-line me-1"></i> Diproses
-                                    @break
-                                @case('Diterima')
-                                    <i class="ri-checkbox-circle-line me-1"></i> Diterima
-                                    @break
-                                @case('Ditolak')
-                                    <i class="ri-close-circle-line me-1"></i> Ditolak
-                                    @break
-                            @endswitch
-                        </a>
+
+                    <li class="nav-item">
+                    <a class="nav-link {{ $isActive }} rounded-pill"
+                        href="{{ route('user.dashboard.index', $params) }}">
+                        <i class="{{ $meta['icon'] }} me-1"></i> {{ $meta['label'] }}
+                    </a>
                     </li>
                 @endforeach
-            </ul>
+                </ul>
+            </div>
         </div>
 
         {{-- CHECK IF PERMOHONAN IS EMPTY RETURN ALERT INSTEAD --}}
@@ -78,7 +59,7 @@
                 <h5 class="mb-3">Belum Ada Permohonan</h5>
                 <p class="text-muted mb-4">Anda belum membuat permohonan apapun.<br>Mulai dengan mengajukan permohonan baru.</p>
                 <a href="{{ route('user.permohonan.create') }}" class="btn btn-primary">
-                    <i class="ri-add-line me-1"></i>Buat Permohonan
+                    <i class="ri-add-line me-1"></i>Buat Permohonan informasi
                 </a>
             </div>
         @else

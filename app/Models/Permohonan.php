@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Permohonan extends Model
 {
@@ -32,5 +33,10 @@ class Permohonan extends Model
     {
         return $this->hasMany(PermohonanReplyFile::class);
     }
- 
+
+    public function buktiBayar(): HasOne
+    {
+        return $this->hasOne(PermohonanBuktiBayar::class, 'permohonan_id');
+    }
+
 }

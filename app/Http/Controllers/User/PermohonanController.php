@@ -88,7 +88,7 @@ class PermohonanController extends Controller
     {
         $this->authorize('view', $permohonan);
 
-        $permohonan->load('files', 'keberatan');
+        $permohonan->load(['buktiBayar', 'files', 'replyFiles', 'keberatan.files', 'keberatan.replyFiles']);
         return view('user.dashboard.permohonan.show', compact('permohonan'));
     }
 

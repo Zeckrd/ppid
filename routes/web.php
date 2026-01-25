@@ -7,6 +7,7 @@ use App\Models\PermohonanFile;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\PermohonanController as UserPermohonanController;
 use App\Http\Controllers\User\KeberatanController;
+use App\Http\Controllers\User\PermohonanBuktiBayarController;
 use App\Http\Controllers\Auth\UserSetupController as UserSetupController;
 use App\Http\Controllers\User\Profile\UserProfileController;
 use App\Http\Controllers\User\Profile\EmailChangeController as EmailChangeController;
@@ -25,7 +26,6 @@ use App\Http\Controllers\Auth\PasswordResetController;
 // Public Routes
 Route::view('/', 'pages.home');
 Route::view('/profil', 'pages.profil');
-Route::view('/tugas-dan-fungsi', 'pages.tugas-dan-fungsi');
 Route::view('/surat-keterangan', 'pages.surat-keterangan');
 Route::view('/sakip', 'pages.sakip');
 Route::view('/standar-layanan', 'pages.standar-layanan');
@@ -90,7 +90,7 @@ Route::middleware(['auth', 'phone.verified'])
         // view user uploaded file
         Route::get('/permohonan/{permohonan}/files/{file}/view', [UserPermohonanController::class, 'viewFile'])
             ->name('permohonan.files.view');
-        
+
         // view (admin) reply file
         Route::get('/permohonan/{permohonan}/reply-files/{file}/view', [UserPermohonanController::class, 'viewReplyFile'])
             ->name('permohonan.reply-files.view');
@@ -98,7 +98,7 @@ Route::middleware(['auth', 'phone.verified'])
         // user uploaded download
         Route::get('/permohonan/{permohonan}/files/{file}', [UserPermohonanController::class, 'downloadFile'])
             ->name('permohonan.files.download');
-        
+
         // User download reply files
         Route::get('/permohonan/{permohonan}/reply-files/{file}', [UserPermohonanController::class, 'downloadReplyFile'])
             ->name('permohonan.reply-files.download');
@@ -119,13 +119,27 @@ Route::middleware(['auth', 'phone.verified'])
         Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}', [KeberatanController::class, 'downloadReplyFile'])
             ->name('keberatan.reply_files.download');
 
-        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/files/{file}/view',
-            [KeberatanController::class, 'viewFile'])
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/files/{file}/view', [KeberatanController::class, 'viewFile'])
             ->name('keberatan.files.view');
 
-        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}/view',
-            [KeberatanController::class, 'viewReplyFile'])
+        Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}/view', [KeberatanController::class, 'viewReplyFile'])
             ->name('keberatan.reply_files.view');
+
+        // Bukti Bayar
+        Route::prefix('/permohonan/{permohonan}/bukti-bayar')->group(function () {
+            Route::post('/', [PermohonanBuktiBayarController::class, 'store'])
+                ->name('permohonan.bukti-bayar.store');
+
+            Route::put('/', [PermohonanBuktiBayarController::class, 'update'])
+                ->name('permohonan.bukti-bayar.update');
+
+            Route::get('/view', [PermohonanBuktiBayarController::class, 'view'])
+                ->name('permohonan.bukti-bayar.view');
+
+            Route::get('/download', [PermohonanBuktiBayarController::class, 'download'])
+                ->name('permohonan.bukti-bayar.download');
+        });
+
     });
 
 
@@ -187,6 +201,16 @@ Route::middleware(['auth', 'phone.verified', 'is_admin'])
         Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/reply-files/{file}/view',
             [AdminKeberatanController::class, 'viewReplyFile']
         )->name('keberatan.reply_files.view');
+
+        // Bukti bayar
+        Route::get('/permohonan/{permohonan}/bukti-bayar/view',
+            [\App\Http\Controllers\Admin\PermohonanBuktiBayarController::class, 'view']
+        )->name('permohonan.bukti-bayar.view');
+
+        Route::get('/permohonan/{permohonan}/bukti-bayar/download',
+            [\App\Http\Controllers\Admin\PermohonanBuktiBayarController::class, 'download']
+        )->name('permohonan.bukti-bayar.download');
+
     });
 
 
@@ -225,4 +249,3 @@ Route::get('/verify-phone/{token}', [PhoneVerificationController::class, 'verify
 Route::post('/verify-phone/send', [PhoneVerificationController::class, 'send'])
     ->middleware(['auth','throttle:phone-send'])
     ->name('phone.send');
-

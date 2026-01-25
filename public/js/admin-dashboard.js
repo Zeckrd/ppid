@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         '#30F1FF',
                         '#FF7F27',
                         '#FFD500',
+                        '#c2d91a',
                         '#4050FF',
                         '#188F18',
                         '#ED1C24',
