@@ -33,7 +33,7 @@ public function boot(): void
             $email = Str::lower((string) $request->input('email', ''));
             $key = $email.'|'.$request->ip();
 
-            return Limit::perMinute(10)->by($key);
+            return Limit::perMinute(5)->by($key);
         });
 
         // register: limit by IP
@@ -57,12 +57,12 @@ public function boot(): void
 
         // email-confirm link: limit by IP
         RateLimiter::for('email-confirm', function (Request $request) {
-            return Limit::perMinute(10)->by($request->ip());
+            return Limit::perMinute(1)->by($request->ip());
         });
 
         // phone-verify link: limit by IP
         RateLimiter::for('phone-verify', function (Request $request) {
-            return Limit::perMinute(10)->by($request->ip());
+            return Limit::perMinute(1)->by($request->ip());
         });
 
         // phone-send: limit per user + per IP fallback

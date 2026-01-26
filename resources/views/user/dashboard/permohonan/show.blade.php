@@ -223,7 +223,6 @@
                                                     </div>
                                                 </label>
 
-                                                {{-- Format note moved near the action --}}
                                                 <div class="small text-muted mt-2">
                                                     <i class="ri-information-line me-1"></i>
                                                     JPG/PNG/PDF • Maks 5 MB
@@ -234,7 +233,7 @@
                                                 @enderror
                                             </form>
                                         @else
-                                            {{-- Locked: keep same dropzone shape, just disabled --}}
+                                            {{-- disabled if not in status --}}
                                             <div class="proof-dropzone proof-dropzone--disabled w-100" role="button" aria-disabled="true">
                                                 <div class="d-flex align-items-center justify-content-between gap-3">
                                                     <div class="d-flex align-items-center gap-3">

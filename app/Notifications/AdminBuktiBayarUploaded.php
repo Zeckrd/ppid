@@ -35,8 +35,6 @@ class AdminBuktiBayarUploaded extends Notification
             "Bukti Pembayaran Diunggah\n"
             . "User: {$userName}\n"
             . "ID: #{$p->id}\n"
-            . "File: {$fileName}\n"
-            . "Ukuran: {$fileSize}\n\n"
             . "Status: {$p->status}\n"
             . "Lihat: {$this->adminPermohonanUrl()}";
     }

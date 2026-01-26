@@ -98,12 +98,6 @@ a.text-decoration-none:hover {
   transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
 }
 
-.proof-dropzone:hover{
-  border-color: rgba(47,92,255,.55);
-  box-shadow: 0 6px 18px rgba(0,0,0,.06);
-  transform: translateY(-1px);
-}
-
 .proof-dropzone-icon{
   width: 40px;
   height: 40px;
@@ -116,21 +110,18 @@ a.text-decoration-none:hover {
   font-size: 1.25rem;
   flex-shrink:0;
 }
-/* Option B layout */
 .proof-cta-wrap{
   display:flex;
   align-items:stretch;
   gap: 10px;
 }
 
-/* Make label behave like a flexible card */
 .proof-dropzone--split{
   flex: 1 1 auto;
   min-width: 0;
   cursor: pointer;
 }
 
-/* Button keeps consistent width */
 .proof-cta-btn{
   flex: 0 0 auto;
   white-space: nowrap;
@@ -138,9 +129,8 @@ a.text-decoration-none:hover {
   padding: 10px 14px;
 }
 
-/* Optional: ensure the label height matches the button nicely */
 .proof-dropzone--split{
-  padding: 12px 14px;   /* tune with your existing proof-dropzone padding */
+  padding: 12px 14px;
   border-radius: 16px;
 }
 
