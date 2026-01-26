@@ -70,7 +70,7 @@
                             <tr>
                                 <th class="px-4 py-3 border-0">
                                     <div class="d-flex align-items-center">
-                                        Waktu Dibuat
+                                        Pembaruan Terakhir
                                         <i class="ms-2 text-muted" style="font-size: 0.875rem;"></i>
                                     </div>
                                 </th>
@@ -91,7 +91,7 @@
                                     <td class="px-4 py-3 align-middle">
                                         <div class="d-flex align-items-center">
                                             <i class="ri-calendar-line text-muted me-2"></i>
-                                            <span>{{ $permohonan->created_at->format('d M Y, H:i') }}</span>
+                                            <span>{{ $permohonan->updated_at->format('d M Y, H:i') }}</span>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 align-middle">

@@ -28,7 +28,6 @@ class PermohonanBuktiBayarController extends Controller
 
         $data = $this->validated($request);
 
-        // Enforce 1:1
         $permohonan->loadMissing('buktiBayar');
         if ($permohonan->buktiBayar) {
             return back()->with('error', 'Bukti pembayaran sudah ada. Silakan gunakan fitur ganti bukti.');
