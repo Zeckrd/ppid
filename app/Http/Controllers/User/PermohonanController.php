@@ -105,7 +105,7 @@ class PermohonanController extends Controller
 
         $canEditFiles = in_array(
             $permohonan->status,
-            ['Menunggu Verifikasi Berkas Dari Petugas', 'Perlu Diperbaiki']
+            ['Menunggu Verifikasi','Diverifikasi', 'Perlu Diperbaiki']
         );
 
         $rules = [
@@ -178,7 +178,7 @@ class PermohonanController extends Controller
         }
 
         if ($permohonan->status === 'Perlu Diperbaiki') {
-            $updateData['status'] = 'Menunggu Verifikasi Berkas Dari Petugas';
+            $updateData['status'] = 'Menunggu Verifikasi';
             $updateData['keterangan_petugas'] = null;
         }
 

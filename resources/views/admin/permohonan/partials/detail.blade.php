@@ -18,7 +18,7 @@
                 </div>
                 <div>
                     @switch($permohonan->status)
-                        @case('Menunggu Verifikasi Berkas Dari Petugas')
+                        @case('Menunggu Verifikasi')
                             <span class="badge bg-warning text-dark px-3 py-2">
                                 <i class="ri-time-line me-1"></i>Menunggu Verifikasi
                             </span>

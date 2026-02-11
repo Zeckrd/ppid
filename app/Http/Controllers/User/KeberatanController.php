@@ -114,7 +114,7 @@ class KeberatanController extends Controller
         }
 
         $permohonan->update([
-            'status' => 'Menunggu Verifikasi Berkas Dari Petugas',
+            'status' => 'Menunggu Verifikasi',
         ]);
 
         $admins = User::admins()->get();
