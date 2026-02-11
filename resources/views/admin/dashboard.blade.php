@@ -91,6 +91,9 @@
                 $activeStatuses = [
                     'Menunggu Verifikasi',
                     'Sedang Diverifikasi',
+                    'Perlu Diperbaiki',
+                    'Menunggu Pembayaran',
+                    'Memverifikasi Pembayaran',
                     'Diproses',
                 ];
             @endphp
@@ -114,19 +117,25 @@
                 </a>
             </div>
 
-
+            @php
+                $finishStatuses = [
+                    'Diterima',
+                    'Ditolak'
+                ];
+            @endphp
 
             <div class="col-md-3">
                 <a href="{{ route('admin.permohonan.search', [
                         'date_from' => $dateFrom,
                         'date_to'   => $dateTo,
+                        'statuses'  => $finishStatuses,
                     ]) }}"
                 class="text-decoration-none">
                     <div class="card border-0 shadow-sm bg-success text-white">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h6 class="fw-semibold mb-1 text-white">Total Permohonan</h6>
-                                <h2 class="fw-bold mb-0 text-white">{{ $totalPermohonan }}</h2>
+                                <h6 class="fw-semibold mb-1 text-white">Permohonan Selesai</h6>
+                                <h2 class="fw-bold mb-0 text-white">{{ $totalPermohonanFinish }}</h2>
                             </div>
                             <i class="ri-file-list-3-line display-5 opacity-75"></i>
                         </div>

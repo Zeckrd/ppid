@@ -29,26 +29,70 @@
         @endphp
 
         <div class="mb-4">
-            <div class="status-scroll">
+            @php
+                $currentStatus = $status ?? request('status', 'Semua');
+            @endphp
+
+            {{-- BIG SCREEN= pills --}}
+            <div class="status-scroll d-none d-md-block">
                 <ul class="nav nav-pills gap-2">
-                @foreach($statuses as $key => $meta)
-                    @php
-                    $isActive = (request('status') == $key || (request('status') == null && $key == 'Semua')) ? 'active' : '';
+                    @foreach($statuses as $key => $meta)
+                        @php
+                            $isActive = ($currentStatus === $key) ? 'active' : '';
 
-                    $params = request()->except('page', 'status');
-                    if ($key !== 'Semua') $params['status'] = $key;
-                    @endphp
+                            $params = request()->except('page', 'status');
+                            if ($key !== 'Semua') {
+                                $params['status'] = $key;
+                            }
+                        @endphp
 
-                    <li class="nav-item">
-                    <a class="nav-link {{ $isActive }} rounded-pill"
-                        href="{{ route('user.dashboard.index', $params) }}">
-                        <i class="{{ $meta['icon'] }} me-1"></i> {{ $meta['label'] }}
-                    </a>
-                    </li>
-                @endforeach
+                        <li class="nav-item">
+                            <a class="nav-link {{ $isActive }} rounded-pill"
+                            href="{{ route('user.dashboard.index', $params) }}">
+                                <i class="{{ $meta['icon'] }} me-1"></i> {{ $meta['label'] }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
-        </div>
+
+            {{-- SMALL SCREEN= dropdown --}}
+            <div class="d-md-none mb-3">
+                <form method="GET" action="{{ route('user.dashboard.index') }}">
+                    @foreach(request()->except('page', 'status') as $k => $v)
+                        @if(is_array($v))
+                            @foreach($v as $item)
+                                <input type="hidden" name="{{ $k }}[]" value="{{ $item }}">
+                            @endforeach
+                        @else
+                            <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                        @endif
+                    @endforeach
+
+                    <div class="quick-filter-mobile card border-0 shadow-sm">
+                        <div class="card-body p-2">
+                            <label for="quick_status_mobile" class="form-label small text-muted mb-1 px-1">
+                                <i class="ri-filter-3-line me-1"></i> Filter Status
+                            </label>
+
+                    <div class="input-group input-group-sm">
+                                <select id="quick_status_mobile"
+                                        name="status"
+                                        class="form-select quick-filter-select"
+                                        onchange="this.form.submit()">
+                                    @foreach($statuses as $key => $meta)
+                                        <option value="{{ $key }}" {{ ($status ?? 'Semua') === $key ? 'selected' : '' }}>
+                                            {{ $key }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
 
         {{-- CHECK IF PERMOHONAN IS EMPTY RETURN ALERT INSTEAD --}}
         @if($permohonans->isEmpty())

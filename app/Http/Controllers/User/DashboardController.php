@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $status = $request->query('status'); // e.g., ?status=Menunggu
+        $status = $request->query('status');
 
         $query = Permohonan::with('user')
             ->where('user_id', $user->id);
