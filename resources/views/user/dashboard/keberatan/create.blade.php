@@ -52,7 +52,7 @@
                     <div class="mb-4">
                         <label for="keterangan_user" class="form-label">
                             <i class="ri-message-3-line me-1 text-primary"></i>
-                            <span class="fw-bold">Alasan / Keterangan Keberatan</span>
+                            <span class="fw-bold">Alasan / Keterangan</span>
                             <span class="text-danger">*</span>
                         </label>
                         <textarea name="keterangan_user" id="keterangan_user" rows="5"
@@ -61,7 +61,7 @@
                         <x-form-error name='keterangan_user'></x-form-error>
                         <div class="form-text small text-muted">
                             <i class="ri-information-line"></i>
-                            Jelaskan poin keberatan Anda sejelas mungkin.
+                            Jelaskan poin Anda sejelas mungkin.
                         </div>
                     </div>
 
@@ -89,11 +89,11 @@
                             accept=".pdf,.doc,.docx"
                             multiple>
 
-                        {{-- Server-side validation errors --}}
+                        {{-- validation error --}}
                         <x-form-error name="keberatan_files"></x-form-error>
                         <x-form-error name="keberatan_files.*"></x-form-error>
 
-                        {{-- JS validation error box --}}
+                        {{-- JS validation error --}}
                         <div id="keberatan_files_error" class="invalid-feedback d-none"></div>
 
                         <div class="form-text small text-muted">

@@ -104,14 +104,8 @@ Route::middleware(['auth', 'phone.verified'])
             ->name('permohonan.reply-files.download');
 
         // Keberatan
-        Route::get('/keberatan/show', [KeberatanController::class, 'show'])
-            ->name('keberatan.show');
-
-        Route::get('/permohonan/{permohonan}/keberatan/create', [KeberatanController::class, 'create'])
-            ->name('keberatan.create');
-
-        Route::post('/permohonan/{permohonan}/keberatan', [KeberatanController::class, 'store'])
-            ->name('keberatan.store');
+        Route::resource('keberatan', KeberatanController::class)
+            ->except(['index']);
 
         Route::get('/permohonan/{permohonan}/keberatan/{keberatan}/files/{file}', [KeberatanController::class, 'downloadFile'])
             ->name('keberatan.files.download');

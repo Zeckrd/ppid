@@ -35,15 +35,6 @@ class KeberatanController extends Controller
         return $ext ? ($base . '.' . $ext) : $base;
     }
 
-    protected function isPdfLike($file): bool
-    {
-        $mime = strtolower((string) ($file->mime_type ?? ''));
-        if ($mime === 'application/pdf') return true;
-
-        $name = strtolower((string) ($file->original_name ?? ''));
-        return str_ends_with($name, '.pdf');
-    }
-
     public function create(Permohonan $permohonan)
     {
         $this->authorize('view', $permohonan);
@@ -113,16 +104,111 @@ class KeberatanController extends Controller
             ]);
         }
 
-        $permohonan->update([
-            'status' => 'Menunggu Verifikasi',
-        ]);
-
         $admins = User::admins()->get();
         Notification::send($admins, new AdminKeberatanCreated($keberatan));
 
         return redirect()
             ->route('user.permohonan.show', $permohonan)
             ->with('success', 'Keberatan berhasil diajukan dan status permohonan diperbarui.');
+    }
+
+    public function edit(Keberatan $keberatan)
+    {
+        $this->authorize('update', $keberatan);
+
+        $permohonan = $keberatan->permohonan;
+
+        return view('user.dashboard.keberatan.edit', compact('keberatan', 'permohonan'));
+    }
+
+    public function update(Request $request, Permohonan $permohonan, Keberatan $keberatan)
+    {
+        $this->authorize('update', $keberatan);
+
+        $permohonan = $keberatan->permohonan;
+
+        $canEditFiles = in_array(
+            $permohonan->status,
+            ['Menunggu Verifikasi', 'Diverifikasi', 'Perlu Diperbaiki']
+        );
+
+        $rules = [
+            'keterangan_user' => 'required|string|max:1024',
+        ];
+
+        if ($canEditFiles) {
+            $rules['keberatan_files']   = 'nullable|array|max:10';
+            $rules['keberatan_files.*'] = 'file|mimes:pdf,doc,docx|max:5120';
+
+            $rules['delete_file_ids']   = 'nullable|array';
+            $rules['delete_file_ids.*'] = 'integer|exists:keberatan_files,id';
+        }
+
+        $validated = $request->validate($rules);
+
+        $updateData = [
+            'keterangan_user' => $validated['keterangan_user'],
+        ];
+
+        if ($canEditFiles) {
+            $deleteIds = $validated['delete_file_ids'] ?? [];
+
+            if (!empty($deleteIds)) {
+                $filesToDelete = $keberatan->files()
+                    ->whereIn('id', $deleteIds)
+                    ->get();
+
+                foreach ($filesToDelete as $file) {
+                    if (Storage::disk('local')->exists($file->path)) {
+                        Storage::disk('local')->delete($file->path);
+                    }
+                    $file->delete();
+                }
+            }
+
+            $newFiles = $request->file('keberatan_files', []);
+
+            $currentCount  = $keberatan->files()->count();
+            $newFilesCount = $newFiles ? count($newFiles) : 0;
+
+            if (($currentCount + $newFilesCount) > 10) {
+                return back()
+                    ->withErrors(['keberatan_files' => 'Jumlah lampiran tidak boleh lebih dari 10.'])
+                    ->withInput();
+            }
+
+            foreach ($newFiles as $uploadedFile) {
+                $path = $uploadedFile->store('private/keberatan', 'local');
+
+                $safeName = $this->sanitizeFilename($uploadedFile->getClientOriginalName());
+
+                $keberatan->files()->create([
+                    'path'          => $path,
+                    'original_name' => $safeName,
+                    'size'          => $uploadedFile->getSize(),
+                    'mime_type'     => $uploadedFile->getMimeType(),
+                ]);
+            }
+
+            if ($keberatan->files()->count() === 0) {
+                return back()
+                    ->withErrors(['keberatan_files' => 'Minimal satu lampiran diperlukan.'])
+                    ->withInput();
+            }
+        }
+
+        if ($permohonan->status === 'Perlu Diperbaiki') {
+            $permohonan->update([
+                'status' => 'Menunggu Verifikasi',
+                'keterangan_petugas' => null,
+            ]);
+        }
+
+        $keberatan->update($updateData);
+
+        return redirect()
+            ->route('user.permohonan.show', $permohonan)
+            ->with('success', 'Keberatan berhasil diperbarui.');
     }
 
     public function downloadFile(Permohonan $permohonan, Keberatan $keberatan, KeberatanFile $file)
@@ -161,8 +247,8 @@ class KeberatanController extends Controller
         if ($file->keberatan_id !== $keberatan->id) abort(404);
         if (!Storage::disk('local')->exists($file->path)) abort(404, 'File keberatan tidak ditemukan.');
 
-        // Only inline PDF; others download
-        if (! $this->isPdfLike($file)) {
+        // Only inline PDF, others download
+        if (! $file->isPdf()) {
             return redirect()->route('user.keberatan.files.download', [
                 $permohonan->id, $keberatan->id, $file->id
             ]);
@@ -186,8 +272,8 @@ class KeberatanController extends Controller
         if ($file->keberatan_id !== $keberatan->id) abort(404);
         if (!Storage::disk('local')->exists($file->path)) abort(404, 'File balasan keberatan tidak ditemukan.');
 
-        // Only inline PDF; others download
-        if (! $this->isPdfLike($file)) {
+        // Only inline PDF, others download
+        if (! $file->isPdf()) {
             return redirect()->route('user.keberatan.reply_files.download', [
                 $permohonan->id, $keberatan->id, $file->id
             ]);
