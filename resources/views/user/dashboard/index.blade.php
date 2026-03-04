@@ -34,7 +34,7 @@
             @endphp
 
             {{-- BIG SCREEN= pills --}}
-            <div class="status-scroll d-none d-md-block">
+            <div class="status-scroll d-none d-md-block mb-3">
                 <ul class="nav nav-pills gap-2">
                     @foreach($statuses as $key => $meta)
                         @php
