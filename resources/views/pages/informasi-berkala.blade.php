@@ -155,7 +155,7 @@
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 py-3">
                     <span class="fw-semibold text-muted">Laporan PTIP</span>
-                    <a href="#" class="btn btn-sm btn-primary ms-lg-auto">Lihat</a>
+                    <a href="/" class="btn btn-sm btn-primary ms-lg-auto">Lihat</a>
                   </li>
                   <li class="list-group-item d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 py-3">
                     <span class="fw-semibold text-muted">Laporan Perkara</span>
