@@ -65,6 +65,7 @@
                         </li>
 
                         <li class="nav-item"><a class="nav-link" href="/standar-layanan">Standar Layanan</a></li>
+                        <li class="nav-item"><a class="nav-link" href="https://drive.google.com/file/d/1GV4DPG_N48g1McV3VUbCBYzU1-cb2wI2/view?usp=sharing">Panduan Pengguna</a></li>
 
                         <li class="nav-item d-none d-lg-block"><span class="nav-link text-muted">|</span></li>
 
@@ -87,7 +88,6 @@
                                         <li><a class="dropdown-item" href="{{ route('admin.permohonan.search') }}"><i class="ri-search-line me-2"></i>Cari Permohonan</a></li>
                                     @endif
 
-                                    <li><a class="dropdown-item" href="#"><i class="ri-book-open-line me-2"></i>Panduan Pengguna</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.profile.edit') }}"><i class="ri-shield-keyhole-line me-2"></i>Pengaturan Akun</a></li>
 
                                     <li><hr class="dropdown-divider"></li>
