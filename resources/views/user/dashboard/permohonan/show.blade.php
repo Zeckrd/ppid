@@ -89,36 +89,47 @@
                     <h5 class="mb-0 fw-bold">Ringkasan Permohonan</h5>
                 </div>
 
-                <div class="row g-3 mb-4">
-
+                <div class="row g-4 mb-4">
                     <div class="col-md-6 col-xl-3">
-                        <div class="summary-item h-100">
-                            <div class="summary-label">Status</div>
-                            <div class="summary-value">{{ $permohonan->status }}</div>
+                        <div class="d-flex align-items-start">
+                            <i class="ri-flag-line text-muted me-2 mt-1"></i>
+                            <div>
+                                <div class="text-muted small mb-1">Status</div>
+                                <div class="fw-medium">{{ $permohonan->status }}</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xl-3">
-                        <div class="summary-item h-100">
-                            <div class="summary-label">Jenis Permohonan</div>
-                            <div class="summary-value">{{ ucfirst($permohonan->permohonan_type) }}</div>
+                        <div class="d-flex align-items-start">
+                            <i class="ri-file-list-3-line text-muted me-2 mt-1"></i>
+                            <div>
+                                <div class="text-muted small mb-1">Jenis Permohonan</div>
+                                <div class="fw-medium">{{ ucfirst($permohonan->permohonan_type) }}</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xl-3">
-                        <div class="summary-item h-100">
-                            <div class="summary-label">Dibuat Pada</div>
-                            <div class="summary-value">{{ $permohonan->created_at->format('d M Y, H:i') }}</div>
+                        <div class="d-flex align-items-start">
+                            <i class="ri-calendar-line text-muted me-2 mt-1"></i>
+                            <div>
+                                <div class="text-muted small mb-1">Dibuat Pada</div>
+                                <div class="fw-medium">{{ $permohonan->created_at->format('d M Y, H:i') }}</div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xl-3">
-                        <div class="summary-item h-100">
-                            <div class="summary-label">Jenis Balasan</div>
-                            <div class="summary-value">{{ ucfirst($permohonan->reply_type) }}</div>
+                        <div class="d-flex align-items-start">
+                            <i class="ri-mail-line text-muted me-2 mt-1"></i>
+                            <div>
+                                <div class="text-muted small mb-1">Jenis Balasan</div>
+                                <div class="fw-medium">{{ ucfirst($permohonan->reply_type) }}</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+
 
                 <hr class="my-4">
 
@@ -275,7 +286,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
 
         <!-- File Permohonan & File Balasan -->
         <div class="card shadow-sm border-0 mb-4">
@@ -412,6 +423,7 @@
                 </div>
             </div>
         </div>
+    
 
         <!-- Keberatan Section -->
         <div class="card shadow-sm border-0 mt-4">
@@ -443,30 +455,38 @@
                     </div>
 
                     <!-- Keberatan Summary -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6 col-xl-4">
-                            <div class="summary-item h-100">
-                                <div class="summary-label">Status Keberatan</div>
-                                <div class="summary-value">{{ ucfirst($status) }}</div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="d-flex align-items-start">
+                                <i class="ri-flag-line text-muted me-2 mt-1"></i>
+                                <div>
+                                    <div class="text-muted small mb-1">Status</div>
+                                    <div class="fw-medium">{{ ucfirst($status) }}</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-xl-4">
-                            <div class="summary-item h-100">
-                                <div class="summary-label">Diajukan Pada</div>
-                                <div class="summary-value">{{ $k->created_at->format('d M Y, H:i') }}</div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="d-flex align-items-start">
+                                <i class="ri-calendar-event-line text-muted me-2 mt-1"></i>
+                                <div>
+                                    <div class="text-muted small mb-1">Diajukan Pada</div>
+                                    <div class="fw-medium">{{ $k->created_at->format('d M Y, H:i') }}</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-xl-4">
-                            <div class="summary-item h-100">
-                                <div class="summary-label">Terakhir Diperbarui</div>
-                                <div class="summary-value">{{ $k->updated_at->format('d M Y, H:i') }}</div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="d-flex align-items-start">
+                                <i class="ri-time-line text-muted me-2 mt-1"></i>
+                                <div>
+                                    <div class="text-muted small mb-1">Terakhir Diperbarui</div>
+                                    <div class="fw-medium">{{ $k->updated_at->format('d M Y, H:i') }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <hr class="my-4">
 
                     {{-- Keterangan User --}}
                     <div class="mb-4">
