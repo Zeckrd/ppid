@@ -22,23 +22,23 @@ class WablasService
     public function sendMessage($phone, $message)
         {
             // Sanitize phone number
-            // $phone = preg_replace('/[^0-9]/', '', $phone);
-            // if (str_starts_with($phone, '0')) {
-            //     $phone = '62' . substr($phone, 1);
-            // }
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
 
-            // $query = http_build_query([
-            //     'token'   => "{$this->token}.{$this->secret}",
-            //     'phone'   => $phone,
-            //     'message' => $message,
-            // ]);
-            // $response = Http::get("{$this->baseUrl}?{$query}");
+            $query = http_build_query([
+                'token'   => "{$this->token}.{$this->secret}",
+                'phone'   => $phone,
+                'message' => $message,
+            ]);
+            $response = Http::get("{$this->baseUrl}?{$query}");
             
-            // \Log::info('Wablas response:', [
-            //     'status' => $response->status(),
-            //     'body'   => $response->body(),
-            // ]);
+            \Log::info('Wablas response:', [
+                'status' => $response->status(),
+                'body'   => $response->body(),
+            ]);
 
-            // return $response->successful();
+            return $response->successful();
         }
 }
